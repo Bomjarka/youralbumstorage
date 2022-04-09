@@ -1,0 +1,11 @@
+<x-app-layout>
+    <x-slot name="title">
+        Photos
+    </x-slot>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('User Photos Page') }}
+        </h2>
+    </x-slot>
+    <x-photos.photos-grid :photos="$photos"></x-photos.photos-grid>
+</x-app-layout>
