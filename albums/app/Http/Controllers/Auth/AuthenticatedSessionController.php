@@ -32,6 +32,11 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+//        if (Auth::user()->isBlocked()) {
+//            Auth::guard('web')->logout();
+//            abort(403);
+//        }
+
         $request->session()->regenerate();
         if (RoleHelper::has_role('admin', Auth::user()->id)) {
             return redirect('admin');

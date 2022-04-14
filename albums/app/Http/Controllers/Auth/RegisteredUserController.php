@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +41,8 @@ class RegisteredUserController extends Controller
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone' => ['required', 'string', 'min:11', 'max:11', 'unique:users'],
+            'gender' => ['required', 'string'],
+            'birthdate' => ['required', 'date'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -51,6 +54,8 @@ class RegisteredUserController extends Controller
             'second_name' => $request->second_name,
             'last_name' => $request->last_name,
             'phone' => $request->phone,
+            'sex' => $request->gender,
+            'birthdate' => Carbon::parse($request->birthdate),
         ]);
 
         event(new Registered($user));

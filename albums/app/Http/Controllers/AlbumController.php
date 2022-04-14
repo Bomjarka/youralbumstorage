@@ -21,7 +21,7 @@ class AlbumController extends Controller
 
     public function delete(Request $request, Album $album, AlbumService $albumService)
     {
-        $isDeletePhotosFromAlbum = $request->get('deletePhotosFromAlbum');
+        $isDeletePhotosFromAlbum = $request->get('delete_photos');
 
         if (is_null($isDeletePhotosFromAlbum)) {
             $albumService->deleteAlbum($album);
@@ -30,5 +30,23 @@ class AlbumController extends Controller
         }
 
         return redirect('albums');
+    }
+
+    public function create(Request $request, AlbumService $albumService)
+    {
+        $albumService->createAlbum($request);
+
+        return redirect()->back();
+    }
+
+    public function edit(Request $request, Album $album, AlbumService $albumService)
+    {
+        $newName = $request->get('album_name');
+        $newDescription = $request->get('album_description');
+
+        $albumService->changeAlbumName($album, $newName);
+        $albumService->changeAlbumDescription($album, $newDescription);
+
+        return redirect()->back();
     }
 }

@@ -15,6 +15,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property mixed $last_name
  * @property mixed $second_name
  * @property mixed $first_name
+ * @property bool $is_blocked
  */
 class User extends Authenticatable
 {
@@ -32,6 +33,8 @@ class User extends Authenticatable
         'login',
         'email',
         'phone',
+        'sex',
+        'birthdate',
         'password',
     ];
 
@@ -50,10 +53,18 @@ class User extends Authenticatable
         return implode(' ', array_filter([$this->first_name, $this->second_name, $this->last_name]));
     }
 
-    public function roles()
+    public function isBlocked()
     {
-        return $this->belongsToMany(Role::class, 'user_roles');
+        return $this->is_blocked;
     }
 
+    public function albums()
+    {
+        return $this->hasMany(Album::class)->orderBy('id');
+    }
 
+    public function photos()
+    {
+        return $this->hasMany(Photo::class)->orderBy('id');
+    }
 }

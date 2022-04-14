@@ -8,7 +8,7 @@
 
         <!-- A basic modal dialog with title, body and one button to close -->
         <div
-            class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0 ">
             <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
                  aria-hidden="true"></div>
             <div @click.away="open = false">
@@ -30,13 +30,11 @@
                                         be stored for 30 days.
                                     </p>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                     <div
                         class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-
                         <form class="deleteAlbumForm"
                               x-on:submit="$dispatch('deleting')"
                               method="post"
@@ -48,15 +46,26 @@
                                     class="deleteModalButton w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
                                 Delete
                             </button>
+                            <input class="delete_photos" type="hidden" name="delete_photos">
                         </form>
-
                         <button @click="open = false"
                                 class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                             Cancel
                         </button>
+                        <label for="delete_photos_checkbox" class="inline-flex items-center">
+                            <input type="checkbox" class="delete_photos_checkbox rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
+                            <span class="ml-2 text-sm text-gray-600">{{ __('Delete photos from album') }}</span>
+                        </label>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+<script>
+    $(".delete_photos_checkbox").on('change', function() {
+        $('.delete_photos').val($(".delete_photos_checkbox").is(':checked'))
+    });
+</script>

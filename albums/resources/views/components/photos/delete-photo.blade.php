@@ -3,7 +3,7 @@
         <i class="fa fa-trash hover:text-red-600"></i>
     </button>
     <!-- Dialog (full screen) -->
-    <div class="absolute top-0 left-0 flex items-center justify-center w-full h-full"
+    <div class="absolute top-0 left-0 flex items-center justify-center w-full h-full "
          x-show="open"  x-cloak>
         <!-- A basic modal dialog with title, body and one button to close -->
         <div
@@ -39,13 +39,11 @@
                                         be stored for 30 days.
                                     </p>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                     <div
                         class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-
                         <form class="deleteAlbumForm"
                               x-on:submit="$dispatch('deleting')"
                               method="post"
@@ -58,7 +56,6 @@
                                 Delete
                             </button>
                         </form>
-
                         <button @click="open = false"
                                 class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                             Cancel

@@ -4,10 +4,10 @@ namespace App\Console\Commands;
 
 
 use App\Models\Album;
-use App\Models\AlbumPhotos;
 use App\Models\Photo;
 use App\Services\AlbumService;
 use App\Services\PhotoService;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class DeleteUsersPhotosAndAlbums extends Command
@@ -18,9 +18,10 @@ class DeleteUsersPhotosAndAlbums extends Command
 
     public function handle(PhotoService $photoService, AlbumService $albumService)
     {
+        $dateOfDeletion = Carbon::now()->startOfDay();
 
-        $albumsQuery = Album::onlyTrashed();
-        $photosQuery = Photo::onlyTrashed();
+        $albumsQuery = Album::onlyTrashed()->where('deleted_at', '<', $dateOfDeletion->copy()->subDays(30));
+        $photosQuery = Photo::onlyTrashed()->where('deleted_at', '<', $dateOfDeletion->copy()->subDays(30));
 
         foreach ($albumsQuery->cursor() as $album) {
             $albumService->deleteAlbumPermanently($album);

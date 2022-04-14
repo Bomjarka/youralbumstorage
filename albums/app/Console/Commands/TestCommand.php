@@ -4,8 +4,11 @@ namespace App\Console\Commands;
 
 
 use App\Helpers\RoleHelper;
+use App\Models\Album;
+use App\Models\Photo;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 
 class TestCommand extends Command
 {
@@ -15,10 +18,7 @@ class TestCommand extends Command
 
     public function handle()
     {
-
-        $user = User::find(1);
-
-        dd(RoleHelper::has_role('admin', $user->id));
-
+        $photo = Photo::find(58);
+        dd(storage_path($photo->path));
     }
 }

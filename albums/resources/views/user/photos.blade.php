@@ -7,5 +7,5 @@
             {{ __('User Photos Page') }}
         </h2>
     </x-slot>
-    <x-photos.photos-grid :photos="$photos"></x-photos.photos-grid>
+    <x-photos.photos-grid :photos="$photos" :album="null"></x-photos.photos-grid>
 </x-app-layout>

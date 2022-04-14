@@ -19,11 +19,13 @@ class CreateUsersTable extends Migration
             $table->string('second_name');
             $table->string('last_name');
             $table->string('login')->unique();
+            $table->string('password');
             $table->string('email')->unique();
             $table->string('phone')->unique();
-            $table->string('password');
+            $table->string('sex');
+            $table->date('birthdate');
             $table->boolean('is_verified')->default(false);
-            $table->boolean('is_blocked')->default(false);;
+            $table->boolean('is_blocked')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

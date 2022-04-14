@@ -1,22 +1,45 @@
 <x-admin-layout>
     <x-slot name="title">
-        Blank
-    </x-slot>
-    <x-slot name="header">
-        <a href="/admin" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">
-            abc
-        </a>
+        Users
     </x-slot>
     <div class="w-full h-screen overflow-x-hidden border-t flex flex-col">
         <main class="w-full flex-grow p-6">
-            <h1 class="text-3xl text-black pb-6">Blank Page</h1>
-
-            <!-- Content goes here! 😁 -->
+            <h1 class="text-3xl text-black pb-6">Users Page</h1>
+            <div class="w-full mt-6">
+                <p class="text-xl pb-3 flex items-center">
+                    <i class="fas fa-list mr-3"></i> Table Example
+                </p>
+                <div class="bg-white overflow-auto">
+                    <table class="min-w-full bg-white">
+                        <thead class="bg-gray-800 text-white">
+                        <tr>
+                            <th class="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">ID</th>
+                            <th class="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">Full Name</th>
+                            <th class="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">Login</th>
+                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Phone</th>
+                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Email
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody class="text-gray-700">
+                        @foreach($users as $user)
+                            <tr>
+                                <td class="w-1/3 text-left py-3 px-4">{{ $user->id }}</td>
+                                <td class="w-1/3 text-left py-3 px-4"><a class="hover:text-blue-500"
+                                                                         href="{{ route('adminUser', [$user]) }}">{{ $user->fullName() }}</a>
+                                </td>
+                                <td class="w-1/3 text-left py-3 px-4">{{ $user->login }}</td>
+                                <td class="text-left py-3 px-4">{{ $user->phone }}</td>
+                                <td class="text-left py-3 px-4"><a class="hover:text-blue-500"
+                                                                   href="mailto:jonsmith@mail.com">{{ $user->email }}</a>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </main>
-
-        <footer class="w-full bg-white text-right p-4">
-            Built by <a target="_blank" href="https://davidgrzyb.com" class="underline">David Grzyb</a>.
-        </footer>
     </div>
 </x-admin-layout>
 

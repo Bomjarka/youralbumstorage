@@ -4,15 +4,29 @@ namespace App\Services;
 
 
 use App\Models\Album;
+use App\Models\User;
 
 class AlbumService
 {
-    public function createAlbum()
+    public function createAlbum($request)
     {
-        $album = new Album();
-        $album->user_id = 1;
-        $album->name = 'Album Name 2';
-        $album->description = 'Description 2';
+        Album::create([
+            'user_id' => $request->get('user_id'),
+            'name' => $request->get('album_name'),
+            'description' => $request->get('album_description')
+        ]);
+    }
+
+    public function changeAlbumName($album, string $newName)
+    {
+        $album->name = $newName;
+        $album->save();
+    }
+
+    public function changeAlbumDescription($album, string $newDescription)
+    {
+        $album->description = $newDescription;
+        $album->save();
     }
 
     public function deleteAlbum(Album $album, bool $isDeletePhotosFromAlbum = false)
@@ -20,7 +34,7 @@ class AlbumService
         $photoService = new PhotoService();
 
         if ($isDeletePhotosFromAlbum == true) {
-            foreach ($album->photos() as $photo) {
+            foreach ($album->photos as $photo) {
                 $photoService->deletePhoto($photo);
             }
         }

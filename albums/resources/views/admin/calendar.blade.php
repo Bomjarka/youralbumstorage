@@ -2,13 +2,7 @@
     <x-slot name="title">
         Calendar
     </x-slot>
-    <x-slot name="header">
-        <a href="/admin" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">
-            abc
-        </a>
-    </x-slot>
     <div class="w-full h-screen overflow-x-hidden border-t flex flex-col">
-        <main class="w-full flex-grow p-6">
             <h1 class="text-3xl text-black pb-6">Calendar</h1>
 
             <div class="w-full">
@@ -152,11 +146,7 @@
                     Source: <a href="https://tailwindcomponents.com/component/calendar-ui-with-tailwindcss-and-alpinejs" class="underline">https://tailwindcomponents.com/component/calendar-ui-with-tailwindcss-and-alpinejs</a>
                 </p>
             </div>
-        </main>
 
-        <footer class="w-full bg-white text-right p-4">
-            Built by <a target="_blank" href="https://davidgrzyb.com" class="underline">David Grzyb</a>.
-        </footer>
     </div>
 </x-admin-layout>
 
