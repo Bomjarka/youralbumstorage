@@ -18,7 +18,8 @@ class CreatePhotosTable extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->string('name');
             $table->string('description')->nullable();
-            $table->string('path');
+            $table->string('photo_path');
+            $table->string('photo_preview_path');
             $table->timestamps();
             $table->softDeletes()->nullable();
         });

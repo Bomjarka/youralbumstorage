@@ -5,6 +5,9 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ $album->name }}
+            @if ($album->photos->count() == 0)
+                - This album is empty
+            @endif
         </h2>
 {{--        <x-albums.delete-album :action="route('deleteAlbum', $album)" :album="$album"></x-albums.delete-album>--}}
     </x-slot>

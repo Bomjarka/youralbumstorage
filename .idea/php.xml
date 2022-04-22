@@ -114,6 +114,7 @@
       <path value="$PROJECT_DIR$/albums/vendor/laravel/framework" />
       <path value="$PROJECT_DIR$/albums/vendor/laravel/sanctum" />
       <path value="$PROJECT_DIR$/albums/vendor/laravel/sail" />
+      <path value="$PROJECT_DIR$/albums/vendor/intervention/image" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1">

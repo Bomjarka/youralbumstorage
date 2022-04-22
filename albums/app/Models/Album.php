@@ -35,4 +35,9 @@ class Album extends Model
     {
         return $this->belongsToMany(Photo::class, 'album_photos');
     }
+
+    public function trashedPhotos()
+    {
+        return $this->photos()->onlyTrashed();
+    }
 }

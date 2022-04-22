@@ -49,4 +49,14 @@ class AlbumController extends Controller
 
         return redirect()->back();
     }
+
+    public function restoreAlbum(Request $request, AlbumService $albumService)
+    {
+        $album = Album::withTrashed()->find($request->get('albumId'));
+        $albumService->restoreAlbum($album);
+
+        return response()->json([
+            'msg' => 'Album restored!',
+        ]);
+    }
 }

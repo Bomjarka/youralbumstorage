@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 
 class PhotoController extends Controller
 {
+    const NO_ALBUM = 'no_album';
+
     public function index()
     {
         return view('user.photo');
@@ -37,14 +39,25 @@ class PhotoController extends Controller
         $photoService->changePhotoDescription($photo, $newDescription);
 
         if ($request->get('album_id')) {
-            if ($photo->album->isNotEmpty()) {
-                if ($request->get('album_id') != $photo->album->first()->id) {
-                    $photo->disassociateAlbumPhoto($photo->album->first()->id);
-                }
+            //Если фото принадлежит какому то альбому, то необходимо удалить связь между ними
+            if ($photo->album->first()) {
+                $photo->disassociateAlbumPhoto($photo->album->first()->id);
             }
-
-            $photo->associateAlbumPhoto($request->get('album_id'));
+            //Если мы переносим фото в конкретный альбом, то необходимо связать их
+            if ($request->get('album_id') != self::NO_ALBUM) {
+                $photo->associateAlbumPhoto($request->get('album_id'));
+            }
         }
         return redirect()->back();
+    }
+
+    public function restorePhoto(Request $request, PhotoService $photoService)
+    {
+        $photo = Photo::withTrashed()->find($request->get('photoId'));
+        $photoService->restorePhoto($photo);
+
+        return response()->json([
+            'msg' => 'Photo restored!',
+        ]);
     }
 }

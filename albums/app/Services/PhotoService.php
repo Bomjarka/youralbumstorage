@@ -4,24 +4,24 @@ namespace App\Services;
 
 
 use App\Models\Photo;
-use Illuminate\Support\Facades\Storage;
-use Nette\Utils\Image;
 
 class PhotoService
 {
+
     public function createPhoto($request)
     {
+        $imageService = new ImageService();
         $file = $request->file('user_photo');
-        $filePath = 'userphotos/' . $request->get('user_id');
-        $fileName = $request->get('photo_name');
 
-        $uploadedFilePath = Storage::disk('public')->put($filePath, $file);
+        $filePath = $imageService->createImage($file, $request->get('user_id'));
+        $previewFilePath = $imageService->createPreview($file, $request->get('user_id'));
 
         $photo = Photo::create([
             'user_id' => $request->get('user_id'),
             'name' => $request->get('photo_name'),
             'description' => $request->get('photo_description'),
-            'path' => $uploadedFilePath
+            'photo_path' => $filePath,
+            'photo_preview_path' => $previewFilePath,
         ]);
 
         if ($request->get('album_id')) {
@@ -44,11 +44,23 @@ class PhotoService
 
     public function deletePhoto($photo)
     {
+
+
         $photo->delete();
     }
 
     public function deletePhotoPermanently(Photo $photo)
     {
+        $imageService = new ImageService();
+        $imageService->deleteImage($photo);
         $photo->forceDelete();
+    }
+
+    public function restorePhoto(Photo $photo)
+    {
+        if ($photo->trashedAlbum()->first()) {
+            $photo->disassociateAlbumPhoto($photo->trashedAlbum()->first()->id);
+        }
+        $photo->restore();
     }
 }

@@ -4,5 +4,7 @@
     "/images/1.jpg": "/images/1.jpg",
     "/images/2.jpg": "/images/2.jpg",
     "/images/3.jpg": "/images/3.jpg",
+    "/images/empty_album.jpg": "/images/empty_album.jpg",
+    "/images/empty_photo.png": "/images/empty_photo.png",
     "/images/logo.png": "/images/logo.png"
 }

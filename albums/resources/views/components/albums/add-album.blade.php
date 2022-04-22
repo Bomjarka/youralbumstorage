@@ -2,7 +2,7 @@
     <div x-data="{ modelOpen: false }">
         <button @click="modelOpen =!modelOpen"
                 class="flex items-center justify-center px-3 py-2 space-x-2 text-sm tracking-wide hover:scale-150 transition duration-500 m-2 text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 shadow-lg">
-            <li class="fa fa-plus w-5 h-5"></li>
+            <i class="fa fa-plus w-5 h-5"></i>
             <span>Add album</span>
         </button>
         <div x-show="modelOpen" class="fixed inset-0 z-50 overflow-y-auto"
@@ -34,7 +34,7 @@
 
                         <button @click="modelOpen = false"
                                 class="text-gray-600 focus:outline-none hover:text-gray-700">
-                            <li class="fa fa-times w-6 h-6"></li>
+                            <i class="fa fa-times w-6 h-6"></i>
                         </button>
                     </div>
 

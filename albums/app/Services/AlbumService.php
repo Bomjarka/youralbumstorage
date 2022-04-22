@@ -46,4 +46,13 @@ class AlbumService
     {
         $album->forceDelete();
     }
+
+    public function restoreAlbum(Album $album)
+    {
+        $album->restore();
+
+        foreach ($album->trashedPhotos as $trashedPhoto) {
+            $trashedPhoto->restore();
+        }
+    }
 }

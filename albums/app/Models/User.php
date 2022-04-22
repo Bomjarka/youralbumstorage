@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+
+use App\Traits\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,6 +14,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $login
  * @property string $email
  * @property string $phone
+ * @property string $sex
+ * @property $birthdate
  * @property mixed $last_name
  * @property mixed $second_name
  * @property mixed $first_name
@@ -19,7 +23,7 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, MustVerifyEmail;
 
     /**
      * The attributes that are mass assignable.
@@ -27,10 +31,10 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'login',
         'first_name',
         'second_name',
         'last_name',
-        'login',
         'email',
         'phone',
         'sex',
@@ -63,8 +67,18 @@ class User extends Authenticatable
         return $this->hasMany(Album::class)->orderBy('id');
     }
 
+    public function trashedAlbums()
+    {
+        return $this->albums()->onlyTrashed();
+    }
+
     public function photos()
     {
         return $this->hasMany(Photo::class)->orderBy('id');
+    }
+
+    public function trashedPhotos()
+    {
+        return $this->photos()->onlyTrashed();
     }
 }

@@ -18,7 +18,8 @@ class Photo extends Model
         'user_id',
         'name',
         'description',
-        'path',
+        'photo_path',
+        'photo_preview_path'
     ];
 
     public function user()
@@ -29,6 +30,11 @@ class Photo extends Model
     public function album()
     {
         return $this->belongsToMany(Album::class, 'album_photos', 'photo_id');
+    }
+
+    public function trashedAlbum()
+    {
+        return $this->album()->onlyTrashed();
     }
 
     public function associateAlbumPhoto($albumid): void

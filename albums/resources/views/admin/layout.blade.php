@@ -31,9 +31,10 @@
     <x-admin.admin-desktop-nav></x-admin.admin-desktop-nav>
     <!-- Mobile Header & Nav -->
     <x-admin.admin-mobile-menu></x-admin.admin-mobile-menu>
-    <main class="w-full flex-grow p-6">
+    <main class="hidden md:block w-full flex-grow p-6">
         {{ $slot }}
     </main>
+    <h1 class="block w-full bg-white text-center p-4 font-bold md:hidden">Admin panel available only from Desktop</h1>
     <footer class="w-full bg-white text-center p-4">
         Built by <a target="_blank" href="#" class="underline">Debeloped by Alexander Chirkin</a>.
     </footer>

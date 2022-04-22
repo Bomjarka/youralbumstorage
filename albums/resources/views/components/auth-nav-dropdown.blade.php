@@ -1,7 +1,8 @@
 <form method="GET" action="{{ route('profile') }}">
     <x-dropdown-link :href="route('profile')"
                      onclick="event.preventDefault();
-                                                this.closest('form').submit();">
+                                                this.closest('form').submit();
+                                                sessionStorage.clear()">
         {{ __('Profile') }}
     </x-dropdown-link>
 </form>

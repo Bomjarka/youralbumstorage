@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Permission;
 use App\Models\Role;
+use App\Models\UserPermission;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 
