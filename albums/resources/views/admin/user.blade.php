@@ -6,7 +6,7 @@
         <h1 class="text-3xl text-black pb-6">{{ $user->fullName() }}</h1>
         <div class="w-full mt-6">
             @if (Auth::user()->hasVerifiedEmail() == false)
-                <x-warning :message="'This user is not verified!'"></x-warning>
+                <x-warning :value="__('This user is not verified!')"></x-warning>
             @endif
             @if($user->isBlocked())
                 <x-error :message="'This user is blocked'"></x-error>

@@ -14,13 +14,14 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
     <!-- Scripts -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
 </head>
 <body class="font-sans antialiased">
 <div class="min-h-screen bg-gray-100">
-@include('layouts.navigation')
+    @include('layouts.navigation')
 
-<!-- Page Heading -->
+    <!-- Page Heading -->
     <header class="bg-white shadow">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             {{ $header }}
@@ -29,7 +30,23 @@
 
     <!-- Page Content -->
     <main>
-        {{ $slot }}
+        @if (session('status') == 'verification-link-sent')
+            <div class="container my-12 mx-auto px-4 md:px-12">
+                <x-approving
+                    :value="__('A new verification link has been sent to the email address you provided during registration.')"></x-approving>
+            </div>
+        @endif
+        @if(Auth::user())
+            @if (Auth::user()->hasVerifiedEmail() == false)
+                <div class="container my-12 mx-auto px-4 md:px-12">
+                    <x-warning :value="__('You are not verified!')">Click here to verify your profile</x-warning>
+                </div>
+            @else
+                {{ $slot }}
+            @endif
+        @else
+            {{ $slot }}
+        @endif
     </main>
 </div>
 </body>

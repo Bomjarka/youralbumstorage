@@ -10,7 +10,6 @@ class PageController extends Controller
 {
     public function index()
     {
-
         if ($user = Auth::user()) {
             return view('main', ['user' => $user]);
         } else {

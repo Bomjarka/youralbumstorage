@@ -1,70 +1,61 @@
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-@if (Auth::user()->hasVerifiedEmail() == false)
+<div class="py-12">
     <div class="container my-12 mx-auto px-4 md:px-12">
-        <x-warning :message="'You are not verified!'"></x-warning>
-    </div>
-@else
-    <div class="py-12">
-        <div class="container my-12 mx-auto px-4 md:px-12">
-            <div class="flex flex-wrap -mx-1 lg:-mx-4">
-                @foreach($photos as $photo)
-                    <!-- Column -->
-                    <div class="article-div my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3 transition duration-500">
-                        <!-- Article -->
-                        <article class="overflow-hidden rounded-lg shadow-lg">
-                            <a href="#">
-                                <img alt="Placeholder" class="block h-auto w-full"
-                                     src="{{ url('storage/' . $photo->photo_preview_path) }}">
-                            </a>
+        <div class="flex flex-wrap -mx-1 lg:-mx-4">
+            @foreach($photos as $photo)
+                <!-- Column -->
+                <div class="article-div my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3 transition duration-500">
+                    <!-- Article -->
+                    <article class="overflow-hidden rounded-lg shadow-lg">
+                        <a href="#">
+                            <img alt="Placeholder" class="block h-auto w-full"
+                                 src="{{ url('storage/' . $photo->photo_preview_path) }}">
+                        </a>
 
-                            <header class="flex items-center justify-between leading-tight p-2 md:p-4">
-                                <h1 class="text-lg">
-                                    <a class="no-underline hover:underline text-black" href="#">
-                                        {{ $photo->name }}
-                                    </a>
-                                </h1>
-                                <p class="text-grey-darker text-sm">
-                                    {{ $photo->created_at->format('d M Y') }}
-                                </p>
-                            </header>
-
-                            <footer class="flex items-center justify-between leading-none p-2 md:p-4">
+                        <header class="flex items-center justify-between leading-tight p-2 md:p-4">
+                            <h1 class="text-lg">
                                 <a class="no-underline hover:underline text-black" href="#">
-                                    <p class="ml-2 text-sm">
-                                        {{ $photo->description }}
-                                    </p>
+                                    {{ $photo->name }}
                                 </a>
-                                <div class="space-x-2 hidden sm:flex">
-                                    <x-photos.edit-photo :photo="$photo"></x-photos.edit-photo>
-                                    <x-photos.delete-photo :photo="$photo"></x-photos.delete-photo>
+                            </h1>
+                            <p class="text-grey-darker text-sm">
+                                {{ $photo->created_at->format('d M Y') }}
+                            </p>
+                        </header>
 
-                                </div>
-                            </footer>
-                        </article>
-                        <!-- END Article -->
-                    </div>
-                    <!-- END Column -->
-                    @if($loop->last)
-                        @if(Route::is('userAlbum'))
-                            <x-photos.add-photo :photo="$photo" :album="$album" :fromAlbums="true"></x-photos.add-photo>
-                        @else
-                            <x-photos.add-photo :photo="$photo" :fromAlbums="false"></x-photos.add-photo>
-                        @endif
-                    @endif
-                @endforeach
-                @if($photos->isEmpty())
+                        <footer class="flex items-center justify-between leading-none p-2 md:p-4">
+                            <a class="no-underline hover:underline text-black" href="#">
+                                <p class="ml-2 text-sm">
+                                    {{ $photo->description }}
+                                </p>
+                            </a>
+                            <div class="space-x-2 hidden sm:flex">
+                                <x-photos.edit-photo :photo="$photo"></x-photos.edit-photo>
+                                <x-photos.delete-photo :photo="$photo"></x-photos.delete-photo>
+
+                            </div>
+                        </footer>
+                    </article>
+                    <!-- END Article -->
+                </div>
+                <!-- END Column -->
+                @if($loop->last)
                     @if(Route::is('userAlbum'))
-                        <x-photos.add-photo :album="$album" :fromAlbums="true"></x-photos.add-photo>
+                        <x-photos.add-photo :photo="$photo" :album="$album" :fromAlbums="true"></x-photos.add-photo>
                     @else
-                        <x-photos.add-photo :fromAlbums="false"></x-photos.add-photo>
+                        <x-photos.add-photo :photo="$photo" :fromAlbums="false"></x-photos.add-photo>
                     @endif
                 @endif
-            </div>
+            @endforeach
+            @if($photos->isEmpty())
+                @if(Route::is('userAlbum'))
+                    <x-photos.add-photo :album="$album" :fromAlbums="true"></x-photos.add-photo>
+                @else
+                    <x-photos.add-photo :fromAlbums="false"></x-photos.add-photo>
+                @endif
+            @endif
         </div>
     </div>
-@endif
-
-
+</div>
 
 <script>
     $(window).load(function () {

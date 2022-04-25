@@ -2,7 +2,7 @@
 
 namespace App\Traits\Auth;
 
-use Illuminate\Auth\Notifications\VerifyEmail;
+use App\Notifications\VerifyEmail;
 
 trait MustVerifyEmail
 {

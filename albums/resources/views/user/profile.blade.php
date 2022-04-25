@@ -1,5 +1,3 @@
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
 <x-app-layout>
     <x-slot name="title">
         Profile
@@ -8,7 +6,7 @@
     </x-slot>
     @if (Auth::user()->hasVerifiedEmail() == false)
         <div class="mx-auto sm:px-6 lg:px-8">
-            <x-warning :message="'You are not verified!'"></x-warning>
+            <x-warning :value="__('You are not verified!')">Click here to verify your profile</x-warning>
         </div>
     @endif
     <div class="py-12">
@@ -19,7 +17,7 @@
                 </div>
             </div>
             <div class="flex flex-row flex-wrap w-full bg-white overflow-hidden shadow-sm sm:rounded-b-lg">
-                <aside class="w-1/6 bg-gray-50 h-100% rounded dark:bg-gray-800" aria-label="Sidebar">
+                <aside class="hidden md:block w-1/6 bg-gray-50 h-100% rounded dark:bg-gray-800" aria-label="Sidebar">
                     <div class="overflow-y-auto py-4 px-3 ">
                         <ul class="space-y-2">
                             <li>
