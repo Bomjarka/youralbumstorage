@@ -39,30 +39,7 @@ class User extends Authenticatable
         'phone',
         'sex',
         'is_verified',
-        'is_blocked',<?php
-
-namespace App\Console\Commands;
-
-
-use App\Models\Role;
-use App\Models\User;
-use App\Services\RoleService;
-use Carbon\Carbon;
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Hash;
-
-class TestCommand extends Command
-{
-    protected $signature = 'test';
-
-    protected $name = 'TestCommand';
-
-    public function handle()
-    {
-
-    }
-}
-
+        'is_blocked',
         'birthdate',
         'password',
     ];

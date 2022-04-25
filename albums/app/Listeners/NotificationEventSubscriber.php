@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 
-use App\Events\VerificationNotificationRead;
+use App\Events\NotificationRead;
 
 class NotificationEventSubscriber
 {
@@ -20,7 +20,7 @@ class NotificationEventSubscriber
     public function subscribe($events)
     {
         $events->listen(
-            VerificationNotificationRead::class,
+            NotificationRead::class,
             'App\Listeners\NotificationEventSubscriber@handleVerificationNotificationread'
         );
     }

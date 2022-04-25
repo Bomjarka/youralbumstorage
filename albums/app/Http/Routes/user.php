@@ -18,6 +18,11 @@ Route::middleware(['userblocked', 'auth'])->group(function () {
         Route::post('/trash/albums', [AlbumController::class, 'restoreAlbum'])->name('restoreAlbum');
 
         Route::post('/trash/photos', [PhotoController::class, 'restorePhoto'])->name('restorePhoto');
+
+        Route::post('/albums_and_photos', [PhotoController::class, 'downloadAllPhotos'])->name('downloadAllPhotos');
+
+        Route::get('/download/{filename}', [PhotoController::class, 'download'])->name('download');
+
     });
 
     Route::prefix('photos')->group(function () {

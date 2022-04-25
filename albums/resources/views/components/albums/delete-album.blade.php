@@ -52,10 +52,14 @@
                                 class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                             Cancel
                         </button>
-                        <label for="delete_photos_checkbox" class="inline-flex items-center">
-                            <input type="checkbox" class="delete_photos_checkbox rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
-                            <span class="ml-2 text-sm text-gray-600">{{ __('Delete photos from album') }}</span>
-                        </label>
+                        @if($album->photos->count() != 0)
+                            <label for="delete_photos_checkbox" class="inline-flex items-center">
+                                <input type="checkbox"
+                                       class="delete_photos_checkbox rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                       name="remember">
+                                <span class="ml-2 text-sm text-gray-600">{{ __('Delete photos from album') }}</span>
+                            </label>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -65,7 +69,7 @@
 
 
 <script>
-    $(".delete_photos_checkbox").on('change', function() {
+    $(".delete_photos_checkbox").on('change', function () {
         $('.delete_photos').val($(".delete_photos_checkbox").is(':checked'))
     });
 </script>

@@ -34,6 +34,11 @@ class AlbumController extends Controller
 
     public function create(Request $request, AlbumService $albumService)
     {
+        $request->validate([
+            'album_name' => ['required', 'string', 'max:255'],
+            'album_description' => ['nullable','string', 'max:255'],
+        ]);
+
         $albumService->createAlbum($request);
 
         return redirect()->back();

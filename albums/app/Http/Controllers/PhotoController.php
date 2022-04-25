@@ -2,9 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationRead;
 use App\Models\Photo;
+use App\Models\User;
+use App\Notifications\DownloadPhotosNotification;
 use App\Services\PhotoService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
+use ZipArchive;
 
 class PhotoController extends Controller
 {
@@ -17,7 +24,11 @@ class PhotoController extends Controller
 
     public function create(Request $request, PhotoService $photoService)
     {
-        //Сделать валидатор
+        $request->validate([
+            'photo_name' => ['required', 'string', 'max:255'],
+            'photo_description' => ['nullable', 'string', 'max:255'],
+        ]);
+
         $photoService->createPhoto($request);
 
         return redirect()->back();
@@ -59,5 +70,41 @@ class PhotoController extends Controller
         return response()->json([
             'msg' => 'Photo restored!',
         ]);
+    }
+
+    public function downloadAllPhotos(Request $request)
+    {
+        $user = User::find($request->get('userId'));
+        $archivePath = Storage::path('public/userphotos/' . $user->id . '/photos.zip');
+        $zip = new ZipArchive();
+        $albums = $user->albums;
+
+        $zip->open($archivePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        foreach ($albums as $album) {
+            foreach ($album->photos as $albumPhoto) {
+                $image = Image::make(Storage::disk('local')->path('public/' . $albumPhoto->photo_path));
+
+                $zip->addFromString($albumPhoto->name . '.' . $image->extension, $image->encode($image->extension));
+            }
+        }
+        $zip->close();
+
+        $user->notify(new DownloadPhotosNotification($archivePath));
+
+        return response()->json([
+            'msg' => 'Check your email, we sent link for downloading archive',
+        ]);
+    }
+
+    public function download(Request $request, string $filename)
+    {
+        $user = Auth::user();
+        if (!Storage::exists('public/userphotos/' . $user->id . '/' .$filename )) {
+            event(new NotificationRead($user, $request->get('notification')));
+
+            return response()->download(Storage::path('public/userphotos/' . $user->id . '/' .$filename ));
+        }
+
+        return redirect('/');
     }
 }

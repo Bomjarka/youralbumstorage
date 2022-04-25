@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Events\VerificationNotificationRead;
+use App\Events\NotificationRead;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Verified;
@@ -23,7 +23,7 @@ class VerifyEmailController extends Controller
         }
 
         if ($request->user()->markEmailAsVerified()) {
-            event(new VerificationNotificationRead($request->user(), $request->get('notification')));
+            event(new NotificationRead($request->user(), $request->get('notification')));
             event(new Verified($request->user()));
 
         }
