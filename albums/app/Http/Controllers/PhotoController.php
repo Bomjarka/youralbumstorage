@@ -15,7 +15,7 @@ use ZipArchive;
 
 class PhotoController extends Controller
 {
-    const NO_ALBUM = 'no_album';
+    public const NO_ALBUM = 'no_album';
 
     public function index()
     {
@@ -93,16 +93,18 @@ class PhotoController extends Controller
 
         return response()->json([
             'msg' => 'Check your email, we sent link for downloading archive',
+            'status' => 'archive-sent',
         ]);
     }
 
     public function download(Request $request, string $filename)
     {
         $user = Auth::user();
-        if (!Storage::exists('public/userphotos/' . $user->id . '/' .$filename )) {
+        $filePath = Storage::path('public/userphotos/' . $user->id . '/' . $filename);
+        if ($filePath) {
             event(new NotificationRead($user, $request->get('notification')));
 
-            return response()->download(Storage::path('public/userphotos/' . $user->id . '/' .$filename ));
+            return response()->download($filePath)->deleteFileAfterSend();
         }
 
         return redirect('/');

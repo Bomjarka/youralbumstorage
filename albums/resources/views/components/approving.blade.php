@@ -1,4 +1,4 @@
-<div class="success" role="alert">
+<div class="success hidden" role="alert">
     <div class="bg-green-500 text-white font-bold rounded-t px-4 py-2 mt-3">
         <i class="fa fa-check mr-3"></i>Success
     </div>
@@ -10,7 +10,10 @@
 </div>
 
 <script>
-    $(function(){
-        $(".success").delay(3000).slideUp(300);
-    });
+    if ('{{session('status')}}' == 'verification-link-sent') {
+        $(function(){
+            $('.success').slideDown(300);
+            $(".success").delay(3000).slideUp(300);
+        });
+    }
 </script>

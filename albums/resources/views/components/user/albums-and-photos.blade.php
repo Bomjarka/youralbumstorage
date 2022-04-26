@@ -1,3 +1,6 @@
+{{--<div class="archive-sent container hidden my-12 mx-auto px-4 md:px-12">--}}
+<x-approving :value="__('Check your email, we sent link for downloading archive')"></x-approving>
+{{--</div>--}}
 <!-- Albums Section -->
 <div class="user_albums hidden bg-white p-3 mt-3 shadow-sm rounded-sm">
     <div>
@@ -12,18 +15,11 @@
             </div>
         </div>
         <div class="flex items-center justify-end">
-{{--            @if($user->photos->count() != 0)--}}
-{{--                <form action="{{ route('downloadAllPhotos') }}" method="post">--}}
-{{--                    @csrf--}}
-{{--                    @method('post')--}}
-{{--                    <input type="hidden" id="userId" name="userId" value="{{ $user->id }}">--}}
-                    <button type="submit"
-                        class="download_photos bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
-                        <i class="fa fa-download mr-3" aria-hidden="true"></i>
-                        <span>Download all photos</span>
-                    </button>
-{{--                </form>--}}
-{{--            @endif--}}
+            <button type="click"
+                    class="download_photos bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                <i class="fa fa-download mr-3" aria-hidden="true"></i>
+                <span>Download all photos</span>
+            </button>
         </div>
         <div class="flex items-center mt-3 space-x-2 font-semibold text-gray-900 leading-8">
                     <span class="text-green-500">
@@ -112,9 +108,8 @@
             userId: {{ Auth::user()->id }}
         })
             .success(function (response) {
-                if (!alert(response.msg)) {
-                    window.location.reload();
-                }
+                $('.success').slideDown(300);
+                $(".success").delay(3000).slideUp(300);
             });
     });
 </script>
