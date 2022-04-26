@@ -135,4 +135,20 @@ class AdminController extends Controller
         ]);
     }
 
+    public function removeUserRole(Request $request, User $user, RoleService $roleService)
+    {
+        $role = Role::find($request->get('roleId'));
+        if ($roleService->removeRoleUser($role->name, $user->id)) {
+
+            return response()->json([
+                'msg' => 'Role deleted from user!',
+            ]);
+        }
+
+        return response()->json([
+            'msg' => 'Something wrong!',
+        ]);
+
+    }
+
 }

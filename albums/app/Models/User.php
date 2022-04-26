@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use App\Services\RoleService;
 use App\Traits\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -79,8 +80,15 @@ class User extends Authenticatable
         return $this->hasMany(Photo::class)->orderBy('id');
     }
 
+    public function roles()
+    {
+        return (new RoleService())->getUserRoles($this->id);
+
+    }
+
     public function trashedPhotos()
     {
         return $this->photos()->onlyTrashed();
     }
+
 }

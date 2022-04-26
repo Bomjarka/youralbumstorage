@@ -3,9 +3,8 @@
 namespace App\Console\Commands;
 
 
-use App\Models\Role;
 use App\Models\User;
-use App\Notifications\DownloadPhotosNotification;
+use App\Services\RoleService;
 use Illuminate\Console\Command;
 
 class TestCommand extends Command
@@ -14,7 +13,9 @@ class TestCommand extends Command
 
     protected $name = 'TestCommand';
 
-    public function handle()
+    public function handle(RoleService $roleService)
     {
+        $user = User::find(2);
+        dd($user->roles()->count());
     }
 }
