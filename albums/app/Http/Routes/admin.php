@@ -31,10 +31,11 @@ Route::middleware(['userblocked', 'auth', 'admin'])->group(function () {
             Route::post('/disable_admin', [AdminController::class, 'disableAdmin'])->name('disableAdmin');
         });
 
-        Route::get('/table', function () {
-            return view('admin.table');
-        })->name('adminTable');
-
+        Route::prefix('/roles')->group(function () {
+            Route::get('/', [AdminController::class, 'roles'])->name('adminRoles');
+            Route::post('/create', [AdminController::class, 'addRole'])->name('addRole');
+            Route::post('/edit', [AdminController::class, 'editRole'])->name('editRole');
+        });
         Route::get('/forms', function () {
             return view('admin.forms');
         })->name('adminForms');

@@ -1,6 +1,4 @@
-{{--<div class="archive-sent container hidden my-12 mx-auto px-4 md:px-12">--}}
 <x-approving :value="__('Check your email, we sent link for downloading archive')"></x-approving>
-{{--</div>--}}
 <!-- Albums Section -->
 <div class="user_albums hidden bg-white p-3 mt-3 shadow-sm rounded-sm">
     <div>

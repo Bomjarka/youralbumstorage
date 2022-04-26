@@ -48,7 +48,6 @@ class DownloadPhotosNotification extends Notification
         return (new MailMessage)
             ->line('You are receiving this email because we received a request for downloading all photos from you.')
             ->action('Click here to download your archive', $this->downloadFileUrl($notifiable))
-            ->attach($this->file)
             ->line('Thank you for using our application!');
     }
 

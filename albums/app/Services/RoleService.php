@@ -74,6 +74,14 @@ class RoleService
         return $this->allRoles = $this->allRoles ?? Role::all();
     }
 
+    public function createRole(string $name, string $description = null)
+    {
+        Role::create([
+           'name' => $name,
+           'description' => $description,
+        ]);
+    }
+
     /**
      * Добавление новой привилегии пользователю
      * @param string $permission - наиенование привилегии

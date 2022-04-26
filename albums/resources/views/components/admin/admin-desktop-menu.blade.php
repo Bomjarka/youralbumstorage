@@ -24,10 +24,10 @@
             <i class="fas fa-sticky-note mr-3"></i>
             Users
         </a>
-        <a href="{{ route('adminTable') }}"
+        <a href="{{ route('adminRoles') }}"
            class="flex items-center text-white hover:opacity-100 py-4 pl-6 nav-item active-nav-link">
             <i class="fas fa-table mr-3"></i>
-            Tables
+            Roles
         </a>
         <a href="{{ route('adminForms') }}"
            class="flex items-center text-white hover:opacity-100 py-4 pl-6 nav-item active-nav-link">

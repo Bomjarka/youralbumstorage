@@ -7,7 +7,7 @@ use App\Events\NotificationRead;
 
 class NotificationEventSubscriber
 {
-    public function handleVerificationNotificationread($event)
+    public function handleNotificationread($event)
     {
         $user = $event->user;
         $user->unreadNotifications
@@ -21,7 +21,7 @@ class NotificationEventSubscriber
     {
         $events->listen(
             NotificationRead::class,
-            'App\Listeners\NotificationEventSubscriber@handleVerificationNotificationread'
+            'App\Listeners\NotificationEventSubscriber@handleNotificationread'
         );
     }
 }

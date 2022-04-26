@@ -17,9 +17,9 @@
             <i class="fas fa-sticky-note mr-3"></i>
             Blank Page
         </a>
-        <a href="{{ route('adminTable') }}" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+        <a href="{{ route('adminRoles') }}" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
             <i class="fas fa-table mr-3"></i>
-            Tables
+            Roles
         </a>
         <a href="{{ route('adminForms') }}" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
             <i class="fas fa-align-left mr-3"></i>

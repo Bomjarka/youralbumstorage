@@ -10,10 +10,10 @@
 </div>
 
 <script>
-    if ('{{session('status')}}' == 'verification-link-sent') {
+    if (['verification-link-sent','role-created'].includes('{{session('status')}}')) {
         $(function(){
             $('.success').slideDown(300);
-            $(".success").delay(3000).slideUp(300);
+            $(".success").delay(1000).slideUp(300);
         });
     }
 </script>

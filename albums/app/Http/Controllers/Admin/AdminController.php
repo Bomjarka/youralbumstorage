@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Helpers\RoleHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use App\Services\RoleService;
 use App\Services\UserService;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-use Illuminate\Http\Client\Request;
-use Illuminate\Http\Client\Response;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
@@ -86,6 +85,54 @@ class AdminController extends Controller
 
 
         return view('admin.dashboard', ['dates' => $dates, 'select' => $select]);
+    }
+
+    public function roles()
+    {
+        $roles = Role::all()->sortBy('id');
+
+        return view('admin.roles', ['roles' => $roles]);
+    }
+
+    public function addRole(Request $request, RoleService $roleService)
+    {
+        $request->validate([
+            'role_name' => ['nullable','string', 'max:255'],
+            'role_description' => ['nullable','string', 'max:255'],
+        ]);
+
+        $roleName = $request->input('role_name');
+        $roleDescription = $request->input('role_description');
+        $roleService->createRole($roleName, $roleDescription);
+
+        return back()->with('status', 'role-created');
+    }
+
+    public function editRole(Request $request)
+    {
+        $request->validate([
+            'newRoleDescription' => ['nullable','string', 'max:255'],
+        ]);
+
+        $roleId = $request->input('roleId');
+        $role = Role::find($roleId);
+
+        if (!$role) {
+            return response()->json([
+                'msg' => 'Nothing to update!',
+            ]);
+        }
+
+        $newRoleDescription = $request->input('newRoleDescription');
+        if ($newRoleDescription) {
+            $role->description = $newRoleDescription;
+        }
+
+        $role->save();
+
+        return response()->json([
+            'msg' => 'Role updated!',
+        ]);
     }
 
 }
