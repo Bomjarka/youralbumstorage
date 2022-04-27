@@ -5,9 +5,9 @@
                 @foreach($albums as $album)
                     <!-- Column -->
                     <div
-                        class="article-div ol my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3 transition duration-500">
+                        class="article-div ol my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3 transition duration-500 ">
                         <!-- Article -->
-                        <article class="overflow-hidden rounded-lg shadow-lg">
+                        <article class="overflow-hidden rounded-lg shadow-lg hover:border-2 border-blue-600">
                             <a href="{{ route('userAlbum', [$album]) }}">
                                 @if(!$album->photos->isEmpty())
                                     <img alt="Placeholder" class="block h-auto w-full"
@@ -61,16 +61,15 @@
 <script>
     // $(window).load(function () {
     //     $(document).on('mouseenter', '.article-div', function () {
-    //         $('.article-div').removeClass('scale-100');
-    //         $('.article-div').not(this).addClass('scale-75');
-    //         $(this).addClass('hover:scale-125');
-    //         $('.new-album-button').addClass('scale-75');
-    //     });
-    //     $(document).on('mouseleave', '.article-div', function () {
-    //         $('.article-div').removeClass('scale-75');
-    //         $('.new-album-button').removeClass('scale-75');
-    //         $('.article-div').addClass('scale-100');
-    //     });
+    // $('.article-div').not(this).addClass('scale-75');
+    // $(this).addClass('hover:scale-125');
+    // $('.new-album-button').addClass('scale-75');
+    // });
+    // $(document).on('mouseleave', '.article-div', function () {
+    // $('.article-div').removeClass('scale-75');
+    // $('.new-album-button').removeClass('scale-75');
+    // $('.article-div').addClass('scale-100');
+    // });
     // });
 </script>
 
