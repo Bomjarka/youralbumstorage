@@ -17,7 +17,10 @@
                             <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Full Name</th>
                             <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Login</th>
                             <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Phone</th>
-                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Email
+                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Email</th>
+                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Albums</th>
+                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Photos</th>
+                            <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Is Blocked</th>
                             </td>
                         </tr>
                         </thead>
@@ -33,6 +36,9 @@
                                 <td class="text-left py-3 px-4"><a class="hover:text-blue-500"
                                                                    href="mailto:jonsmith@mail.com">{{ $user->email }}</a>
                                 </td>
+                                <td class="text-left py-3 px-4">{{ $user->albums->count() }}</td>
+                                <td class="text-left py-3 px-4">{{ $user->photos->count() }}</td>
+                                <td class="text-left py-3 px-4">@if ($user->isBlocked()) Blocked @else Not blocked @endif</td>
                             </tr>
                         @endforeach
                         </tbody>

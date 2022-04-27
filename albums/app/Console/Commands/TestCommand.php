@@ -20,14 +20,7 @@ class TestCommand extends Command
     {
 //        User::factory()->count(5)->create();
 
-        $startDate = Carbon::now()->startOfDay()->subMonths(2)->format('F');
-        $endDate = Carbon::now()->startOfDay()->format('F');
-        $period = CarbonPeriod::create($startDate, $endDate);
-        $registeredCount = [];
-        foreach ($period as $date) {
-            $registeredCount[$date->format('F')] = User::where(DB::raw("extract(month from created_at)"), '=', $date->format('m'))->count();
-        }
-        dd($registeredCount);
+        dd(User::find(7)->isBlocked());
 
 //        dd(json_encode($rolesArr));
     }
