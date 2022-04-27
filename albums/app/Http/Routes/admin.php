@@ -14,8 +14,10 @@ Route::middleware(['userblocked', 'auth', 'admin'])->group(function () {
             return view('admin.index');
         })->name('admin');
 
-        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('adminDashboard');
-        Route::post('/dashboard', [AdminController::class, 'dashboardPeriod'])->name('adminDashboardPeriod');
+        Route::prefix('dashboard')->group(function () {
+            Route::get('/', [AdminController::class, 'dashboard'])->name('adminDashboard');
+            Route::post('/', [AdminController::class, 'dashboardPeriod'])->name('adminDashboardPeriod');
+        });
 
         Route::get('/users', [AdminController::class, 'users'])->name('adminUsers');
 

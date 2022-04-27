@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Helpers\RoleHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Photo;
 use App\Models\Role;
 use App\Models\User;
 use App\Services\RoleService;
@@ -77,12 +78,14 @@ class AdminController extends Controller
         $endDate = Carbon::now()->startOfDay();
         $period = CarbonPeriod::create($startDate, $endDate);
         $registeredCount = [];
+        $photosUploadedCount = [];
 
         foreach ($period as $date) {
             $registeredCount[$date->toDateString()] = User::where(DB::raw("created_at::date"), '=', $date)->count();
+            $photosUploadedCount[$date->toDateString()] = Photo::where(DB::raw("created_at::date"), '=', $date)->count();
         }
 
-        return view('admin.dashboard', ['data' => $registeredCount]);
+        return view('admin.dashboard', ['usersRegistered' => $registeredCount, 'photosUploadedCount' => $photosUploadedCount]);
     }
 
 
@@ -90,30 +93,32 @@ class AdminController extends Controller
     {
         $term = explode('_', $request->get('period'))[0];
         $period = explode('_', $request->get('period'))[1];
-
+        $registeredCount = [];
+        $photosUploadedCount = [];
         switch ($period) {
             case 'day':
-                $startDate = Carbon::now()->startOfDay()->subDays($term-1);
+                $startDate = Carbon::now()->startOfDay()->subDays($term - 1);
                 $endDate = Carbon::now()->startOfDay();
                 $period = CarbonPeriod::create($startDate, $endDate);
-                $registeredCount = [];
                 foreach ($period as $date) {
                     $registeredCount[$date->toDateString()] = User::where(DB::raw("created_at::date"), '=', $date)->count();
+                    $photosUploadedCount[$date->toDateString()] = Photo::where(DB::raw("created_at::date"), '=', $date)->count();
                 }
                 break;
             case 'month':
-                $startDate = Carbon::now()->startOfDay()->subMonths($term-1);
+                $startDate = Carbon::now()->startOfDay()->subMonths($term - 1);
                 $endDate = Carbon::now()->startOfDay();
                 $period = CarbonPeriod::create($startDate, $endDate);
-                $registeredCount = [];
                 foreach ($period as $date) {
                     $registeredCount[$date->format('F') . ' ' . $date->format('y')] = User::where(DB::raw("extract(month from created_at)"), '=', $date->format('m'))->count();
+                    $photosUploadedCount[$date->format('F') . ' ' . $date->format('y')] = Photo::where(DB::raw("extract(month from created_at)"), '=', $date->format('m'))->count();
                 }
                 break;
         }
 
         return response()->json([
-            'data' => $registeredCount,
+            'usersRegistered' => $registeredCount,
+            'photosUploadedCount' => $photosUploadedCount,
         ]);
 
     }
