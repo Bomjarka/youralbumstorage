@@ -13,9 +13,14 @@ class TestCommand extends Command
 
     protected $name = 'TestCommand';
 
-    public function handle(RoleService $roleService)
+    public function handle()
     {
         $user = User::find(2);
-        dd($user->roles()->count());
+
+        $rolesArr = [];
+        foreach ((new RoleService())->getAllRoles() as $role) {
+            $rolesArr[] = $role->name;
+        }
+        dd(json_encode($rolesArr));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\RoleHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
@@ -81,7 +82,7 @@ class AdminController extends Controller
             $dates[] = $date->toDateString();
         }
 
-        $select =  DB::select("SELECT created_at::date, count(id) FROM users GROUP BY created_at::date");
+        $select = DB::select("SELECT created_at::date, count(id) FROM users GROUP BY created_at::date");
 
 
         return view('admin.dashboard', ['dates' => $dates, 'select' => $select]);
@@ -97,8 +98,8 @@ class AdminController extends Controller
     public function addRole(Request $request, RoleService $roleService)
     {
         $request->validate([
-            'role_name' => ['nullable','string', 'max:255'],
-            'role_description' => ['nullable','string', 'max:255'],
+            'role_name' => ['nullable', 'string', 'max:255'],
+            'role_description' => ['nullable', 'string', 'max:255'],
         ]);
 
         $roleName = $request->input('role_name');
@@ -111,7 +112,7 @@ class AdminController extends Controller
     public function editRole(Request $request)
     {
         $request->validate([
-            'newRoleDescription' => ['nullable','string', 'max:255'],
+            'newRoleDescription' => ['nullable', 'string', 'max:255'],
         ]);
 
         $roleId = $request->input('roleId');
@@ -132,6 +133,20 @@ class AdminController extends Controller
 
         return response()->json([
             'msg' => 'Role updated!',
+        ]);
+    }
+
+    public function addUserRole(Request $request, User $user, RoleService $roleService)
+    {
+        $role = Role::find($request->get('roleId'));
+        if (!RoleHelper::has_role($role->name, $user->id) && $roleService->addRoleUser($role->name, $user->id)) {
+            return response()->json([
+                'msg' => 'Role added to user!',
+            ]);
+        }
+
+        return response()->json([
+            'msg' => 'Something wrong!',
         ]);
     }
 

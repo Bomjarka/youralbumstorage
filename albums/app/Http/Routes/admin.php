@@ -29,6 +29,7 @@ Route::middleware(['userblocked', 'auth', 'admin'])->group(function () {
             Route::post('/unblock', [AdminController::class, 'unblockUser'])->name('unblockUser');
             Route::post('/make_admin', [AdminController::class, 'makeAdmin'])->name('makeAdmin');
             Route::post('/disable_admin', [AdminController::class, 'disableAdmin'])->name('disableAdmin');
+            Route::post('/add_role', [AdminController::class, 'addUserRole'])->name('addUserRole');
             Route::post('/remove_role', [AdminController::class, 'removeUserRole'])->name('removeUserRole');
         });
 

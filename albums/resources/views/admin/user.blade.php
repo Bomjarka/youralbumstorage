@@ -80,8 +80,8 @@
                     </div>
                 </div>
                 <!-- End of about section -->
-                <!-- Approve msg if role deleted from user -->
-                <div class="delete_user_role_success hidden" role="alert">
+                <!-- Approve msg if role action succeed -->
+                <div class="user_role_action_success hidden" role="alert">
                     <div class="bg-green-500 text-white font-bold rounded-t px-4 py-2 mt-3">
                         <i class="fa fa-check mr-3"></i>Success
                     </div>
@@ -90,7 +90,9 @@
                         <p></p>
                     </div>
                 </div>
-                <div class="delete_user_role_fail hidden" role="alert">
+                <!-- End of Approve msg if role action succeed -->
+                <!-- Warning msg if role action failed -->
+                <div class="user_role_action_fail hidden" role="alert">
                     <div class="bg-orange-500 text-white font-bold rounded-t px-4 py-2 mt-3">
                         <i class="fa fa-exclamation-triangle mr-3"></i>Warning
                     </div>
@@ -99,13 +101,23 @@
                         <p></p>
                     </div>
                 </div>
+                <!-- End of Warning msg if role action failed -->
                 <!-- User Roles Section -->
                 <div class="hidden sm:block bg-white border border-blue-500 p-3  mt-3 shadow-sm rounded-sm">
-                    <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
-                    <span class="text-blue-500">
+                    <div class="flex items-center justify-between space-x-2 font-semibold text-gray-900 leading-8">
+                        <div>
+                            <span class="text-blue-500">
                             <i class="fa fa-book mr-3"></i>
-                        </span>
-                        User Roles
+                            </span>
+                            User Roles
+                        </div>
+                        <button type="click" id="add_user_role"
+                                class="add_user_role bg-green-600 text-white font-semibold h-8 px-4 m-2 rounded hover:bg-green-500">
+                            Assign role
+                        </button>
+                    </div>
+                    <div class="choose_role flex items-center justify-end hidden">
+                        <x-admin.role-search-input></x-admin.role-search-input>
                     </div>
                     @if ($user->roles()->count() == 0)
                         No roles
@@ -114,9 +126,7 @@
                             <thead class="bg-gray-800 text-white">
                             <tr>
                                 <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">Role name</th>
-                                <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">Role
-                                    description
-                                </th>
+                                <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">Role description</th>
                                 <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">Action</th>
                             </tr>
                             </thead>
@@ -321,19 +331,46 @@
         })
             .success(function (response) {
                 if (response.msg == 'Role deleted from user!') {
-                    $('.delete_user_role_success p').text(response.msg);
-                    $('.delete_user_role_success').slideDown(300);
-                    $(".delete_user_role_success").delay(1000).slideUp(300, function () {
+                    $('.user_role_action_success p').text(response.msg);
+                    $('.user_role_action_success').slideDown(300);
+                    $(".user_role_action_success").delay(1000).slideUp(300, function () {
                         window.location.reload();
                     });
                 } else {
-                    $('.delete_user_role_fail p').text(response.msg);
-                    $('.delete_user_role_fail').slideDown(300);
-                    $(".delete_user_role_fail").delay(1000).slideUp(300, function () {
+                    $('.user_role_action_fail p').text(response.msg);
+                    $('.user_role_action_fail').slideDown(300);
+                    $(".user_role_action_fail").delay(1000).slideUp(300, function () {
                         window.location.reload();
                     });
                 }
             });
+    });
+
+    $('.add_user_role').on('click', function () {
+        $('.choose_role').delay(100).slideDown(300);
+        $('.select-role').on('change', function () {
+            let url = "{{ route('addUserRole', ['user' => $user]) }}";
+            let roleId = $(this).val();
+            $.post(url, {
+                _token: '{{ csrf_token() }}',
+                roleId: roleId
+            })
+                .success(function (response) {
+                    if (response.msg == 'Role added to user!') {
+                        $('.user_role_action_success p').text(response.msg);
+                        $('.user_role_action_success').slideDown(300);
+                        $(".user_role_action_success").delay(1000).slideUp(300, function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        $('.user_role_action_fail p').text(response.msg);
+                        $('.user_role_action_fail').slideDown(300);
+                        $(".user_role_action_fail").delay(1000).slideUp(300, function () {
+                            window.location.reload();
+                        });
+                    }
+                });
+        });
     });
 </script>
 
