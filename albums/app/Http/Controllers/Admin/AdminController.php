@@ -76,16 +76,46 @@ class AdminController extends Controller
         $startDate = Carbon::now()->startOfDay()->subDays(7);
         $endDate = Carbon::now()->startOfDay();
         $period = CarbonPeriod::create($startDate, $endDate);
+        $registeredCount = [];
 
-        $dates = [];
         foreach ($period as $date) {
-            $dates[] = $date->toDateString();
+            $registeredCount[$date->toDateString()] = User::where(DB::raw("created_at::date"), '=', $date)->count();
         }
 
-        $select = DB::select("SELECT created_at::date, count(id) FROM users GROUP BY created_at::date");
+        return view('admin.dashboard', ['data' => $registeredCount]);
+    }
 
 
-        return view('admin.dashboard', ['dates' => $dates, 'select' => $select]);
+    public function dashboardPeriod(Request $request)
+    {
+        $term = explode('_', $request->get('period'))[0];
+        $period = explode('_', $request->get('period'))[1];
+
+        switch ($period) {
+            case 'day':
+                $startDate = Carbon::now()->startOfDay()->subDays($term-1);
+                $endDate = Carbon::now()->startOfDay();
+                $period = CarbonPeriod::create($startDate, $endDate);
+                $registeredCount = [];
+                foreach ($period as $date) {
+                    $registeredCount[$date->toDateString()] = User::where(DB::raw("created_at::date"), '=', $date)->count();
+                }
+                break;
+            case 'month':
+                $startDate = Carbon::now()->startOfDay()->subMonths($term-1);
+                $endDate = Carbon::now()->startOfDay();
+                $period = CarbonPeriod::create($startDate, $endDate);
+                $registeredCount = [];
+                foreach ($period as $date) {
+                    $registeredCount[$date->format('F') . ' ' . $date->format('y')] = User::where(DB::raw("extract(month from created_at)"), '=', $date->format('m'))->count();
+                }
+                break;
+        }
+
+        return response()->json([
+            'data' => $registeredCount,
+        ]);
+
     }
 
     public function roles()

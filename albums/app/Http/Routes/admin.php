@@ -15,10 +15,7 @@ Route::middleware(['userblocked', 'auth', 'admin'])->group(function () {
         })->name('admin');
 
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('adminDashboard');
-
-        Route::get('/blank', function () {
-            return view('admin.blank');
-        })->name('adminBlank');
+        Route::post('/dashboard', [AdminController::class, 'dashboardPeriod'])->name('adminDashboardPeriod');
 
         Route::get('/users', [AdminController::class, 'users'])->name('adminUsers');
 

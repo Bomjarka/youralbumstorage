@@ -8,8 +8,7 @@
         <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
         <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
             <a href="{{ route('main') }}" target="_blank" class="block px-4 py-2 account-link hover:text-blue-600 opacity-100">Back to app</a>
-            <a href="#" class="block px-4 py-2 account-link hover:text-blue-600 opacity-100">Account</a>
-            <a href="#" class="block px-4 py-2 account-link hover:text-blue-600">Support</a>
+            <a href="{{ route('adminUser' ,['user' => Auth::user()]) }}" class="block px-4 py-2 account-link hover:text-blue-600 opacity-100">Profile</a>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <a href="{{ route('logout') }}" class="block px-4 py-2 account-link hover:text-blue-600"

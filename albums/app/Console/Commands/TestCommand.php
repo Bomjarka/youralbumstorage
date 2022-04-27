@@ -4,8 +4,11 @@ namespace App\Console\Commands;
 
 
 use App\Models\User;
-use App\Services\RoleService;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class TestCommand extends Command
 {
@@ -15,12 +18,17 @@ class TestCommand extends Command
 
     public function handle()
     {
-        $user = User::find(2);
+//        User::factory()->count(5)->create();
 
-        $rolesArr = [];
-        foreach ((new RoleService())->getAllRoles() as $role) {
-            $rolesArr[] = $role->name;
+        $startDate = Carbon::now()->startOfDay()->subMonths(2)->format('F');
+        $endDate = Carbon::now()->startOfDay()->format('F');
+        $period = CarbonPeriod::create($startDate, $endDate);
+        $registeredCount = [];
+        foreach ($period as $date) {
+            $registeredCount[$date->format('F')] = User::where(DB::raw("extract(month from created_at)"), '=', $date->format('m'))->count();
         }
-        dd(json_encode($rolesArr));
+        dd($registeredCount);
+
+//        dd(json_encode($rolesArr));
     }
 }

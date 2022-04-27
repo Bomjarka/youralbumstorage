@@ -6,19 +6,25 @@
         <h1 class="text-3xl text-black pb-6">Dashboard</h1>
         <div class="flex flex-wrap mt-6">
             <div class="w-full lg:w-1/2 pr-0 lg:pr-2">
-                <p class="text-xl pb-3 flex items-center">
-                    <i class="fas fa-plus mr-3"></i> Users
-                </p>
-                <div class="p-6 bg-white">
-                    <canvas id="chartOne" width="400" height="200"></canvas>
+                <p class="text-xl pb-3 flex items-center">Registrations</p>
+                <div class="flex flex-wrap justify-end p-6 bg-white">
+                    <select
+                        class="select-period appearance-none block text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                        <option value="7_day" selected>7 days</option>
+                        <option value="14_day">14 days</option>
+                        <option value="30_day">30 days</option>
+                        <option value="3_month">3 months</option>
+                        <option value="6_month">6 months</option>
+                        <option value="12_month">1 year</option>
+                    </select>
+                    <canvas id="usersRegisteredChart" width="400" height="200"></canvas>
                 </div>
             </div>
             <div class="w-full lg:w-1/2 pl-0 lg:pl-2 mt-12 lg:mt-0">
-                <p class="text-xl pb-3 flex items-center">
-                    <i class="fas fa-check mr-3"></i> Resolved Reports
-                </p>
+                <p class="text-xl pb-3 flex items-center">Resolved Reports</p>
                 <div class="p-6 bg-white">
                     <canvas id="chartTwo" width="400" height="200"></canvas>
+
                 </div>
             </div>
         </div>
@@ -26,88 +32,46 @@
 </x-admin-layout>
 
 <script>
-    let values = <?php echo json_encode($select); ?>;
-    let labels = [];
-    let data = [];
+    let countData = @json(array_values($data));
+    let labelData = @js(array_keys($data));
+    const data = {
+        labels: labelData,
+        datasets: [
+            {
+                label: "Registered users",
+                backgroundColor: "hsl(252, 82.9%, 67.8%)",
+                borderColor: "hsl(252, 82.9%, 67.8%)",
+                data: countData,
+            },
+        ],
+    };
 
-    values.forEach(function (elem, index) {
-        labels += elem['created_at'];
-        data += elem['count'];
-    });
-    console.log(values);
-    var chartOne = document.getElementById('chartOne');
-    var myChart = new Chart(chartOne, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: '# of Votes',
-                data: data,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
+    const configLineChart = {
+        type: "line",
+        data,
+        options: {},
+    };
+
+    var usersRegisteredChart = new Chart(
+        document.getElementById("usersRegisteredChart"),
+        configLineChart
+    );
+
+    $('.select-period').on('click', function () {
+        let url = "{{ route('adminDashboardPeriod') }}";
+        let period = $(this).val();
+        $.post(url, {
+            _token: '{{ csrf_token() }}',
+            period: period
+        })
+            .success(function (response) {
+                labelData = Object.keys(response.data)
+                countData = Object.values(response.data);
+                usersRegisteredChart.data.labels.pop();
+                usersRegisteredChart.data.labels = labelData;
+                usersRegisteredChart.data.datasets[0].data = countData;
+                usersRegisteredChart.update();
+            });
     });
 
-    var chartTwo = document.getElementById('chartTwo');
-    var myLineChart = new Chart(chartTwo, {
-        type: 'line',
-        data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
 </script>
