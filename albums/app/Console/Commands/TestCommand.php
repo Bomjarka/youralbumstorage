@@ -18,10 +18,7 @@ class TestCommand extends Command
 
     public function handle()
     {
-//        User::factory()->count(5)->create();
-
-        dd(User::find(7)->isBlocked());
-
-//        dd(json_encode($rolesArr));
+        $photos = User::find(2)->photos;
+        dd($photos->where('id', '>', $photos->first()->id)->count());
     }
 }

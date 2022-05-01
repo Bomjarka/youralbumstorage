@@ -24,6 +24,9 @@ Route::middleware(['userblocked', 'auth'])->group(function () {
         Route::get('/download/{filename}', [PhotoController::class, 'download'])->name('download');
 
     });
+    Route::get('/gallery', function () {
+        return view('user.gallery');
+    })->name('gallery');
 
     Route::prefix('photos')->group(function () {
         Route::get('/{photo}', [PageController::class, 'photos'])->name('userPhotos');
