@@ -16,6 +16,8 @@ class DeleteUsersPhotosAndAlbums extends Command
 
     protected $name = 'DeleteUsersPhotosAndAlbums';
 
+    protected $description = 'Команда для удаления фотография и альбомов, которые были удалены пользователем более 30 дней назад';
+
     public function handle(PhotoService $photoService, AlbumService $albumService)
     {
         $dateOfDeletion = Carbon::now()->startOfDay();

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class CheckAdmin
 {
     /**
-     * Handle an incoming request.
+     * Проверяем является ли пользователь администратором
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next

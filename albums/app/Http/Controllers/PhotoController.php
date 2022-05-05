@@ -7,16 +7,29 @@ use App\Models\Photo;
 use App\Models\User;
 use App\Notifications\DownloadPhotosNotification;
 use App\Services\PhotoService;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use ZipArchive;
 
 class PhotoController extends Controller
 {
     public const NO_ALBUM = 'no_album';
 
+    /**
+     *
+     * Возвращает страницу с фотографиями
+     *
+     * @return Application|Factory|View
+     */
     public function index()
     {
         if ($user = Auth::user()) {
@@ -27,7 +40,15 @@ class PhotoController extends Controller
         return view('guest.photos');
     }
 
-    public function create(Request $request, PhotoService $photoService)
+    /**
+     *
+     * Создать новую фотографию
+     *
+     * @param Request $request
+     * @param PhotoService $photoService
+     * @return RedirectResponse
+     */
+    public function create(Request $request, PhotoService $photoService): RedirectResponse
     {
         $request->validate([
             'photo_name' => ['required', 'string', 'max:255'],
@@ -39,14 +60,31 @@ class PhotoController extends Controller
         return redirect()->back();
     }
 
-    public function delete(Photo $photo, PhotoService $photoService)
+    /**
+     *
+     * Удалить фото
+     *
+     * @param Photo $photo
+     * @param PhotoService $photoService
+     * @return RedirectResponse
+     */
+    public function delete(Photo $photo, PhotoService $photoService): RedirectResponse
     {
         $photoService->deletePhoto($photo);
 
         return redirect()->back();
     }
 
-    public function edit(Request $request, Photo $photo, PhotoService $photoService)
+    /**
+     *
+     * Редакетировать данные фотографии
+     *
+     * @param Request $request
+     * @param Photo $photo
+     * @param PhotoService $photoService
+     * @return RedirectResponse
+     */
+    public function edit(Request $request, Photo $photo, PhotoService $photoService): RedirectResponse
     {
         $newName = $request->get('photo_name');
         $newDescription = $request->get('photo_description');
@@ -67,24 +105,22 @@ class PhotoController extends Controller
         return redirect()->back();
     }
 
-    public function restorePhoto(Request $request, PhotoService $photoService)
-    {
-        $photo = Photo::withTrashed()->find($request->get('photoId'));
-        $photoService->restorePhoto($photo);
 
-        return response()->json([
-            'msg' => 'Photo restored!',
-        ]);
-    }
-
-    public function downloadAllPhotos(Request $request)
+    /**
+     *
+     * Скачать все фотографии, подготавливает архив со всеми пользовательскими изображениями
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function downloadAllPhotos(Request $request): JsonResponse
     {
         $user = User::find($request->get('userId'));
         $archivePath = Storage::path('public/userphotos/' . $user->id . '/photos.zip');
         $zip = new ZipArchive();
         $albums = $user->albums;
 
-        $zip->open($archivePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        $zip->open($archivePath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
         foreach ($albums as $album) {
             foreach ($album->photos as $albumPhoto) {
                 $image = Image::make(Storage::disk('local')->path('public/' . $albumPhoto->photo_path));
@@ -94,6 +130,7 @@ class PhotoController extends Controller
         }
         $zip->close();
 
+        //Отправим пользователю письмо с ссылкой на скачивание архива
         $user->notify(new DownloadPhotosNotification($archivePath));
 
         return response()->json([
@@ -102,6 +139,14 @@ class PhotoController extends Controller
         ]);
     }
 
+    /**
+     *
+     * Скачивание архива по ссылке из письма
+     *
+     * @param Request $request
+     * @param string $filename
+     * @return Application|RedirectResponse|Redirector|BinaryFileResponse
+     */
     public function download(Request $request, string $filename)
     {
         $user = Auth::user();

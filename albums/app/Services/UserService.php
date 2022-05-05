@@ -12,7 +12,7 @@ class UserService
         $user->login = $userData['login'];
         $user->first_name = $userData['firstName'];
         $user->second_name = $userData['secondName'];
-        $user->lastName = $userData['lastName'];
+        $user->last_name = $userData['lastName'];
         $user->sex = $userData['gender'];
         $user->phone = $userData['phone'];
         $user->email = $userData['email'];

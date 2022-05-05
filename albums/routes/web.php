@@ -1,9 +1,6 @@
 <?php
 
 use App\Http\Controllers\Guest\GuestController;
-use App\Http\Controllers\User\UserController;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +17,6 @@ use Illuminate\Support\Facades\Route;
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/../app/Http/Routes/user.php';
-require __DIR__ . '/../app/Http/Routes/guest.php';
 require __DIR__ . '/../app/Http/Routes/common.php';
 require __DIR__ . '/../app/Http/Routes/admin.php';
 

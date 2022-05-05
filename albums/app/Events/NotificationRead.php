@@ -18,7 +18,7 @@ class NotificationRead
     public $user;
 
     /**
-     * Create a new event instance.
+     * Event о прочтении нотификации пользователем
      *
      * @return void
      */

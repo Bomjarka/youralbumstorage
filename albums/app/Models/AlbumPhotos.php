@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 /**
+ *
+ * Модель Фотографии Альбома
+ *
  * @property int $user_id
  * @property string $name
  * @property string description

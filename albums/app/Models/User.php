@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Services\RoleService;
 use App\Traits\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -21,6 +22,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property mixed $second_name
  * @property mixed $first_name
  * @property bool $is_blocked
+ * @property int $id
  */
 class User extends Authenticatable
 {
@@ -55,40 +57,69 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function fullName()
+    /**
+     *
+     * Возвращает полное имя пользователя
+     *
+     * @return string
+     */
+    public function fullName(): string
     {
         return implode(' ', array_filter([$this->first_name, $this->second_name, $this->last_name]));
     }
 
-    public function isBlocked()
+    /**
+     *
+     * Заблокрован ли пользователь
+     *
+     * @return bool
+     */
+    public function isBlocked(): bool
     {
         return $this->is_blocked;
     }
 
-    public function albums()
+    /**
+     *
+     * Возвращает все пользовательские альбомы
+     *
+     * @return HasMany
+     */
+    public function albums(): HasMany
     {
         return $this->hasMany(Album::class)->orderBy('id');
     }
 
+    /**
+     *
+     * Возвращает все пользовательские удалённые альбомы
+     *
+     * @return mixed
+     */
     public function trashedAlbums()
     {
         return $this->albums()->onlyTrashed();
     }
 
-    public function photos()
+    /**
+     *
+     * Возвраащает все пользовательские фоторафии
+     *
+     * @return HasMany
+     */
+    public function photos(): HasMany
     {
         return $this->hasMany(Photo::class)->orderBy('id');
     }
 
-    public function roles()
-    {
-        return (new RoleService())->getUserRoles($this->id);
-
-    }
-
+    /**
+     *
+     * Возвращает все удалёныее пользователем фотографии
+     *
+     * @return mixed
+     */
     public function trashedPhotos()
     {
         return $this->photos()->onlyTrashed();
     }
-
 }

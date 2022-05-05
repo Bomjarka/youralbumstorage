@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Route;
 /**
  * Маршруты для администратора
  */
-
 Route::middleware(['userblocked', 'auth', 'admin'])->group(function () {
     Route::prefix('admin')->group(function () {
         Route::get('/', function () {

@@ -74,7 +74,15 @@ class RoleService
         return $this->allRoles = $this->allRoles ?? Role::all();
     }
 
-    public function createRole(string $name, string $description = null)
+    /**
+     *
+     * Создание новой роли приложения
+     *
+     * @param string $name
+     * @param string|null $description
+     * @return void
+     */
+    public function createRole(string $name, string $description = null): void
     {
         Role::create([
            'name' => $name,

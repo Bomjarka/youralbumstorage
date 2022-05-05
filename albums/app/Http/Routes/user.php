@@ -12,22 +12,27 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['userblocked', 'auth'])->group(function () {
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
 
+    //Страница профиль
     Route::prefix('profile')->group(function () {
         Route::post('/edit', [UserController::class, 'edit'])->name('editUserProfile');
 
-        Route::post('/trash/albums', [AlbumController::class, 'restoreAlbum'])->name('restoreAlbum');
+        Route::post('/trash/albums', [UserController::class, 'restoreAlbum'])->name('restoreAlbum');
 
-        Route::post('/trash/photos', [PhotoController::class, 'restorePhoto'])->name('restorePhoto');
+        Route::post('/trash/photos', [UserController::class, 'restorePhoto'])->name('restorePhoto');
 
         Route::post('/albums_and_photos', [PhotoController::class, 'downloadAllPhotos'])->name('downloadAllPhotos');
 
         Route::get('/download/{filename}', [PhotoController::class, 'download'])->name('download');
 
     });
+
+    //Страница с галлереей
     Route::get('/gallery', function () {
         return view('user.gallery');
     })->name('gallery');
 
+
+    //Страница с фотографиями пользователя
     Route::prefix('photos')->group(function () {
         Route::get('/{photo}', [PageController::class, 'photos'])->name('userPhotos');
         Route::post('/create', [PhotoController::class, 'create'])->name('createPhoto');
@@ -37,6 +42,8 @@ Route::middleware(['userblocked', 'auth'])->group(function () {
         Route::post('/{photo}/delete', [PhotoController::class, 'delete'])->name('deletePhoto');
     });
 
+
+    //Страница с альбомами пользователя
     Route::prefix('albums')->group(function () {
         Route::get('/{album}', [AlbumController::class, 'album'])->name('userAlbum');
 

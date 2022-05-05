@@ -7,7 +7,14 @@ use App\Events\NotificationRead;
 
 class NotificationEventSubscriber
 {
-    public function handleNotificationread($event)
+    /**
+     *
+     * Помечаем нотификацию прочитанной если ловим событие
+     *
+     * @param $event
+     * @return void
+     */
+    public function handleNotificationRead($event): void
     {
         $user = $event->user;
         $user->unreadNotifications

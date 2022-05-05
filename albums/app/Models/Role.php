@@ -18,6 +18,5 @@ class Role extends Model
      */
     public $timestamps = false;
 
-
     public const ROLE_ADMIN = 'admin';
 }

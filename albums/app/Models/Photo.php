@@ -4,9 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
+ *
+ *Модель Фотографии
+ *
  * @property int $id
  */
 class Photo extends Model
@@ -22,32 +27,64 @@ class Photo extends Model
         'photo_preview_path'
     ];
 
-    public function user()
+    /**
+     *
+     * Возвращает пользователя, которому принадлежит фотография
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function album()
+    /**
+     *
+     * Возвращает альбом, которому принадлежит фотография
+     *
+     * @return BelongsToMany
+     */
+    public function album(): BelongsToMany
     {
         return $this->belongsToMany(Album::class, 'album_photos', 'photo_id');
     }
 
+    /**
+     *
+     * Возвращает удалённый альбом если фото относится
+     * к такому альбому (например пользователь удалил альбом, но оставил фотографии)
+     *
+     * @return mixed
+     */
     public function trashedAlbum()
     {
         return $this->album()->onlyTrashed();
     }
 
-    public function associateAlbumPhoto($albumid): void
+    /**
+     * Привязываем фото к альбому
+     *
+     * @param $albumId
+     * @return void
+     */
+    public function associateAlbumPhoto($albumId): void
     {
         AlbumPhotos::create([
-            'album_id' => $albumid,
+            'album_id' => $albumId,
             'photo_id' => $this->id,
         ]);
     }
 
-    public function disassociateAlbumPhoto($albumid)
+    /**
+     *
+     * Отвязываем фото от альбома
+     *
+     * @param $albumId
+     * @return void
+     */
+    public function disassociateAlbumPhoto($albumId): void
     {
-        $albumPhoto = AlbumPhotos::whereAlbumId($albumid)->wherePhotoId($this->id)->first();
+        $albumPhoto = AlbumPhotos::whereAlbumId($albumId)->wherePhotoId($this->id)->first();
         $albumPhoto->delete();
     }
 }

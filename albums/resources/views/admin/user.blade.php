@@ -119,19 +119,21 @@
                     <div class="choose_role flex items-center justify-end hidden">
                         <x-admin.role-search-input></x-admin.role-search-input>
                     </div>
-                    @if ($user->roles()->count() == 0)
+                    @if (RoleHelper::get_user_roles($user->id)->count() == 0)
                         No roles
                     @else
                         <table class="min-w-full bg-white mt-3">
                             <thead class="bg-gray-800 text-white">
                             <tr>
                                 <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">Role name</th>
-                                <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">Role description</th>
+                                <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">Role
+                                    description
+                                </th>
                                 <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">Action</th>
                             </tr>
                             </thead>
                             <tbody class="text-gray-700">
-                            @foreach($user->roles()->sortBy('id') as $role)
+                            @foreach(RoleHelper::get_user_roles($user->id)->sortBy('id') as $role)
                                 <tr>
                                     <input type="hidden" class="role_id_{{ $role->id }}" name="role_id"
                                            value="{{ $role->id }}">

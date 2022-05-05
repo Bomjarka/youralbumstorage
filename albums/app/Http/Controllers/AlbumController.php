@@ -6,22 +6,41 @@ use App\Models\Album;
 use App\Models\AlbumPhotos;
 use App\Models\Photo;
 use App\Services\AlbumService;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 
 
 class AlbumController extends Controller
 {
+    /**
+     *
+     * Возвращает страницу с альбомами
+     *
+     * @return Application|Factory|View
+     */
     public function index()
     {
         if ($user = Auth::user()) {
             $albums = Album::whereUserId($user->id)->orderBy('id')->simplePaginate(5);
+
             return view('user.albums', ['albums' => $albums]);
         }
 
         return view('guest.albums');
     }
 
+    /**
+     *
+     * Возвращает страницу открытого пользователем альбома
+     *
+     * @param Album $album
+     * @return Application|Factory|View
+     */
     public function album(Album $album)
     {
         $albumPhotosId = AlbumPhotos::whereAlbumId($album->id)->get()->pluck('photo_id');
@@ -30,8 +49,18 @@ class AlbumController extends Controller
         return view('user.album', ['album' => $album, 'photos' => $photos]);
     }
 
+    /**
+     *
+     * Удаление альбома
+     *
+     * @param Request $request
+     * @param Album $album
+     * @param AlbumService $albumService
+     * @return Application|RedirectResponse|Redirector
+     */
     public function delete(Request $request, Album $album, AlbumService $albumService)
     {
+        //Передаём из blade значение чекбокса с вопросм удалить ли все фото из альбома
         $isDeletePhotosFromAlbum = $request->get('delete_photos');
 
         if (is_null($isDeletePhotosFromAlbum)) {
@@ -43,7 +72,15 @@ class AlbumController extends Controller
         return redirect('albums');
     }
 
-    public function create(Request $request, AlbumService $albumService)
+    /**
+     *
+     * Создать новый альбом
+     *
+     * @param Request $request
+     * @param AlbumService $albumService
+     * @return RedirectResponse
+     */
+    public function create(Request $request, AlbumService $albumService): RedirectResponse
     {
         $request->validate([
             'album_name' => ['required', 'string', 'max:255'],
@@ -55,7 +92,16 @@ class AlbumController extends Controller
         return redirect()->back();
     }
 
-    public function edit(Request $request, Album $album, AlbumService $albumService)
+    /**
+     *
+     * Редактировать данные об альбоме
+     *
+     * @param Request $request
+     * @param Album $album
+     * @param AlbumService $albumService
+     * @return RedirectResponse
+     */
+    public function edit(Request $request, Album $album, AlbumService $albumService): RedirectResponse
     {
         $newName = $request->get('album_name');
         $newDescription = $request->get('album_description');
@@ -64,15 +110,5 @@ class AlbumController extends Controller
         $albumService->changeAlbumDescription($album, $newDescription);
 
         return redirect()->back();
-    }
-
-    public function restoreAlbum(Request $request, AlbumService $albumService)
-    {
-        $album = Album::withTrashed()->find($request->get('albumId'));
-        $albumService->restoreAlbum($album);
-
-        return response()->json([
-            'msg' => 'Album restored!',
-        ]);
     }
 }
