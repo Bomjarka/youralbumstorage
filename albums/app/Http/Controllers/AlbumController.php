@@ -7,11 +7,22 @@ use App\Models\AlbumPhotos;
 use App\Models\Photo;
 use App\Services\AlbumService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class AlbumController extends Controller
 {
-    public function index(Album $album)
+    public function index()
+    {
+        if ($user = Auth::user()) {
+            $albums = Album::whereUserId($user->id)->orderBy('id')->simplePaginate(5);
+            return view('user.albums', ['albums' => $albums]);
+        }
+
+        return view('guest.albums');
+    }
+
+    public function album(Album $album)
     {
         $albumPhotosId = AlbumPhotos::whereAlbumId($album->id)->get()->pluck('photo_id');
         $photos = Photo::whereIn('id', $albumPhotosId)->orderBy('id')->get();
@@ -36,7 +47,7 @@ class AlbumController extends Controller
     {
         $request->validate([
             'album_name' => ['required', 'string', 'max:255'],
-            'album_description' => ['nullable','string', 'max:255'],
+            'album_description' => ['nullable', 'string', 'max:255'],
         ]);
 
         $albumService->createAlbum($request);

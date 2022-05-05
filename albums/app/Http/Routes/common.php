@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\PhotoController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -11,7 +13,7 @@ Route::get('/', [PageController::class, 'index'])->name('main');
 
 Route::get('/about', [PageController::class, 'about'])->name('about');
 
-Route::get('/albums', [PageController::class, 'albums'])->name('albums');
+Route::get('/albums', [AlbumController::class, 'index'])->name('albums');
 
-Route::get('/photos', [PageController::class, 'photos'])->name('photos');
+Route::get('/photos', [PhotoController::class, 'index'])->name('photos');
 

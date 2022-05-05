@@ -38,7 +38,7 @@ Route::middleware(['userblocked', 'auth'])->group(function () {
     });
 
     Route::prefix('albums')->group(function () {
-        Route::get('/{album}', [AlbumController::class, 'index'])->name('userAlbum');
+        Route::get('/{album}', [AlbumController::class, 'album'])->name('userAlbum');
 
         Route::post('/create', [AlbumController::class, 'create'])
             ->name('createAlbum');

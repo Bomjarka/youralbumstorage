@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class TestCommand extends Command
 {
-    protected $signature = 'test';
+    protected $signature = 'test1';
 
     protected $name = 'TestCommand';
 

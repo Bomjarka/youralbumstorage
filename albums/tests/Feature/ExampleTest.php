@@ -18,4 +18,11 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_guset_view_albums()
+    {
+        $response = $this->get('/about');
+
+        $response->assertStatus(200);
+    }
 }

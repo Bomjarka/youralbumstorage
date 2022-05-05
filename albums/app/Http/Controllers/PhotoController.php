@@ -19,7 +19,12 @@ class PhotoController extends Controller
 
     public function index()
     {
-        return view('user.photo');
+        if ($user = Auth::user()) {
+            $photos = Photo::whereUserId($user->id)->orderBy('id')->get();
+            return view('user.photos', ['photos' => $photos]);
+        }
+
+        return view('guest.photos');
     }
 
     public function create(Request $request, PhotoService $photoService)
