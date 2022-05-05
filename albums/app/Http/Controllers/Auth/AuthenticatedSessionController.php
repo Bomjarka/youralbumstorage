@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Helpers\RoleHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Role;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +35,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        if (RoleHelper::has_role('admin', Auth::user()->id)) {
+        if (RoleHelper::has_role(Role::ROLE_ADMIN, Auth::user()->id)) {
             if ($request->get('usual_user')) {
                 return redirect('/');
             }

@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Helpers\RoleHelper;
+use App\Models\Role;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,7 @@ class CheckAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (RoleHelper::has_role('admin', Auth::user()->id)) {
+        if (RoleHelper::has_role(Role::ROLE_ADMIN, Auth::user()->id)) {
             return $next($request);
         }
 

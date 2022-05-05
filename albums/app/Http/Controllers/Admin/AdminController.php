@@ -48,7 +48,7 @@ class AdminController extends Controller
 
     public function makeAdmin(User $user, RoleService $roleService)
     {
-        if ($roleService->addRoleUser('admin', $user->id)) {
+        if ($roleService->addRoleUser(Role::ROLE_ADMIN, $user->id)) {
             return response()->json([
                 'msg' => 'User is admin now!',
             ]);
@@ -61,7 +61,7 @@ class AdminController extends Controller
 
     public function disableAdmin(User $user, RoleService $roleService)
     {
-        if ($roleService->removeRoleUser('admin', $user->id)) {
+        if ($roleService->removeRoleUser(Role::ROLE_ADMIN, $user->id)) {
             return response()->json([
                 'msg' => 'Admin role removed!',
             ]);
@@ -81,7 +81,7 @@ class AdminController extends Controller
         $photosUploadedCount = [];
 
         foreach ($period as $date) {
-            $registeredCount[$date->toDateString()] = User::where(DB::raw("created_at::date"), '=', $date)->count();
+            $registeredCount[$date->toDateString()] = User::where('login', '!=', Role::ROLE_ADMIN)->where(DB::raw("created_at::date"), '=', $date)->count();
             $photosUploadedCount[$date->toDateString()] = Photo::where(DB::raw("created_at::date"), '=', $date)->count();
         }
 
