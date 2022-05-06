@@ -7,8 +7,11 @@ use App\Models\Photo;
 
 class PhotoService
 {
-
-    public function createPhoto($request)
+    /**
+     * @param $request
+     * @return void
+     */
+    public function createPhoto($request): void
     {
         $imageService = new ImageService();
         $file = $request->file('user_photo');
@@ -30,33 +33,53 @@ class PhotoService
 
     }
 
-    public function changePhotoName($photo, string $newName)
+    /**
+     * @param $photo
+     * @param string $newName
+     * @return void
+     */
+    public function changePhotoName($photo, string $newName): void
     {
         $photo->name = $newName;
         $photo->save();
     }
 
-    public function changePhotoDescription($photo, string $newDescription)
+    /**
+     * @param $photo
+     * @param string $newDescription
+     * @return void
+     */
+    public function changePhotoDescription($photo, string $newDescription): void
     {
         $photo->description = $newDescription;
         $photo->save();
     }
 
-    public function deletePhoto($photo)
+    /**
+     * @param $photo
+     * @return void
+     */
+    public function deletePhoto($photo): void
     {
-
-
         $photo->delete();
     }
 
-    public function deletePhotoPermanently(Photo $photo)
+    /**
+     * @param Photo $photo
+     * @return void
+     */
+    public function deletePhotoPermanently(Photo $photo): void
     {
         $imageService = new ImageService();
         $imageService->deleteImage($photo);
         $photo->forceDelete();
     }
 
-    public function restorePhoto(Photo $photo)
+    /**
+     * @param Photo $photo
+     * @return void
+     */
+    public function restorePhoto(Photo $photo): void
     {
         if ($photo->trashedAlbum()->first()) {
             $photo->disassociateAlbumPhoto($photo->trashedAlbum()->first()->id);

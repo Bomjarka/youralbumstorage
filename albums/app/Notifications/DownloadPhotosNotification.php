@@ -27,12 +27,12 @@ class DownloadPhotosNotification extends Notification
     }
 
     /**
-     * Get the notification's delivery channels.
+     * Уведомление с ссылкой на скачивание файла
      *
      * @param mixed $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return ['mail', 'database'];
     }
@@ -52,7 +52,14 @@ class DownloadPhotosNotification extends Notification
     }
 
 
-    protected function downloadFileUrl($notifiable)
+    /**
+     *
+     * Ссылка на скачивание файла
+     *
+     * @param $notifiable
+     * @return string
+     */
+    protected function downloadFileUrl($notifiable): string
     {
         $fileName = Arr::last(explode('/', $this->file));
 

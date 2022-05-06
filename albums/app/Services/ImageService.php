@@ -8,16 +8,24 @@ use Intervention\Image\Facades\Image;
 
 class ImageService
 {
-    const FILEPATH = 'userphotos/';
+    public const FILEPATH = 'userphotos/';
 
-    public function  __construct()
+    public function __construct()
     {
         if (!Storage::disk('public')->exists(self::FILEPATH)) {
             Storage::disk('public')->makeDirectory(self::FILEPATH);
         }
     }
 
-    public function createImage($file, $userid)
+    /**
+     *
+     * Создаём изображение
+     *
+     * @param $file
+     * @param $userid
+     * @return string
+     */
+    public function createImage($file, $userid): string
     {
         $filePath = self::FILEPATH . $userid;
         $this->checkFolder($filePath);
@@ -29,7 +37,15 @@ class ImageService
         return $filePath . '/' . $fileName;
     }
 
-    public function createPreview($file, $userid)
+    /**
+     *
+     * Создаём превью изображения
+     *
+     * @param $file
+     * @param $userid
+     * @return string
+     */
+    public function createPreview($file, $userid): string
     {
         $filePath = self::FILEPATH . $userid . '/preview';
         $this->checkFolder($filePath);
@@ -41,25 +57,32 @@ class ImageService
         return $filePath . '/' . $fileName;
     }
 
-    public function deleteImage($photo)
+    /**
+     * @param $photo
+     * @return bool
+     */
+    public function deleteImage($photo): bool
     {
-//        if (!Storage::disk('public')->exists($photo->photo_path)
-//            || !Storage::disk('public')->exists($photo->photo_preview_path)) {
-//            return \Exception::class;
-//        }
-
         Storage::disk('public')->delete($photo->photo_path);
         Storage::disk('public')->delete($photo->photo_preview_path);
 
         return true;
     }
 
-    private function createFilename($file)
+    /**
+     * @param $file
+     * @return string
+     */
+    private function createFilename($file): string
     {
         return Str::random(20) . $file->getClientOriginalName();
     }
 
-    private function checkFolder($filepath)
+    /**
+     * @param $filepath
+     * @return void
+     */
+    private function checkFolder($filepath): void
     {
         if (!Storage::disk('public')->exists($filepath)) {
             Storage::disk('public')->makeDirectory($filepath);

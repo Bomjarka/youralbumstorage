@@ -8,7 +8,11 @@ use App\Models\User;
 
 class AlbumService
 {
-    public function createAlbum($request)
+    /**
+     * @param $request
+     * @return void
+     */
+    public function createAlbum($request): void
     {
         Album::create([
             'user_id' => $request->get('user_id'),
@@ -17,23 +21,33 @@ class AlbumService
         ]);
     }
 
-    public function changeAlbumName($album, string $newName)
+    /**
+     * @param $album
+     * @param string $newName
+     * @return void
+     */
+    public function changeAlbumName($album, string $newName): void
     {
         $album->name = $newName;
         $album->save();
     }
 
-    public function changeAlbumDescription($album, string $newDescription)
+    public function changeAlbumDescription($album, string $newDescription): void
     {
         $album->description = $newDescription;
         $album->save();
     }
 
-    public function deleteAlbum(Album $album, bool $isDeletePhotosFromAlbum = false)
+    /**
+     * @param Album $album
+     * @param bool $isDeletePhotosFromAlbum
+     * @return void
+     */
+    public function deleteAlbum(Album $album, bool $isDeletePhotosFromAlbum = false): void
     {
         $photoService = new PhotoService();
 
-        if ($isDeletePhotosFromAlbum == true) {
+        if ($isDeletePhotosFromAlbum) {
             foreach ($album->photos as $photo) {
                 $photoService->deletePhoto($photo);
             }
@@ -42,12 +56,26 @@ class AlbumService
         $album->delete();
     }
 
-    public function deleteAlbumPermanently(Album $album)
+    /**
+     *
+     * Удаляем альбом из базы
+     *
+     * @param Album $album
+     * @return void
+     */
+    public function deleteAlbumPermanently(Album $album): void
     {
         $album->forceDelete();
     }
 
-    public function restoreAlbum(Album $album)
+    /**
+     *
+     * Восстанавливаем альбом из корзины
+     *
+     * @param Album $album
+     * @return void
+     */
+    public function restoreAlbum(Album $album): void
     {
         $album->restore();
 

@@ -7,7 +7,12 @@ use Illuminate\Http\Request;
 
 class UserService
 {
-    public function editData($userData, User $user)
+    /**
+     * @param $userData
+     * @param User $user
+     * @return void
+     */
+    public function editData($userData, User $user): void
     {
         $user->login = $userData['login'];
         $user->first_name = $userData['firstName'];
@@ -21,13 +26,21 @@ class UserService
         $user->save();
     }
 
-    public function block(User $user)
+    /**
+     * @param User $user
+     * @return void
+     */
+    public function block(User $user): void
     {
         $user->is_blocked = true;
         $user->save();
     }
 
-    public function unblock(User $user)
+    /**
+     * @param User $user
+     * @return void
+     */
+    public function unblock(User $user): void
     {
         $user->is_blocked = false;
         $user->save();

@@ -11,7 +11,7 @@ trait MustVerifyEmail
      *
      * @return bool
      */
-    public function hasVerifiedEmail()
+    public function hasVerifiedEmail(): bool
     {
         return ($this->is_verified);
     }
@@ -21,7 +21,7 @@ trait MustVerifyEmail
      *
      * @return bool
      */
-    public function markEmailAsVerified()
+    public function markEmailAsVerified(): bool
     {
         return $this->forceFill([
             'is_verified' => true,
@@ -33,7 +33,7 @@ trait MustVerifyEmail
      *
      * @return void
      */
-    public function sendEmailVerificationNotification()
+    public function sendEmailVerificationNotification(): void
     {
         $this->notify(new VerifyEmail);
     }
@@ -43,7 +43,7 @@ trait MustVerifyEmail
      *
      * @return string
      */
-    public function getEmailForVerification()
+    public function getEmailForVerification(): string
     {
         return $this->email;
     }
