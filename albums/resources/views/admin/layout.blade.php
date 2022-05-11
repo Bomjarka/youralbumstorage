@@ -35,7 +35,7 @@
     </main>
     <h1 class="block w-full bg-white text-center p-4 font-bold md:hidden">Admin panel available only from Desktop</h1>
     <footer class="w-full bg-white text-center p-4">
-        Built by <a target="_blank" href="#" class="underline">Debeloped by Alexander Chirkin</a>.
+       <a target="_blank" href="#" class="underline">Developed by Alexander Chirkin</a>.
     </footer>
 </div>
 </body>

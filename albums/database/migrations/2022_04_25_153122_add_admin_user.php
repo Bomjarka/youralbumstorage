@@ -19,12 +19,12 @@ class AddAdminUser extends Migration
     {
         $user = User::create([
             'login' => 'admin',
-            'email' => 'admin@albums.ru',
+            'email' => 'admin@youralbumstorage.ru',
             'password' => Hash::make('Xamas123'),
-            'first_name' => 'admin',
-            'second_name' => 'admin',
-            'last_name' => 'admin',
-            'phone' => '89609213097',
+            'first_name' => 'Alexander',
+            'second_name' => 'Nikolayevich',
+            'last_name' => 'Chirkin',
+            'phone' => '89609213096',
             'sex' => 'male',
             'birthdate' => new Carbon('1996-10-27'),
             'is_verified' => true,

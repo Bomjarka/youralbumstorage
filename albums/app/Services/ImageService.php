@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
@@ -25,16 +27,23 @@ class ImageService
      * @param $userid
      * @return string
      */
-    public function createImage($file, $userid): string
+    public function createImage($file, $userid): ?string
     {
-        $filePath = self::FILEPATH . $userid;
-        $this->checkFolder($filePath);
-        $fileName = $this->createFilename($file);
+        try {
+            $filePath = self::FILEPATH . $userid;
+            $this->checkFolder($filePath);
+            $fileName = $this->createFilename($file);
 
-        $img = Image::make($file);
-        $img->save(Storage::disk('public')->path($filePath . '/' . $fileName));
+            $img = Image::make($file);
+            $img->save(Storage::disk('public')->path($filePath . '/' . $fileName));
 
-        return $filePath . '/' . $fileName;
+            return $filePath . '/' . $fileName;
+        } catch (\Exception $e) {
+            Log::critical('Error when create Image: ' . $e->getMessage(), ['fileData' => $file]);
+            DB::rollBack();
+            return null;
+        }
+
     }
 
     /**
@@ -45,16 +54,22 @@ class ImageService
      * @param $userid
      * @return string
      */
-    public function createPreview($file, $userid): string
+    public function createPreview($file, $userid): ?string
     {
-        $filePath = self::FILEPATH . $userid . '/preview';
-        $this->checkFolder($filePath);
-        $fileName = $this->createFilename($file);
-        $img = Image::make($file);
-        $img->fit(600, 400);
-        $img->save(Storage::disk('public')->path($filePath . '/' . $fileName));
+        try {
+            $filePath = self::FILEPATH . $userid . '/preview';
+            $this->checkFolder($filePath);
+            $fileName = $this->createFilename($file);
+            $img = Image::make($file);
+            $img->fit(600, 400);
+            $img->save(Storage::disk('public')->path($filePath . '/' . $fileName));
 
-        return $filePath . '/' . $fileName;
+            return $filePath . '/' . $fileName;
+        } catch (\Exception $e) {
+            Log::critical('Error when create Image: ' . $e->getMessage(), ['fileData' => $file]);
+
+            return null;
+        }
     }
 
     /**

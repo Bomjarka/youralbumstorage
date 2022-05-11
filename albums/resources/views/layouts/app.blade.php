@@ -50,6 +50,6 @@
 </div>
 </body>
 <footer class="w-full bg-white text-center p-4">
-    Built by <a target="_blank" href="#" class="underline">Debeloped by Alexander Chirkin</a>.
+   <a target="_blank" href="#" class="underline">Developed by Alexander Chirkin</a>.
 </footer>
 </html>

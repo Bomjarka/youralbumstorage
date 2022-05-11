@@ -25,7 +25,7 @@ class UserEventSubscriber
 
     public function handleUserVerified($event): void
     {
-       throw new \Exception('User was verified');
+
     }
 
     public function subscribe($events)

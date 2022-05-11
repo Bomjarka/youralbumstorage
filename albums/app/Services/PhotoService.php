@@ -4,6 +4,7 @@ namespace App\Services;
 
 
 use App\Models\Photo;
+use Illuminate\Support\Facades\DB;
 
 class PhotoService
 {
@@ -13,6 +14,8 @@ class PhotoService
      */
     public function createPhoto($request): void
     {
+
+        DB::beginTransaction();
         $imageService = new ImageService();
         $file = $request->file('user_photo');
 
@@ -30,6 +33,7 @@ class PhotoService
         if ($request->get('album_id')) {
             $photo->associateAlbumPhoto($request->get('album_id'), $photo->id);
         }
+        DB::commit();
 
     }
 
