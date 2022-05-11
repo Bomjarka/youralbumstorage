@@ -10,10 +10,10 @@ use Illuminate\Support\Facades\Route;
  * Маршруты для пользователей
  */
 Route::middleware(['userblocked', 'auth'])->group(function () {
-    Route::get('/profile', [UserController::class, 'profile'])->name('profile');
 
     //Страница профиль
     Route::prefix('profile')->group(function () {
+        Route::get('/', [UserController::class, 'profile'])->name('profile');
         Route::post('/edit', [UserController::class, 'edit'])->name('editUserProfile');
 
         Route::post('/trash/albums', [UserController::class, 'restoreAlbum'])->name('restoreAlbum');
@@ -23,7 +23,6 @@ Route::middleware(['userblocked', 'auth'])->group(function () {
         Route::post('/albums_and_photos', [PhotoController::class, 'downloadAllPhotos'])->name('downloadAllPhotos');
 
         Route::get('/download/{filename}', [PhotoController::class, 'download'])->name('download');
-
     });
 
     //Страница с галлереей

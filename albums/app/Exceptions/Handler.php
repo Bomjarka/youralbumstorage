@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
+use App\Mail\ErrorHandled;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Mail;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -35,7 +37,7 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->reportable(function (Throwable $e) {
-            //
+            Mail::to('admin@youralbumstorage.ru')->send(new ErrorHandled($e));
         });
     }
 }

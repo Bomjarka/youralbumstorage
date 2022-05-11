@@ -33,13 +33,12 @@ class ImageService
             $filePath = self::FILEPATH . $userid;
             $this->checkFolder($filePath);
             $fileName = $this->createFilename($file);
-
             $img = Image::make($file);
             $img->save(Storage::disk('public')->path($filePath . '/' . $fileName));
 
             return $filePath . '/' . $fileName;
         } catch (\Exception $e) {
-            Log::critical('Error when create Image: ' . $e->getMessage(), ['fileData' => $file]);
+            Log::critical('Error when create Image: ' . $e->getMessage(), ['fileData' => $file, 'errorRow' => $e->getLine()]);
             DB::rollBack();
             return null;
         }
