@@ -48,8 +48,6 @@ Route::middleware('auth')->group(function () {
                 ->middleware('throttle:6,1')
                 ->name('verification.send');
 
-//    Route::post('/mark-as-read', [NotificationController::class, 'markNotificationRead'])->name('markNotificationRead');
-
     Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
                 ->name('password.confirm');
 

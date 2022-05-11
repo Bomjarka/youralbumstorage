@@ -3,15 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use Carbon\Carbon;
+use App\Services\Registration\RegistrationService;
+use App\Services\Registration\UserData;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
@@ -30,11 +28,11 @@ class RegisteredUserController extends Controller
      * Handle an incoming registration request.
      *
      * @param Request $request
+     * @param RegistrationService $regisTrationService
      * @return RedirectResponse
      *
-     * @throws ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, RegistrationService $regisTrationService): RedirectResponse
     {
         $request->validate([
             'login' => ['required', 'string', 'max:255', 'unique:users'],
@@ -48,22 +46,11 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'login' => $request->login,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'first_name' => $request->first_name,
-            'second_name' => $request->second_name,
-            'last_name' => $request->last_name,
-            'phone' => $request->phone,
-            'sex' => $request->gender,
-            'birthdate' => Carbon::parse($request->birthdate),
-        ]);
+        $user = $regisTrationService->registerUser(UserData::prepareData($request));
 
         event(new Registered($user));
-
         Auth::login($user);
 
-        return redirect('/');
+        return redirect('/')->with('status', 'verification-link-sent');
     }
 }
