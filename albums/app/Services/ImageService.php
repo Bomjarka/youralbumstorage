@@ -72,6 +72,8 @@ class ImageService
     }
 
     /**
+     * Удаляет файлы с фотографиями
+     *
      * @param $photo
      * @return bool
      */
