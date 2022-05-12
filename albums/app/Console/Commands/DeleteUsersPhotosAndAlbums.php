@@ -16,14 +16,14 @@ class DeleteUsersPhotosAndAlbums extends Command
 
     protected $name = 'DeleteUsersPhotosAndAlbums';
 
-    protected $description = 'Команда для удаления фотография и альбомов, которые были удалены пользователем более 30 дней назад';
+    protected $description = 'Команда для удаления фотография и альбомов, которые были удалены пользователем более 24 часов назад';
 
     public function handle(PhotoService $photoService, AlbumService $albumService)
     {
         $dateOfDeletion = Carbon::now()->startOfDay();
 
-        $albumsQuery = Album::onlyTrashed()->where('deleted_at', '<', $dateOfDeletion->copy()->subDays(30));
-        $photosQuery = Photo::onlyTrashed()->where('deleted_at', '<', $dateOfDeletion->copy()->subDays(30));
+        $albumsQuery = Album::onlyTrashed()->where('deleted_at', '<', $dateOfDeletion->copy()->subHours(24));
+        $photosQuery = Photo::onlyTrashed()->where('deleted_at', '<', $dateOfDeletion->copy()->subHours(24));
 
         foreach ($albumsQuery->cursor() as $album) {
             $albumService->deleteAlbumPermanently($album);
