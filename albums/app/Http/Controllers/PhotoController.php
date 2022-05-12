@@ -87,7 +87,7 @@ class PhotoController extends Controller
     public function edit(Request $request, Photo $photo, PhotoService $photoService): RedirectResponse
     {
         $newName = $request->get('photo_name');
-        $newDescription = $request->get('photo_description');
+        $newDescription = $request->get('photo_description') ?? '';
 
         $photoService->changePhotoName($photo, $newName);
         $photoService->changePhotoDescription($photo, $newDescription);
@@ -98,9 +98,7 @@ class PhotoController extends Controller
                 $photo->disassociateAlbumPhoto($photo->album->first()->id);
             }
             //Если мы переносим фото в конкретный альбом, то необходимо связать их
-            if ($request->get('album_id') != self::NO_ALBUM) {
-                $photo->associateAlbumPhoto($request->get('album_id'));
-            }
+            $photo->associateAlbumPhoto($request->get('album_id'));
         }
         return redirect()->back();
     }

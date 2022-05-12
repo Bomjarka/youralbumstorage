@@ -63,24 +63,7 @@
 </div>
 
 <script>
-
-
     $(window).load(function () {
-        let hidden = true;
-        $('.photo-to-album').on('click', function () {
-            if (hidden == false) {
-                $('.form-select').addClass('invisible');
-                hidden = true;
-            } else {
-                $('.form-select').removeClass('invisible');
-                hidden = false
-            }
-            $('.form-select').change(function () {
-                var value = $(this).val();
-                $('.album_id').val(value);
-            });
-        });
-
         $('.article-div').on('click', function () {
             let id = $(this).attr('id');
             let path = 'storage/' + $('.photo-path-' + id).val();

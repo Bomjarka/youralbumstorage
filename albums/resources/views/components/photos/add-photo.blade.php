@@ -63,7 +63,7 @@
                                 Description</label>
                             <input placeholder="This photo of a something somewhere" type="text"
                                    name="photo_description"
-                                   class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
+                                   class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                         </div>
                         <div class="mt-2  text-sm text-gray-700 capitalize dark:text-gray-200"><span>Attachments</span>
                             <div class="flex justify-between items-center">
@@ -113,7 +113,20 @@
 </div>
 
 <script>
-
+        let hiddenField = true;
+        $('.photo-to-album').on('click', function () {
+        if (hiddenField == false) {
+        $('.form-select').addClass('hidden');
+        hiddenField = true;
+    } else {
+        $('.form-select').removeClass('hidden');
+        hiddenField = false
+    }
+        $('.form-select').change(function () {
+        var value = $(this).val();
+        $('.album_id').val(value);
+    });
+    });
     let imgInput = document.getElementById('user_photo');
     imgInput.addEventListener('change', function (e) {
         if (e.target.files) {

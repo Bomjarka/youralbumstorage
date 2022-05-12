@@ -40,10 +40,10 @@
                                         <x-input id="photo_name" class="block mt-1 w-full" type="text" name="photo_name"
                                                  value="{{ $photo->name }}"
                                                  required autofocus class="mb-3"/>
-                                        <x-label for="photo_description" :value="__('Photo Description')"/>
-                                        <x-input id="photo_description" class="block mt-1 mb-3 w-full" type="text"
-                                                 name="photo_description" value="{{ $photo->description }}"
-                                                 required autofocus/>
+                                            <x-label for="photo_description" :value="__('Photo Description')"/>
+                                            <input placeholder="This photo of a something somewhere" type="text"
+                                                   name="photo_description" value="{{ $photo->description }}"
+                                                   class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
                                         <input class="album_id" type="hidden"
                                                name="album_id" value={{ $album->id ?? null }}>
 
