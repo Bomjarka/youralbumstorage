@@ -34,6 +34,7 @@ class ErrorHandled extends Mailable
     public function build()
     {
         return $this->from(config('mail.from.address', 'YourAlbumStorage'))
+            ->subject('Error log')
             ->view('letters.error');
     }
 }
