@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="albums@localhost" uuid="117b7b6e-9071-490d-9a5c-7b42a59b0b3b">
+    <data-source source="LOCAL" name="youralbumstorage@localhost" uuid="117b7b6e-9071-490d-9a5c-7b42a59b0b3b">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/albums</jdbc-url>
+      <jdbc-url>jdbc:postgresql://localhost:5432/youralbumstorage</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
