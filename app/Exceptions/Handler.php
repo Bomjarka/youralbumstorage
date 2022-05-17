@@ -3,7 +3,9 @@
 namespace App\Exceptions;
 
 use App\Mail\ErrorHandled;
+use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Throwable;
 
@@ -12,7 +14,7 @@ class Handler extends ExceptionHandler
     /**
      * A list of the exception types that are not reported.
      *
-     * @var array<int, class-string<Throwable>>
+     * @var array
      */
     protected $dontReport = [
         //
@@ -21,23 +23,41 @@ class Handler extends ExceptionHandler
     /**
      * A list of the inputs that are never flashed for validation exceptions.
      *
-     * @var array<int, string>
+     * @var array
      */
     protected $dontFlash = [
-        'current_password',
         'password',
         'password_confirmation',
     ];
 
     /**
-     * Register the exception handling callbacks for the application.
+     * Report or log an exception.
      *
+     * @param Throwable $exception
+     * @return void
+     *
+     * @throws Exception
+     * @throws Throwable
+     */
+    public function report(Throwable $exception)
+    {
+        $this->sendEmail($exception);
+
+        parent::report($exception);
+    }
+
+    /**
+     * Отправляем письмо с ошибкой на почту
+     *
+     * @param Throwable $exception
      * @return void
      */
-    public function register()
+    public function sendEmail(Throwable $exception): void
     {
-        $this->reportable(function (Throwable $e) {
-            Mail::to('admin@youralbumstorage.ru')->send(new ErrorHandled($e));
-        });
+        try {
+            Mail::to('admin@youralbumstorage.ru')->send(new ErrorHandled($exception));
+        } catch (Throwable $exception) {
+            Log::error($exception);
+        }
     }
 }

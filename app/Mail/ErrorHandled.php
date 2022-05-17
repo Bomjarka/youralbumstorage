@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -31,10 +30,10 @@ class ErrorHandled extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build(): ErrorHandled
     {
         return $this->from(config('mail.from.address', 'YourAlbumStorage'))
             ->subject('Error log')
-            ->view('letters.error');
+            ->view('letters.error', ['error' => $this->error]);
     }
 }
