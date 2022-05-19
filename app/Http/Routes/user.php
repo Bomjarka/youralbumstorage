@@ -4,6 +4,7 @@ use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\User\UserController;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -30,7 +31,6 @@ Route::middleware(['userblocked', 'auth'])->group(function () {
         return view('user.gallery');
     })->name('gallery');
 
-
     //Страница с фотографиями пользователя
     Route::prefix('photos')->group(function () {
         Route::get('/{photo}', [PageController::class, 'photos'])->name('userPhotos');
@@ -40,7 +40,6 @@ Route::middleware(['userblocked', 'auth'])->group(function () {
 
         Route::post('/{photo}/delete', [PhotoController::class, 'delete'])->name('deletePhoto');
     });
-
 
     //Страница с альбомами пользователя
     Route::prefix('albums')->group(function () {
@@ -58,6 +57,19 @@ Route::middleware(['userblocked', 'auth'])->group(function () {
         Route::post('/{album}/{photo}/delete', [PhotoController::class, 'delete'])
             ->name('deletePhotoFromAlbum');
     });
+
+    //Смена языка
+    Route::get('locale/{locale}', function ($locale) {
+        if (!in_array($locale, ['en', 'ru'])) {
+            abort(404);
+        }
+
+        App::setLocale($locale);
+        // Session
+        session()->put('locale', $locale);
+
+        return redirect()->back();
+    })->name('changeLocale');
 });
 
 

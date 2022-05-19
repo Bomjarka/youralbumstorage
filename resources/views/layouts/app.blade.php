@@ -48,7 +48,23 @@
     </main>
 </div>
 </body>
-<footer class="w-full bg-white text-center p-4">
-   <a target="_blank" href="#" class="underline">Developed by Alexander Chirkin</a>.
+<footer class="flex flex-col justify-center w-full bg-white text-center p-4">
+    <div class="px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500">
+        <div class="theme-switcher">
+            <a href="{{ route('changeLocale', ['locale' => 'ru']) }}"
+               class="theme-switcher-button theme-switcher-dark bg-gray-200 border-gray-200 border-2 dark:bg-black dark:border-black p-2 focus:outline-none hover:text-gray-700 hover:border-gray-300"
+               title="Dark">
+                <i class="fa fa-language pointer-events-none"></i> RU
+            </a>
+            <a href="{{ route('changeLocale', ['locale' => 'en']) }}"
+               class="theme-switcher-button theme-switcher-auto bg-gray-200 border-gray-200 dark:bg-black border-2 dark:border-black p-2 focus:outline-none hover:text-gray-700 hover:border-gray-300"
+               title="Auto">
+                <i class="fa fa-language pointer-events-none"></i> ENG
+            </a>
+        </div>
+    </div>
+    <div class="pt-3">
+        <a target="_blank" href="#" class="underline">Developed by Alexander Chirkin</a>.
+    </div>
 </footer>
 </html>

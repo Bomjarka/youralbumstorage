@@ -1,4 +1,3 @@
-<!-- Authentication -->
 <form method="GET" action="{{ route('profile') }}">
     <x-responsive-nav-link :href="route('profile')"
                            onclick="event.preventDefault();

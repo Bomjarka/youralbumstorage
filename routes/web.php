@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\Guest\GuestController;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
