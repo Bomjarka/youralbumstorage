@@ -4,7 +4,7 @@
             <div class="font-medium text-base text-gray-800">{{ Auth::user()->first_name }}</div>
             <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
         @else
-            <div>Guest</div>
+            <div>{{ trans('view-navigation.guest') }}</div>
         @endif
     </div>
     <div class="mt-3 space-y-1">

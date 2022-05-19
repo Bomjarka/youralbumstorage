@@ -3,7 +3,7 @@
                      onclick="event.preventDefault();
                                                 this.closest('form').submit();
                                                 sessionStorage.clear()">
-        {{ __('Profile') }}
+        {{ trans('view-navigation.profile') }}
     </x-dropdown-link>
 </form>
 
@@ -12,6 +12,6 @@
     <x-dropdown-link :href="route('logout')"
                      onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-        {{ __('Log Out') }}
+        {{ trans('view-navigation.logout') }}
     </x-dropdown-link>
 </form>

@@ -3,13 +3,13 @@
     <x-dropdown-link :href="route('login')"
                      onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-        {{ __('Log In') }}
+        {{ trans('view-navigation.login') }}
     </x-dropdown-link>
 </form>
 <form method="GET" action="{{ route('register') }}">
     <x-dropdown-link :href="route('register')"
                      onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-        {{ __('Register') }}
+        {{ trans('view-navigation.register') }}
     </x-dropdown-link>
 </form>

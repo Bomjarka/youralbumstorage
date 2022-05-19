@@ -4,7 +4,7 @@
     </x-slot>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Welcome ' . ($user->first_name ?? 'Guest')) }}
+            {{ ('Welcome ' . ($user->first_name ?? trans('view-navigation.guest'))) }}
         </h2>
     </x-slot>
     <div class="py-12">

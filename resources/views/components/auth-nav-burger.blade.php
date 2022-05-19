@@ -3,7 +3,7 @@
     <x-responsive-nav-link :href="route('profile')"
                            onclick="event.preventDefault();
                                         this.closest('form').submit();">
-        {{ __('Profile') }}
+        {{ trans('view-navigation.profile') }}
     </x-responsive-nav-link>
 </form>
 
@@ -12,6 +12,6 @@
     <x-responsive-nav-link :href="route('logout')"
                            onclick="event.preventDefault();
                                         this.closest('form').submit();">
-        {{ __('Log Out') }}
+        {{ trans('view-navigation.logout') }}
     </x-responsive-nav-link>
 </form>
