@@ -13,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 
 class AlbumController extends Controller
@@ -69,6 +70,8 @@ class AlbumController extends Controller
             $albumService->deleteAlbum($album, $isDeletePhotosFromAlbum);
         }
 
+        Log::info('Album deleted by user', ['album: ' => $album, 'Are photo deleted from album' => $isDeletePhotosFromAlbum]);
+
         return redirect('albums');
     }
 
@@ -106,9 +109,10 @@ class AlbumController extends Controller
         $newName = $request->get('album_name');
         $newDescription = $request->get('album_description');
 
+
+        Log::info('Album updated', ['album: ' => $album, 'New Name' => $newName, 'New Description' => $newDescription]);
         $albumService->changeAlbumName($album, $newName);
         $albumService->changeAlbumDescription($album, $newDescription);
-
         return redirect()->back();
     }
 }

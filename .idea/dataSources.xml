@@ -8,5 +8,13 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/youralbumstorage</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="prod" uuid="9911fd91-61dd-46b4-b3f4-3e74beceab69">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <rewrite-bounds>false</rewrite-bounds>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://176.99.12.143:5432/youralbumstorage</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

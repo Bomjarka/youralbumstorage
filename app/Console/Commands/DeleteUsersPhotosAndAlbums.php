@@ -9,6 +9,7 @@ use App\Services\AlbumService;
 use App\Services\PhotoService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class DeleteUsersPhotosAndAlbums extends Command
 {
@@ -24,6 +25,8 @@ class DeleteUsersPhotosAndAlbums extends Command
 
         $albumsQuery = Album::onlyTrashed()->where('deleted_at', '<', $dateOfDeletion->copy()->subHours(24));
         $photosQuery = Photo::onlyTrashed()->where('deleted_at', '<', $dateOfDeletion->copy()->subHours(24));
+
+        Log::info('Daily deleting user data', ['Photos count' => $photosQuery->count(), 'Albums count' => $albumsQuery->count()]);
 
         foreach ($albumsQuery->cursor() as $album) {
             $albumService->deleteAlbumPermanently($album);

@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 
 use App\Events\NotificationRead;
+use Illuminate\Support\Facades\Log;
 
 class NotificationEventSubscriber
 {
@@ -22,6 +23,8 @@ class NotificationEventSubscriber
                 return $query->where('id', $event->notification);
             })
             ->markAsRead();
+
+        Log::info('User read notification message', ['UserId: ' => $user->id, 'NotificationId:' => $event->notification]);
     }
 
     public function subscribe($events)

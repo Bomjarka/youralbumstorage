@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Models\Album;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class AlbumService
 {
@@ -30,6 +31,8 @@ class AlbumService
     {
         $album->name = $newName;
         $album->save();
+
+
     }
 
     public function changeAlbumDescription($album, string $newDescription): void
@@ -78,9 +81,9 @@ class AlbumService
     public function restoreAlbum(Album $album): void
     {
         $album->restore();
-
         foreach ($album->trashedPhotos as $trashedPhoto) {
             $trashedPhoto->restore();
         }
+
     }
 }

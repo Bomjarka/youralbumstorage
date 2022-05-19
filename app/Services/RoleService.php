@@ -80,11 +80,11 @@ class RoleService
      *
      * @param string $name
      * @param string|null $description
-     * @return void
+     * @return Role
      */
-    public function createRole(string $name, string $description = null): void
+    public function createRole(string $name, string $description = null): Role
     {
-        Role::create([
+        return Role::create([
            'name' => $name,
            'description' => $description,
         ]);
@@ -128,6 +128,7 @@ class RoleService
             $ids = UserPermission::whereUserId($userId)->pluck('permission_id')->toArray();
             $this->userPermissions[$userId] = $this->getAllPermissions()->whereIn('id', $ids);
         }
+
         return $this->userPermissions[$userId];
     }
 
@@ -144,6 +145,7 @@ class RoleService
             return false;
         }
         $this->userRoles[$userId]->add($roleModel);
+
         return (bool)UserRole::create(['user_id' => $userId, 'role_id' => $roleModel->id]);
     }
 

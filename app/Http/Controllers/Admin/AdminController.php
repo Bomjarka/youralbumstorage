@@ -18,6 +18,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
@@ -58,6 +59,7 @@ class AdminController extends Controller
     public function blockUser(User $user, UserService $userService): JsonResponse
     {
         $userService->block($user);
+        Log::info('User blocked', ['user' => $user]);
 
         return response()->json([
             'msg' => 'User blocked!',
@@ -75,6 +77,7 @@ class AdminController extends Controller
     public function unblockUser(User $user, UserService $userService): JsonResponse
     {
         $userService->unblock($user);
+        Log::info('User unblocked', ['user' => $user]);
 
         return response()->json([
             'msg' => 'User unblocked!',
@@ -92,6 +95,8 @@ class AdminController extends Controller
     public function makeAdmin(User $user, RoleService $roleService): JsonResponse
     {
         if ($roleService->addRoleUser(Role::ROLE_ADMIN, $user->id)) {
+            Log::info('Make user as admin', ['user' => $user]);
+
             return response()->json([
                 'msg' => 'User is admin now!',
             ]);
@@ -113,6 +118,8 @@ class AdminController extends Controller
     public function disableAdmin(User $user, RoleService $roleService): JsonResponse
     {
         if ($roleService->removeRoleUser(Role::ROLE_ADMIN, $user->id)) {
+            Log::info('Disable admin role for user', ['user' => $user]);
+
             return response()->json([
                 'msg' => 'Admin role removed!',
             ]);
@@ -218,7 +225,9 @@ class AdminController extends Controller
 
         $roleName = $request->input('role_name');
         $roleDescription = $request->input('role_description');
-        $roleService->createRole($roleName, $roleDescription);
+        $newRole = $roleService->createRole($roleName, $roleDescription);
+
+        Log::info('New Role created', ['photo' => $newRole]);
 
         return back()->with('status', 'role-created');
     }
@@ -251,6 +260,7 @@ class AdminController extends Controller
             $role->description = $newRoleDescription;
         }
 
+        Log::info('Role updated', ['role' => $role, 'New Description' => $newRoleDescription]);
         $role->save();
 
         return response()->json([
@@ -271,6 +281,8 @@ class AdminController extends Controller
     {
         $role = Role::find($request->get('roleId'));
         if (!RoleHelper::has_role($role->name, $user->id) && $roleService->addRoleUser($role->name, $user->id)) {
+            Log::info('Add user new role', ['user' => $user, 'role' => $role]);
+
             return response()->json([
                 'msg' => 'Role added to user!',
             ]);
@@ -294,6 +306,7 @@ class AdminController extends Controller
     {
         $role = Role::find($request->get('roleId'));
         if ($roleService->removeRoleUser($role->name, $user->id)) {
+            Log::info('Role removed from user', ['user' => $user, 'role' => $role]);
 
             return response()->json([
                 'msg' => 'Role deleted from user!',

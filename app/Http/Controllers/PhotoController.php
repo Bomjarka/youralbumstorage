@@ -15,6 +15,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -55,7 +56,8 @@ class PhotoController extends Controller
             'photo_description' => ['nullable', 'string', 'max:255'],
         ]);
 
-        $photoService->createPhoto($request);
+        $photo = $photoService->createPhoto($request);
+        Log::info('New photo created', ['Photo' => $photo]);
 
         return redirect()->back();
     }
@@ -71,6 +73,7 @@ class PhotoController extends Controller
     public function delete(Photo $photo, PhotoService $photoService): RedirectResponse
     {
         $photoService->deletePhoto($photo);
+        Log::info('Photo deleted by user', ['album: ' => $photo]);
 
         return redirect()->back();
     }
@@ -89,6 +92,7 @@ class PhotoController extends Controller
         $newName = $request->get('photo_name');
         $newDescription = $request->get('photo_description') ?? '';
 
+        Log::info('Photo updated', ['photo: ' => $photo, 'New Name' => $newName, 'New Description' => $newDescription]);
         $photoService->changePhotoName($photo, $newName);
         $photoService->changePhotoDescription($photo, $newDescription);
 
@@ -96,9 +100,11 @@ class PhotoController extends Controller
             //Если фото принадлежит какому то альбому, то необходимо удалить связь между ними
             if ($photo->album->first()) {
                 $photo->disassociateAlbumPhoto($photo->album->first()->id);
+                Log::info('Photo disassociated from album', ['photo' => $photo, 'album: ' => $photo->album]);
             }
             //Если мы переносим фото в конкретный альбом, то необходимо связать их
             $photo->associateAlbumPhoto($request->get('album_id'));
+            Log::info('Photo associated to album', ['photo' => $photo, 'album: ' => $photo->album]);
         }
         return redirect()->back();
     }
@@ -130,6 +136,7 @@ class PhotoController extends Controller
 
         //Отправим пользователю письмо с ссылкой на скачивание архива
         $user->notify(new DownloadPhotosNotification($archivePath));
+        Log::info('Download files notification message sent', ['UserId: ' => $user->id]);
 
         return response()->json([
             'msg' => 'Check your email, we sent link for downloading archive',

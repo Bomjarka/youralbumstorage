@@ -5,16 +5,16 @@ namespace App\Services;
 
 use App\Models\Photo;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PhotoService
 {
     /**
      * @param $request
-     * @return void
+     * @return mixed
      */
-    public function createPhoto($request): void
+    public function createPhoto($request)
     {
-
         DB::beginTransaction();
         $imageService = new ImageService();
         $file = $request->file('user_photo');
@@ -30,10 +30,13 @@ class PhotoService
             'photo_preview_path' => $previewFilePath,
         ]);
 
+
         if ($request->get('album_id')) {
             $photo->associateAlbumPhoto($request->get('album_id'), $photo->id);
         }
         DB::commit();
+
+        return $photo;
 
     }
 
@@ -75,8 +78,9 @@ class PhotoService
     public function deletePhotoPermanently(Photo $photo): void
     {
         $imageService = new ImageService();
-        $imageService->deleteImage($photo);
-        $photo->forceDelete();
+        if ($imageService->deleteImage($photo)) {
+            $photo->forceDelete();
+        }
     }
 
     /**

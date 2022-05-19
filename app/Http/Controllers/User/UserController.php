@@ -16,6 +16,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -91,6 +92,7 @@ class UserController extends Controller
     {
         $album = Album::withTrashed()->find($request->get('albumId'));
         $albumService->restoreAlbum($album);
+        Log::info('Album restored', ['album: ' => $album, 'Albums photos restored' => $album->trashedPhotos->count()]);
 
         return response()->json([
             'msg' => 'Album restored!',
@@ -109,6 +111,7 @@ class UserController extends Controller
     {
         $photo = Photo::withTrashed()->find($request->get('photoId'));
         $photoService->restorePhoto($photo);
+        Log::info('Photo restored', ['photo: ' => $photo]);
 
         return response()->json([
             'msg' => 'Photo restored!',

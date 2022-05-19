@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Log;
 
 class SendEmailVerificationNotification
 {
@@ -16,6 +17,7 @@ class SendEmailVerificationNotification
     {
         if (!$event->user->hasVerifiedEmail()) {
             $event->user->sendEmailVerificationNotification();
+            Log::info('Verification notification message sent', ['UserId: ' => $event->user->id, 'NotificationId:' => $event->notification]);
         }
     }
 }

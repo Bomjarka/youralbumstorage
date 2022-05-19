@@ -79,10 +79,16 @@ class ImageService
      */
     public function deleteImage($photo): bool
     {
-        Storage::disk('public')->delete($photo->photo_path);
-        Storage::disk('public')->delete($photo->photo_preview_path);
+        try {
+            Storage::disk('public')->delete($photo->photo_path);
+            Storage::disk('public')->delete($photo->photo_preview_path);
 
-        return true;
+            return true;
+        } catch (\Exception $e) {
+            Log::critical('Error when delete photo from storage: ' . $e->getMessage(), ['photo' => $photo]);
+
+            return false;
+        }
     }
 
     /**
