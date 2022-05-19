@@ -13,7 +13,7 @@
         <div class="mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-t-lg">
                 <div class="p-6 bg-white border-b border-gray-200 text-center">
-                    Here you can set up your profile!
+                    {{ trans('view-profilepage-profile.title') }}
                 </div>
             </div>
             <div class="flex flex-row flex-wrap w-full bg-white overflow-hidden shadow-sm sm:rounded-b-lg">
@@ -23,25 +23,25 @@
                             <li>
                                 <a href="#"
                                    class="profile flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white bg-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700">
-                                    <i class="fa fa-user mr-3"></i>Profile data
+                                    <i class="fa fa-user mr-3"></i>{{ trans('view-profilepage-profile.profile-data') }}
                                 </a>
                             </li>
                             <li>
                                 <a href="#"
                                    class="album_and_photos flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700">
-                                    <i class="fa fa-user mr-3"></i>Albums & photos
+                                    <i class="fa fa-user mr-3"></i>{{ trans('view-profilepage-albums-and-photos.albums-and-photos') }}
                                 </a>
                             </li>
                             <li>
                                 <a href="#"
                                    class="trash flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700">
-                                    <i class="fa fa-trash-alt mr-3"></i>Trash
+                                    <i class="fa fa-trash-alt mr-3"></i>{{ trans('view-profilepage-trash.trash') }}
                                 </a>
                             </li>
                             <li>
                                 <a href="#"
                                    class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700">
-                                    <i class="fa fa-star mr-3 text-amber-400"></i>Premium
+                                    <i class="fa fa-star mr-3 text-amber-400"></i>{{ trans('view-profilepage-premium.premium') }}
                                 </a>
                             </li>
                         </ul>
@@ -55,7 +55,6 @@
             </div>
         </div>
     </div>
-
 </x-app-layout>
 
 <script>
@@ -76,6 +75,8 @@
         $('.user_albums').addClass('hidden');
         $('.user_albums').addClass('hidden');
         $('.user_photos').addClass('hidden');
+        $('.user_trashed_albums').addClass('hidden');
+        $('.user_trashed_photos').addClass('hidden');
         $('.album_and_photos').removeClass('bg-gray-200');
 
         sessionStorage.setItem('lastUri', 'profile_data')
@@ -100,7 +101,6 @@
         $('.user_data').addClass('hidden');
         $('.user_trashed_albums').addClass('hidden');
         $('.user_trashed_photos').addClass('hidden');
-
         $('.album_and_photos').addClass('bg-gray-200');
         $('.user_albums').removeClass('hidden');
         $('.user_photos').removeClass('hidden');

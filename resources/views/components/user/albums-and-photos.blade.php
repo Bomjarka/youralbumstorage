@@ -4,11 +4,11 @@
     <div>
         <div class="grid md:grid-cols-2 text-sm">
             <div class="grid grid-cols-2">
-                <div class="px-4 py-2 font-semibold">Total albums:</div>
+                <div class="px-4 py-2 font-semibold">{{ trans('view-profilepage-albums-and-photos.total-albums') }}</div>
                 <div class="px-4 py-2">{{ $user->albums->count() }}</div>
             </div>
             <div class="grid grid-cols-2">
-                <div class="px-4 py-2 font-semibold">Total photos:</div>
+                <div class="px-4 py-2 font-semibold">{{ trans('view-profilepage-albums-and-photos.total-photos') }}</div>
                 <div class="px-4 py-2">{{ $user->photos->count() }}</div>
             </div>
         </div>
@@ -16,27 +16,25 @@
             <button type="click"
                     class="download_photos bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
                 <i class="fa fa-download mr-3" aria-hidden="true"></i>
-                <span>Download all photos</span>
+                <span>{{ trans('view-profilepage-albums-and-photos.download-photos') }}</span>
             </button>
         </div>
         <div class="flex items-center mt-3 space-x-2 font-semibold text-gray-900 leading-8">
                     <span class="text-green-500">
                             <i class="fa fa-book mr-3"></i>
                         </span>
-            Albums
+            {{ trans('view-profilepage-albums-and-photos.albums') }}
         </div>
         @if ($user->albums->count() == 0)
-            No albums
+            {{ trans('view-profilepage-albums-and-photos.no-albums') }}
         @else
             <table class="w-full bg-white mt-3">
                 <thead class="bg-gray-800 text-white">
                 <tr>
                     <th class="text-left py-3 px-4 uppercase font-semibold text-sm">ID</th>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Album Name</th>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Album
-                        Description
-                    </th>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Created</th>
+                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">{{ strtoupper(trans('view-albumpage.album-name')) }}</th>
+                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">{{ strtoupper(trans('view-albumpage.album-description')) }}</th>
+                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">{{ strtoupper(trans('base-phrases.created')) }}</th>
 
                 </tr>
                 </thead>
@@ -63,20 +61,18 @@
                     <span class="text-green-500">
                             <i class="fa fa-camera mr-3"></i>
                         </span>
-            Photos
+            {{ trans('view-profilepage-albums-and-photos.photos') }}
         </div>
         @if ($user->photos->count() == 0)
-            No photos
+            {{ trans('view-profilepage-albums-and-photos.no-photos') }}
         @else
             <table class="w-full bg-white mt-3">
                 <thead class="bg-gray-800 text-white">
                 <tr>
                     <th class="text-left py-3 px-4 uppercase font-semibold text-sm">ID</th>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Photo Name</th>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Photo
-                        Description
-                    </th>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Created</th>
+                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">{{ strtoupper(trans('view-photospage.photo-name')) }}</th>
+                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">{{ strtoupper(trans('view-photospage.photo-description')) }}</th>
+                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">{{ strtoupper(trans('base-phrases.created')) }}</th>
 
                 </tr>
                 </thead>

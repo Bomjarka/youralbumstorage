@@ -9,7 +9,6 @@
                 - This album is empty
             @endif
         </h2>
-{{--        <x-albums.delete-album :action="route('deleteAlbum', $album)" :album="$album"></x-albums.delete-album>--}}
     </x-slot>
     <x-photos.photos-grid :photos="$photos" :album="$album"></x-photos.photos-grid>
 </x-app-layout>

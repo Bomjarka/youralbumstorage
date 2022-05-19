@@ -17,7 +17,7 @@ class AddTranslationNavigation extends Migration
         LanguageLine::create([
             'group' => 'view-navigation',
             'key' => 'albums',
-            'text' => ['ru' => 'Альбомы', 'en' => 'Photos'],
+            'text' => ['ru' => 'Альбомы', 'en' => 'Albums'],
         ]);
 
         LanguageLine::create([
@@ -62,7 +62,11 @@ class AddTranslationNavigation extends Migration
             'text' => ['ru' => 'Гость', 'en' => 'Guest'],
         ]);
 
-
+        LanguageLine::create([
+            'group' => 'view-navigation',
+            'key' => 'main',
+            'text' => ['ru' => 'Главная', 'en' => 'Main'],
+        ]);
     }
 
     /**

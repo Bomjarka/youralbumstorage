@@ -1,10 +1,10 @@
 <x-app-layout>
     <x-slot name="title">
-        Albums
+        {{ trans('view-navigation.albums') }}
     </x-slot>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Guest Albums Page') }}
+            {{ trans('view-albumpage.title') }}
         </h2>
     </x-slot>
     <x-guest.albums-grid></x-guest.albums-grid>
