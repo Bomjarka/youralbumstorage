@@ -37,7 +37,7 @@
         @if(Auth::user())
             @if (Auth::user()->hasVerifiedEmail() == false)
                 <div class="container my-12 mx-auto px-4 md:px-12">
-                    <x-warning :value="__('You are not verified!')">Click here to verify your profile</x-warning>
+                    <x-warning :value="trans('warning-blade.subject')">{{ trans('warning-blade.message') }}</x-warning>
                 </div>
             @else
                 {{ $slot }}
