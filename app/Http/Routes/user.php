@@ -4,14 +4,12 @@ use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\User\UserController;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 /**
  * Маршруты для пользователей
  */
 Route::middleware(['userblocked', 'auth'])->group(function () {
-
     //Страница профиль
     Route::prefix('profile')->group(function () {
         Route::get('/', [UserController::class, 'profile'])->name('profile');
@@ -57,19 +55,6 @@ Route::middleware(['userblocked', 'auth'])->group(function () {
         Route::post('/{album}/{photo}/delete', [PhotoController::class, 'delete'])
             ->name('deletePhotoFromAlbum');
     });
-
-    //Смена языка
-    Route::get('locale/{locale}', function ($locale) {
-        if (!in_array($locale, ['en', 'ru'])) {
-            abort(404);
-        }
-
-        App::setLocale($locale);
-        // Session
-        session()->put('locale', $locale);
-
-        return redirect()->back();
-    })->name('changeLocale');
 });
 
 
