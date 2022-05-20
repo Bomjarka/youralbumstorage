@@ -26,6 +26,13 @@ class VerifyEmail extends Notification
      */
     public static $toMailCallback;
 
+    private  $firstName;
+
+    public function __construct(string $firtName)
+    {
+        $this->firstName = $firtName;
+    }
+
     /**
      * Get the notification's channels.
      *
@@ -63,10 +70,12 @@ class VerifyEmail extends Notification
     protected function buildMailMessage($url): MailMessage
     {
         return (new MailMessage)
-            ->subject(Lang::get('Verify Email Address'))
-            ->line(Lang::get('Please click the button below to verify your email address.'))
-            ->action(Lang::get('Verify Email Address'), $url)
-            ->line(Lang::get('If you did not create an account, no further action is required.'));
+            ->subject(trans('verify-email-message.subject'))
+            ->greeting(trans('verify-email-message.greeting') . ', ' . $this->firstName)
+            ->line(trans('verify-email-message.message'))
+            ->action(trans('verify-email-message.action'), $url)
+            ->line(trans('verify-email-message.warning'))
+            ->salutation(trans('verify-email-message.regards'));
     }
 
     /**

@@ -4,11 +4,6 @@
     </x-slot>
     <x-slot name="header">
     </x-slot>
-    @if (Auth::user()->hasVerifiedEmail() == false)
-        <div class="mx-auto sm:px-6 lg:px-8">
-            <x-warning :value="__('You are not verified!')">Click here to verify your profile</x-warning>
-        </div>
-    @endif
     <div class="py-12">
         <div class="mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-t-lg">
