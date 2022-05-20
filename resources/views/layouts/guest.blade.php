@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
     <!-- Scripts -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
 </head>
 <body>
