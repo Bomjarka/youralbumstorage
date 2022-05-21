@@ -3,9 +3,13 @@
 namespace App\Console\Commands;
 
 
+use App\Models\Photo;
 use App\Models\User;
+use App\Services\RoleService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Spatie\TranslationLoader\LanguageLine;
 
 class TestCommand extends Command
 {
@@ -13,11 +17,8 @@ class TestCommand extends Command
 
     protected $name = 'TestCommand';
 
-    public function handle()
+    public function handle(RoleService $roleService)
     {
-
-        $user = User::find(6);
-        Log::info('New user registered', ['user: ' => $user]);
 
     }
 }

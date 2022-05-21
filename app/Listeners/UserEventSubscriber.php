@@ -6,6 +6,7 @@ namespace App\Listeners;
 use App\Events\NotificationRead;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Support\Facades\Log;
 
 class UserEventSubscriber
 {
@@ -18,14 +19,15 @@ class UserEventSubscriber
      */
     public function handleUserRegistered($event): void
     {
-        if (!$event->user->hasVerifiedEmail()) {
+        if (!$event->user->isVerified()) {
             $event->user->sendEmailVerificationNotification();
+            Log::info('Verification notification message sent', ['UserId: ' => $event->user->id, 'Manual Sending:' => false]);
         }
     }
 
     public function handleUserVerified($event): void
     {
-
+        Log::info('User was verified', ['UserId: ' => $event->user]);
     }
 
     public function subscribe($events)

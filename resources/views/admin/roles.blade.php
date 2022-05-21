@@ -2,49 +2,22 @@
     <x-slot name="title">
         {{ trans('admin-menu.roles') }}
     </x-slot>
-    <!-- Warning if AJAX wrong -->
-    {{--    @if (session('status') == 'nothing-updated')--}}
-    {{--    <div class="warning hidden" role="alert">--}}
-    {{--        <div class="bg-orange-500 text-white font-bold rounded-t px-4 py-2 mt-3">--}}
-    {{--            <i class="fa fa-exclamation-triangle mr-3"></i>{{ trans('warning-blade.title') }}--}}
-    {{--        </div>--}}
-    {{--        <div--}}
-    {{--            class="warning-text flex flex-col border border-t-0 border-orange-400 rounded-b bg-orange-100 px-4 py-3 text-orange-700 font-bold">--}}
-    {{--            <p></p>--}}
-    {{--        </div>--}}
-    {{--    </div>--}}
-    {{--    @endif--}}
-    <!-- End of arning if AJAX wrong -->
-    <!-- Approve msg if role created -->
 
-    <!-- End of approve msg if role created -->
-    <!-- Approve msg if role updated -->
     @if (session('status'))
         @if (session('status') == 'role-created')
-            <x-approving
-                :value="trans('admin-roles.role-created')"></x-approving>
+            <x-notifications.approving
+                :value="trans('admin-roles.role-created')"></x-notifications.approving>
         @endif
         @if (session('status') == 'role-updated')
-            <x-approving
-                :value="trans('admin-roles.role-updated')"></x-approving>
-
+            <x-notifications.approving
+                :value="trans('admin-roles.role-updated')"></x-notifications.approving>
         @endif
         @if (session('status') == 'nothing-updated')
-            <x-error
+            <x-notifications.error
                 :icon="'fa fa-exclamation-triangle mr-3'"
-                :value="trans('admin-roles.nothing-update')"></x-error>
+                :value="trans('admin-roles.nothing-update')"></x-notifications.error>
         @endif
     @endif
-    {{--    <div class="edit_success hidden" role="alert">--}}
-    {{--        <div class="bg-green-500 text-white font-bold rounded-t px-4 py-2 mt-3">--}}
-    {{--            <i class="fa fa-check mr-3"></i>{{ trans('approving-blade.title') }}--}}
-    {{--        </div>--}}
-    {{--        <div--}}
-    {{--            class="flex flex-col border border-t-0 border-green-400 rounded-b bg-green-100 px-4 py-3 text-green-700 font-bold">--}}
-    {{--            <p>{{ trans('admin-roles.role-updated') }}</p>--}}
-    {{--        </div>--}}
-    {{--    </div>--}}
-    <!-- End of approve msg if role updated -->
     <div class="w-full h-screen overflow-x-hidden border-t flex flex-col" x-data="{ modelOpen: false }">
         <main class="w-full flex-grow p-6">
             <h1 class="text-3xl text-black pb-6">{{ trans('admin-menu.roles') }}</h1>

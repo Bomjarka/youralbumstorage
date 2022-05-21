@@ -7,10 +7,15 @@
         <h1 class="text-3xl text-black pb-6">{{ $user->fullName() }}</h1>
         <div class="w-full mt-6">
             @if (!$user->isVerified())
-                <x-warning :value="trans('admin-user-page-verify-warning.subject')"></x-warning>
+                <x-notifications.warning
+                    :value="trans('admin-user-page-verify-warning.subject')">
+                </x-notifications.warning>
             @endif
             @if($user->isBlocked())
-                <x-error :icon="'fa fa-lock mr-3'" :value="trans('admin-user-page-blocked-alert.subject')"></x-error>
+                <x-notifications.error
+                    :icon="'fa fa-lock mr-3'"
+                    :value="trans('admin-user-page-blocked-alert.subject')">
+                </x-notifications.error>
             @endif
         </div>
         <div class="w-full mt-6">

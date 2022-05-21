@@ -30,14 +30,16 @@
     <main>
         @if (session('status') == 'verification-link-sent')
             <div class="container my-12 mx-auto px-4 md:px-12">
-                <x-approving
-                    :value="__('A new verification link has been sent to the email address you provided during registration.')"></x-approving>
+                <x-notifications.approving
+                    :value="__('A new verification link has been sent to the email address you provided during registration.')">
+                </x-notifications.approving>
             </div>
         @endif
         @if(Auth::user())
-            @if (Auth::user()->hasVerifiedEmail() == false)
+            @if (!Auth::user()->isVerified())
                 <div class="container my-12 mx-auto px-4 md:px-12">
-                    <x-warning :value="trans('warning-blade.subject')">{{ trans('warning-blade.message') }}</x-warning>
+                    <x-notifications.warning
+                        :value="trans('warning-blade.subject')">{{ trans('warning-blade.message') }}</x-notifications.warning>
                 </div>
             @else
                 {{ $slot }}

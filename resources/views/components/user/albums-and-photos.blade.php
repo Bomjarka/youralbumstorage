@@ -1,4 +1,6 @@
-<x-approving :value="__('Check your email, we sent link for downloading archive')"></x-approving>
+<x-notifications.approving
+    :value="__('Check your email, we sent link for downloading archive')">
+</x-notifications.approving>
 <!-- Albums Section -->
 <div class="user_albums hidden bg-white p-3 mt-3 shadow-sm rounded-sm">
     <div>
