@@ -53,7 +53,14 @@
 </x-app-layout>
 
 <script>
-    let gender;
+    var gender = '';
+
+    if ($('#gendermale').is(':checked')) {
+        gender = $('#gendermale').val();
+    } else if ($('#genderfemale').is(':checked')) {
+        gender = $('#genderfemale').val();
+    }
+
     if (sessionStorage.getItem('lastUri') == 'trash') {
         trash();
     } else if (sessionStorage.getItem('lastUri') == 'profile_data') {
@@ -124,7 +131,11 @@
         $('.user_input').addClass('hidden');
     });
 
-    $("input").on('change', function () {
+    $('#gendermale').on('change', function () {
+        gender = $(this).val();
+    });
+
+    $('#genderfemale').on('change', function () {
         gender = $(this).val();
     });
 

@@ -65,22 +65,46 @@
                 <div class="px-4 py-2 font-semibold m-2">{{ trans('view-profilepage-profile.sex') }}</div>
                 <div class="flex-row">
                     <div class="flex items-center mb-3 last:mb-0">
-                        <input
-                            id="gender"
-                            name="gender"
-                            type="radio"
-                            class="w-6 h-6 border border-gray-300 rounded-full outline-none cursor-pointer"
-                            value="male"
-                        /><label class="ml-2 text-sm" for="male">{{ trans('base-phrases.sex-male') }}</label>
+                        @if($user->sex == 'male')
+                            <input
+                                id="gendermale"
+                                name="gender"
+                                type="radio"
+                                class="w-6 h-6 border border-gray-300 rounded-full outline-none cursor-pointer"
+                                value="male"
+                                checked
+                            />
+                        @else
+                            <input
+                                id="gendermale"
+                                name="gender"
+                                type="radio"
+                                class="w-6 h-6 border border-gray-300 rounded-full outline-none cursor-pointer"
+                                value="male"
+                            />
+                        @endif
+                            <label class="ml-2 text-sm" for="male">{{ trans('base-phrases.sex-male') }}</label>
                     </div>
                     <div class="flex items-center mb-3 last:mb-0">
+                        @if($user->sex == 'female')
                         <input
-                            id="gender"
+                            id="genderfemale"
                             name="gender"
                             type="radio"
                             class="w-6 h-6 border border-gray-300 rounded-full outline-none cursor-pointer"
                             value="female"
-                        /><label class="ml-2 text-sm" for="female">{{ trans('base-phrases.sex-female') }}</label>
+                            checked
+                        />
+                        @else
+                            <input
+                                id="genderfemale"
+                                name="gender"
+                                type="radio"
+                                class="w-6 h-6 border border-gray-300 rounded-full outline-none cursor-pointer"
+                                value="female"
+                            />
+                        @endif
+                            <label class="ml-2 text-sm" for="female">{{ trans('base-phrases.sex-female') }}</label>
                     </div>
                 </div>
             </div>
