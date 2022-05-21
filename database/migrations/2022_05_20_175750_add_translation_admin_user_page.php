@@ -33,6 +33,12 @@ class AddTranslationAdminUserPage extends Migration
             'text' => ['ru' => 'Этот пользователь является администратором', 'en' => 'This user is admin'],
         ]);
 
+        LanguageLine::create([
+            'group' => 'admin-user-page-user-data',
+            'key' => 'about',
+            'text' => ['ru' => 'О пользователе', 'en' => 'About'],
+        ]);
+
         //Пользовательские роли
         LanguageLine::create([
             'group' => 'admin-user-page-user-roles',

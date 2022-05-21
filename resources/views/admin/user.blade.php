@@ -34,7 +34,7 @@
                         <span class="text-blue-500">
                             <i class="fa fa-user mr-3"></i>
                         </span>
-                        About
+                        {{ trans('admin-user-page-user-data.about') }}
                     </div>
                     <div class="text-gray-700">
                         <div class="grid md:grid-cols-2 text-sm">
