@@ -35,7 +35,10 @@
     </main>
     <h1 class="block w-full bg-white text-center p-4 font-bold md:hidden">{{ trans('admin-common.ability-message') }}</h1>
     <footer class="w-full bg-white text-center p-4">
-       <a target="_blank" href="https://vk.com/xamas27" class="underline">Developed by Alexander Chirkin 2022 ©</a>
+        <x-translate-block></x-translate-block>
+        <div class="pt-3">
+            <a target="_blank" href="https://vk.com/xamas27" class="underline">Developed by Alexander Chirkin 2022 ©</a>.
+        </div>
     </footer>
 </div>
 </body>

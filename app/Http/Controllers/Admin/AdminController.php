@@ -156,7 +156,7 @@ class AdminController extends Controller
      */
     public function roles(RoleService $roleService)
     {
-        $roles = $roleService->getAllRoles();
+        $roles = $roleService->getAllRoles()->sortBy('id');
 
         return view('admin.roles', ['roles' => $roles]);
     }
@@ -178,6 +178,7 @@ class AdminController extends Controller
 
         $roleName = $request->input('role_name');
         $roleDescription = $request->input('role_description');
+
         $newRole = $roleService->createRole($roleName, $roleDescription);
 
         Log::info('New Role created', ['photo' => $newRole]);
@@ -201,14 +202,14 @@ class AdminController extends Controller
 
         $roleId = $request->input('roleId');
         $role = Role::find($roleId);
+        $newRoleDescription = $request->input('newRoleDescription');
 
-        if (!$role) {
+        if (!$role || $newRoleDescription == $role->description) {
             return response()->json([
-                'msg' => 'Nothing to update!',
+                'msg' => trans('admin-roles.nothing-update') . '!',
             ]);
         }
 
-        $newRoleDescription = $request->input('newRoleDescription');
         if ($newRoleDescription) {
             $role->description = $newRoleDescription;
         }

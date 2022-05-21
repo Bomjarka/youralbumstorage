@@ -1,6 +1,6 @@
 <div class="success hidden" role="alert">
     <div class="bg-green-500 text-white font-bold rounded-t px-4 py-2 mt-3">
-        <i class="fa fa-check mr-3"></i>Success
+        <i class="fa fa-check mr-3"></i>{{ trans('approving-blade.title') }}
     </div>
     <div class="flex flex-col border border-t-0 border-green-400 rounded-b bg-green-100 px-4 py-3 text-green-700 font-bold">
         <p>
