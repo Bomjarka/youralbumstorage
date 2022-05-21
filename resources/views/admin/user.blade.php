@@ -10,7 +10,7 @@
                 <x-warning :value="trans('admin-user-page-verify-warning.subject')"></x-warning>
             @endif
             @if($user->isBlocked())
-                <x-error :message="trans('admin-user-page-blocked-alert.subject')"></x-error>
+                <x-error :icon="'fa fa-lock mr-3'" :value="trans('admin-user-page-blocked-alert.subject')"></x-error>
             @endif
         </div>
         <div class="w-full mt-6">
@@ -47,7 +47,8 @@
                                 <div class="px-4 py-2">{{ $user->sex }}</div>
                             </div>
                             <div class="grid grid-cols-2">
-                                <div class="px-4 py-2 font-semibold">{{ trans('view-profilepage-profile.firstname') }}</div>
+                                <div
+                                    class="px-4 py-2 font-semibold">{{ trans('view-profilepage-profile.firstname') }}</div>
                                 <div class="px-4 py-2">{{ $user->first_name }}</div>
                             </div>
                             <div class="grid grid-cols-2">
@@ -55,7 +56,8 @@
                                 <div class="px-4 py-2">{{ $user->phone }}</div>
                             </div>
                             <div class="grid grid-cols-2">
-                                <div class="px-4 py-2 font-semibold">{{ trans('view-profilepage-profile.secondname') }}</div>
+                                <div
+                                    class="px-4 py-2 font-semibold">{{ trans('view-profilepage-profile.secondname') }}</div>
                                 <div class="px-4 py-2">{{ $user->second_name }}</div>
                             </div>
                             <div class="grid grid-cols-2">
@@ -65,15 +67,18 @@
                                 </div>
                             </div>
                             <div class="grid grid-cols-2">
-                                <div class="px-4 py-2 font-semibold">{{ trans('view-profilepage-profile.lastname') }}</div>
+                                <div
+                                    class="px-4 py-2 font-semibold">{{ trans('view-profilepage-profile.lastname') }}</div>
                                 <div class="px-4 py-2">{{ $user->last_name }}</div>
                             </div>
                             <div class="grid grid-cols-2">
-                                <div class="px-4 py-2 font-semibold">{{ trans('view-profilepage-profile.birthdate') }}</div>
+                                <div
+                                    class="px-4 py-2 font-semibold">{{ trans('view-profilepage-profile.birthdate') }}</div>
                                 <div class="px-4 py-2">{{ $user->birthdate }}</div>
                             </div>
                             <div class="grid grid-cols-2">
-                                <div class="px-4 py-2 font-semibold">{{ trans('view-profilepage-profile.registered') }}</div>
+                                <div
+                                    class="px-4 py-2 font-semibold">{{ trans('view-profilepage-profile.registered') }}</div>
                                 <div class="px-4 py-2">{{ $user->created_at }}</div>
                             </div>
                         </div>
@@ -212,10 +217,10 @@
                                 <tr>
                                     <td class="text-center py-3 px-4">{{ $photo->id }}</td>
                                     <td class="text-center py-3 px-4"><a class="hover:text-blue-500"
-                                                                       href="#">{{ $photo->album->first()->name ?? trans('admin-user-page-user-albums.not-in-album') }}</a>
+                                                                         href="#">{{ $photo->album->first()->name ?? trans('admin-user-page-user-albums.not-in-album') }}</a>
                                     </td>
                                     <td class="text-center py-3 px-4"><a class="hover:text-blue-500"
-                                                                       href="#">{{ $photo->name }}</a></td>
+                                                                         href="#">{{ $photo->name }}</a></td>
                                     <td class="text-center py-3 px-4">{{ $photo->description }}</td>
                                     <td class="text-center py-3 px">{{ $photo->created_at->toDateString() }}</td>
                                 </tr>
@@ -239,11 +244,13 @@
                     <div>
                         @if(!$user->isBlocked())
                             <button class="block_user" name="block" value="block" type="button"><i
-                                    class="fa fa-ban text-red-500 mr-3" aria-hidden="true"></i>{{ trans('admin-user-page-admin-actions.block-user') }}
+                                    class="fa fa-ban text-red-500 mr-3"
+                                    aria-hidden="true"></i>{{ trans('admin-user-page-admin-actions.block-user') }}
                             </button>
                         @else
                             <button class="unblock_user" name="unblock" value="unblock" type="button"><i
-                                    class="fa fa-heart text-green-500 mr-3" aria-hidden="true"></i>{{ trans('admin-user-page-admin-actions.unblock-user') }}
+                                    class="fa fa-heart text-green-500 mr-3"
+                                    aria-hidden="true"></i>{{ trans('admin-user-page-admin-actions.unblock-user') }}
                             </button>
                         @endif
                     </div>

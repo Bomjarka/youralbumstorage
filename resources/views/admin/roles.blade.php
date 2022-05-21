@@ -30,7 +30,9 @@
 
         @endif
         @if (session('status') == 'nothing-updated')
-            <x-error :value="trans('admin-roles.nothing-update')"></x-error>
+            <x-error
+                :icon="'fa fa-exclamation-triangle mr-3'"
+                :value="trans('admin-roles.nothing-update')"></x-error>
         @endif
     @endif
     {{--    <div class="edit_success hidden" role="alert">--}}
