@@ -51,7 +51,7 @@
 <footer class="flex flex-col justify-center w-full bg-white text-center p-4">
     <x-translate-block></x-translate-block>
     <div class="pt-3">
-        <a target="_blank" href="#" class="underline">Developed by Alexander Chirkin</a>.
+        <a target="_blank" href="https://vk.com/xamas27" class="underline">Developed by Alexander Chirkin 2022 ©</a>.
     </div>
 </footer>
 

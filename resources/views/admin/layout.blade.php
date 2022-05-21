@@ -33,9 +33,9 @@
     <main class="hidden md:block w-full flex-grow p-6">
         {{ $slot }}
     </main>
-    <h1 class="block w-full bg-white text-center p-4 font-bold md:hidden">Admin panel available only from Desktop</h1>
+    <h1 class="block w-full bg-white text-center p-4 font-bold md:hidden">{{ trans('admin-common.ability-message') }}</h1>
     <footer class="w-full bg-white text-center p-4">
-       <a target="_blank" href="#" class="underline">Developed by Alexander Chirkin</a>.
+       <a target="_blank" href="https://vk.com/xamas27" class="underline">Developed by Alexander Chirkin 2022 ©</a>
     </footer>
 </div>
 </body>

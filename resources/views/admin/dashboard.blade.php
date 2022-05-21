@@ -1,9 +1,9 @@
 <x-admin-layout>
     <x-slot name="title">
-        Dashboard
+        {{ trans('admin-menu.dashboard') }}
     </x-slot>
     <div class="w-full overflow-x-hidden border-t flex flex-col">
-        <h1 class="text-3xl text-black pb-6">Dashboard</h1>
+        <h1 class="text-3xl text-black pb-6">{{ trans('admin-menu.dashboard') }}</h1>
         <div class="flex flex-wrap mt-6">
             <div class="w-full lg:w-1/2 pr-0 lg:pr-2">
                 <p class="text-xl pb-3 flex items-center">Registrations</p>

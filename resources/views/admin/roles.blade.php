@@ -1,6 +1,6 @@
 <x-admin-layout>
     <x-slot name="title">
-        Roles
+        {{ trans('admin-menu.roles') }}
     </x-slot>
     <!-- Warning if AJAX wrong -->
     <div class="warning hidden" role="alert">
@@ -34,7 +34,7 @@
     <!-- End of approve msg if role updated -->
     <div class="w-full h-screen overflow-x-hidden border-t flex flex-col" x-data="{ modelOpen: false }">
         <main class="w-full flex-grow p-6">
-            <h1 class="text-3xl text-black pb-6">Roles</h1>
+            <h1 class="text-3xl text-black pb-6">{{ trans('admin-menu.roles') }}</h1>
             <button @click="modelOpen =!modelOpen"
                     class="flex items-center justify-center px-3 py-2 space-x-2 bg-green-600 text-white font-semibold h-8 px-4 m-2 rounded hover:bg-green-500">
                 <i class="fa fa-plus w-5 h-5"></i>
