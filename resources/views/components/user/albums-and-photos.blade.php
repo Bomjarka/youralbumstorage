@@ -6,21 +6,25 @@
     <div>
         <div class="grid md:grid-cols-2 text-sm">
             <div class="grid grid-cols-2">
-                <div class="px-4 py-2 font-semibold">{{ trans('view-profilepage-albums-and-photos.total-albums') }}</div>
+                <div
+                    class="px-4 py-2 font-semibold">{{ trans('view-profilepage-albums-and-photos.total-albums') }}</div>
                 <div class="px-4 py-2">{{ $user->albums->count() }}</div>
             </div>
             <div class="grid grid-cols-2">
-                <div class="px-4 py-2 font-semibold">{{ trans('view-profilepage-albums-and-photos.total-photos') }}</div>
+                <div
+                    class="px-4 py-2 font-semibold">{{ trans('view-profilepage-albums-and-photos.total-photos') }}</div>
                 <div class="px-4 py-2">{{ $user->photos->count() }}</div>
             </div>
         </div>
-        <div class="flex items-center justify-end">
-            <button type="click"
-                    class="download_photos bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
-                <i class="fa fa-download mr-3" aria-hidden="true"></i>
-                <span>{{ trans('view-profilepage-albums-and-photos.download-photos') }}</span>
-            </button>
-        </div>
+        @if ($user->photos->count() != 0)
+            <div class="flex items-center justify-end">
+                <button type="click"
+                        class="download_photos bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                    <i class="fa fa-download mr-3" aria-hidden="true"></i>
+                    <span>{{ trans('view-profilepage-albums-and-photos.download-photos') }}</span>
+                </button>
+            </div>
+        @endif
         <div class="flex items-center mt-3 space-x-2 font-semibold text-gray-900 leading-8">
                     <span class="text-green-500">
                             <i class="fa fa-book mr-3"></i>
@@ -45,7 +49,7 @@
                     <tr>
                         <td class="text-center py-3 px-4">{{ $album->id }}</td>
                         <td class="text-center py-3 px-4"><a class="hover:text-blue-500"
-                                                           href="{{ route('userAlbum', $album) }}">{{ $album->name }}</a>
+                                                             href="{{ route('userAlbum', $album) }}">{{ $album->name }}</a>
                         </td>
                         <td class="text-center py-3 px-4">{{ $album->description ?? '-'}}</td>
                         <td class="text-center py-3 px">{{ $album->created_at->toDateString() }}</td>
@@ -83,7 +87,7 @@
                     <tr>
                         <td class="text-center py-3 px-4">{{ $photo->id }}</td>
                         <td class="text-center py-3 px-4"><a class="hover:text-blue-500"
-                                                           href="#">{{ $photo->name }}</a></td>
+                                                             href="#">{{ $photo->name }}</a></td>
                         <td class="text-center py-3 px-4">{{ $photo->description }}</td>
                         <td class="text-center py-3 px">{{ $photo->created_at->toDateString() }}</td>
                     </tr>
