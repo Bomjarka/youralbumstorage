@@ -192,9 +192,9 @@ class AdminController extends Controller
      * Отредактировать данные роли
      *
      * @param Request $request
-     * @return JsonResponse
+     * @return RedirectResponse
      */
-    public function editRole(Request $request): JsonResponse
+    public function editRole(Request $request): RedirectResponse
     {
         $request->validate([
             'newRoleDescription' => ['nullable', 'string', 'max:255'],
@@ -205,9 +205,8 @@ class AdminController extends Controller
         $newRoleDescription = $request->input('newRoleDescription');
 
         if (!$role || $newRoleDescription == $role->description) {
-            return response()->json([
-                'msg' => trans('admin-roles.nothing-update') . '!',
-            ]);
+
+            return back()->with('status', 'nothing-updated');
         }
 
         if ($newRoleDescription) {
@@ -217,9 +216,7 @@ class AdminController extends Controller
         Log::info('Role updated', ['role' => $role, 'New Description' => $newRoleDescription]);
         $role->save();
 
-        return response()->json([
-            'msg' => 'Role updated!',
-        ]);
+        return back()->with('status', 'role-updated');
     }
 
     /**

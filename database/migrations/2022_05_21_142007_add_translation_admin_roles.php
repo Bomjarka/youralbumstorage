@@ -70,7 +70,7 @@ class AddTranslationAdminRoles extends Migration
 
         LanguageLine::create([
             'group' => 'admin-roles',
-            'key' => 'nothing-updated',
+            'key' => 'role-updated',
             'text' => ['ru' => 'Роль обновлена', 'en' => 'Role updated'],
         ]);
 

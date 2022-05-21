@@ -1,4 +1,4 @@
-<div role="alert">
+<div role="alert" class="warning">
     <div class="bg-orange-500 text-white font-bold rounded-t px-4 py-2 mt-3">
         <i class="fa fa-exclamation-triangle mr-3"></i>
         {{ trans('warning-blade.title') }}
