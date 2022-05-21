@@ -85,52 +85,6 @@ class AdminController extends Controller
 
     /**
      *
-     * Сделать пользователя администратором в админке
-     *
-     * @param User $user
-     * @param RoleService $roleService
-     * @return JsonResponse
-     */
-    public function makeAdmin(User $user, RoleService $roleService): JsonResponse
-    {
-        if ($roleService->addRoleUser(Role::ROLE_ADMIN, $user->id)) {
-            Log::info('Make user as admin', ['user' => $user]);
-
-            return response()->json([
-                'msg' => 'User is admin now!',
-            ]);
-        }
-
-        return response()->json([
-            'msg' => 'Something wrong!',
-        ]);
-    }
-
-    /**
-     *
-     * Забрать роль администратора у пользователя
-     *
-     * @param User $user
-     * @param RoleService $roleService
-     * @return JsonResponse
-     */
-    public function disableAdmin(User $user, RoleService $roleService): JsonResponse
-    {
-        if ($roleService->removeRoleUser(Role::ROLE_ADMIN, $user->id)) {
-            Log::info('Disable admin role for user', ['user' => $user]);
-
-            return response()->json([
-                'msg' => 'Admin role removed!',
-            ]);
-        }
-
-        return response()->json([
-            'msg' => 'Something wrong!',
-        ]);
-    }
-
-    /**
-     *
      * Возвращает данные для диаграмм в админке
      *
      * @return Application|Factory|View

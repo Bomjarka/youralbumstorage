@@ -247,17 +247,6 @@
                             </button>
                         @endif
                     </div>
-                    <div>
-                        @if(RoleHelper::has_role('admin', $user->id) == false)
-                            <button class="make_admin" name="make_admin" value="make_admin" type="button"><i
-                                    class="fa fa-user-plus text-green-500 mr-3" aria-hidden="true"></i>Make admin
-                            </button>
-                        @else
-                            <button class="disable_admin" name="disable_admin" value="disable_admin" type="button"><i
-                                    class="fa fa-user-times text-red-500 mr-3" aria-hidden="true"></i>Dismiss Admin
-                            </button>
-                        @endif
-                    </div>
                 </div>
             </div>
             <!-- End right aside section -->
@@ -281,32 +270,6 @@
 
     $('.unblock_user').on('click', function () {
         let url = "{{ route('unblockUser', ['user' => $user]) }}";
-        $.post(url, {
-            _token: '{{ csrf_token() }}'
-        })
-            .success(function (response) {
-                console.log(response.msg);
-                if (!alert(response.msg)) {
-                    window.location.reload();
-                }
-            });
-    });
-
-    $('.make_admin').on('click', function () {
-        let url = "{{ route('makeAdmin', ['user' => $user->id]) }}";
-        $.post(url, {
-            _token: '{{ csrf_token() }}'
-        })
-            .success(function (response) {
-                console.log(response.msg);
-                if (!alert(response.msg)) {
-                    window.location.reload();
-                }
-            });
-    });
-
-    $('.disable_admin').on('click', function () {
-        let url = "{{ route('disableAdmin', ['user' => $user]) }}";
         $.post(url, {
             _token: '{{ csrf_token() }}'
         })
