@@ -31,22 +31,22 @@
             <table class="w-full bg-white mt-3">
                 <thead class="bg-gray-800 text-white">
                 <tr>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">ID</th>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">{{ strtoupper(trans('view-albumpage.album-name')) }}</th>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">{{ strtoupper(trans('view-albumpage.album-description')) }}</th>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">{{ strtoupper(trans('base-phrases.created')) }}</th>
+                    <th class="text-center py-3 px-4 uppercase font-semibold text-sm">ID</th>
+                    <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('view-albumpage.album-name') }}</th>
+                    <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('view-albumpage.album-description') }}</th>
+                    <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('base-phrases.created') }}</th>
 
                 </tr>
                 </thead>
                 <tbody class="text-gray-700">
                 @foreach($user->albums as $album)
                     <tr>
-                        <td class="text-left py-3 px-4">{{ $album->id }}</td>
-                        <td class="text-left py-3 px-4"><a class="hover:text-blue-500"
+                        <td class="text-center py-3 px-4">{{ $album->id }}</td>
+                        <td class="text-center py-3 px-4"><a class="hover:text-blue-500"
                                                            href="{{ route('userAlbum', $album) }}">{{ $album->name }}</a>
                         </td>
-                        <td class="text-left py-3 px-4">{{ $album->description }}</td>
-                        <td class="text-left py-3 px">{{ $album->created_at->toDateString() }}</td>
+                        <td class="text-center py-3 px-4">{{ $album->description ?? '-'}}</td>
+                        <td class="text-center py-3 px">{{ $album->created_at->toDateString() }}</td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -69,21 +69,21 @@
             <table class="w-full bg-white mt-3">
                 <thead class="bg-gray-800 text-white">
                 <tr>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">ID</th>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">{{ strtoupper(trans('view-photospage.photo-name')) }}</th>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">{{ strtoupper(trans('view-photospage.photo-description')) }}</th>
-                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">{{ strtoupper(trans('base-phrases.created')) }}</th>
+                    <th class="text-center py-3 px-4 uppercase font-semibold text-sm">ID</th>
+                    <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('view-photospage.photo-name') }}</th>
+                    <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('view-photospage.photo-description') }}</th>
+                    <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('base-phrases.created') }}</th>
 
                 </tr>
                 </thead>
                 <tbody class="text-gray-700">
                 @foreach($user->photos as $photo)
                     <tr>
-                        <td class="text-left py-3 px-4">{{ $photo->id }}</td>
-                        <td class="text-left py-3 px-4"><a class="hover:text-blue-500"
+                        <td class="text-center py-3 px-4">{{ $photo->id }}</td>
+                        <td class="text-center py-3 px-4"><a class="hover:text-blue-500"
                                                            href="#">{{ $photo->name }}</a></td>
-                        <td class="text-left py-3 px-4">{{ $photo->description }}</td>
-                        <td class="text-left py-3 px">{{ $photo->created_at->toDateString() }}</td>
+                        <td class="text-center py-3 px-4">{{ $photo->description }}</td>
+                        <td class="text-center py-3 px">{{ $photo->created_at->toDateString() }}</td>
                     </tr>
                 @endforeach
                 </tbody>

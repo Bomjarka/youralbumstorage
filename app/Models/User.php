@@ -22,6 +22,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property mixed $second_name
  * @property mixed $first_name
  * @property bool $is_blocked
+ * @property bool is_verified
  * @property int $id
  */
 class User extends Authenticatable
@@ -77,6 +78,11 @@ class User extends Authenticatable
     public function isBlocked(): bool
     {
         return $this->is_blocked;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->is_verified;
     }
 
     /**
