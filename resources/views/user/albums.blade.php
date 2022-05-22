@@ -10,7 +10,7 @@
     </x-slot>
     <div class="container my-12 mx-auto px-4 md:px-12">
         <x-notifications.approving
-            :value="__('Check your email, we sent link for downloading archive')">
+            :value="trans('download-photos-notification.message')">
         </x-notifications.approving>
     </div>
     <x-albums.albums-grid :albums="$albums"></x-albums.albums-grid>

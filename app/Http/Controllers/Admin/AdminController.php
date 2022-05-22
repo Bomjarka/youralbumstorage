@@ -32,6 +32,7 @@ class AdminController extends Controller
     public function users()
     {
         $allUsers = User::orderBy('id')->get();
+
         return view('admin.users', ['users' => $allUsers]);
     }
 

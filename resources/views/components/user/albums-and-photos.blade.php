@@ -1,5 +1,5 @@
 <x-notifications.approving
-    :value="__('Check your email, we sent link for downloading archive')">
+    :value="trans('download-photos-notification.message')">
 </x-notifications.approving>
 <!-- Albums Section -->
 <div class="user_albums hidden bg-white p-3 mt-3 shadow-sm rounded-sm">

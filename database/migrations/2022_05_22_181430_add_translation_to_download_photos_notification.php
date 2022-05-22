@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Spatie\TranslationLoader\LanguageLine;
 
-class AddTranslationToBasePhrases extends Migration
+class AddTranslationToDownloadPhotosNotification extends Migration
 {
     /**
      * Run the migrations.
@@ -15,11 +15,13 @@ class AddTranslationToBasePhrases extends Migration
     public function up()
     {
         LanguageLine::create([
-            'group' => 'base-phrases',
-            'key' => 'without-albums',
-            'text' => ['ru' => 'без альбомов', 'en' => 'without albums'],
+            'group' => 'download-photos-notification',
+            'key' => 'message',
+            'text' => [
+                'ru' => 'Проверьте свою почту, мы выслали ссылку на скачивание архива с фотографиями',
+                'en' => 'Check your email, we sent link for downloading archive'
+            ],
         ]);
-
     }
 
     /**
@@ -29,10 +31,6 @@ class AddTranslationToBasePhrases extends Migration
      */
     public function down()
     {
-        $langaugeLines = LanguageLine::where('group', 'base-phrases')
-            ->where('key', 'without-albums');
-        if ($langaugeLines) {
-            $langaugeLines->delete();
-        }
+
     }
 }

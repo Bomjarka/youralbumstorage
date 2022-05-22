@@ -144,15 +144,23 @@ class PhotoController extends Controller
                 }
             }
             //скачаем все фото без альбомов
-            foreach ($user->photos as $userPhoto) {
-                if (!$userPhoto->album->first()) {
-                    $image = Image::make(Storage::disk('local')->path('public/' . $userPhoto->photo_path));
-                    $zip->addFromString($withoutAlbum . '/' . $userPhoto->name . '.' . $image->extension, $image->encode($image->extension));
+            foreach ($user->photos as $photo) {
+                if (!$photo->album->first()) {
+                    $image = Image::make(Storage::disk('local')->path('public/' . $photo->photo_path));
+                    $zip->addFromString($withoutAlbum . '/' . $photo->name . '.' . $image->extension, $image->encode($image->extension));
                 }
 
             }
         } catch (\Throwable $e) {
+            Log::info('Download files notification message sent', [
+                'User: ' => $user,
+                'Photo' => $photo,
+                'Album' => $album ?? null,
+                'ZIP' => $zip,
+            ]);
+
             throw new Exception('Something wrong while creating ZIP archive');
+
         } finally {
             $zip->close();
         }
@@ -162,8 +170,7 @@ class PhotoController extends Controller
         Log::info('Download files notification message sent', ['UserId: ' => $user->id]);
 
         return response()->json([
-            'msg' => 'Check your email, we sent link for downloading archive',
-            'status' => 'archive-sent',
+            'msg' => 'OK',
         ]);
     }
 
