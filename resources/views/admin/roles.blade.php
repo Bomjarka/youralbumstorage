@@ -154,25 +154,5 @@
             return false;
         }
         let url = "{{ route('editRole') }}";
-        {{--$.post(url, {--}}
-        {{--    _token: '{{ csrf_token() }}',--}}
-        {{--    roleId: roleId,--}}
-        {{--    newRoleDescription: newRoleDescription--}}
-        {{--})--}}
-        {{--    .success(function (response) {--}}
-        {{--        console.log(response.msg);--}}
-        {{--        // if (response.msg != 'Role updated!') {--}}
-        {{--        //     $('.warning').slideDown(300);--}}
-        {{--        //     $(".warning").delay(1000).slideUp(300);--}}
-        {{--        //     $('.warning-text p').text(response.msg);--}}
-        {{--        // } else {--}}
-        {{--        //     $('.save_role').removeClass('hidden');--}}
-        {{--        //     $('.save_role').addClass('cursor-not-allowed opacity-50');--}}
-        {{--        //     $('.edit_success').slideDown(300);--}}
-        {{--        //     $(".edit_success").delay(1000).slideUp(300, function () {--}}
-        {{--                window.location.reload();--}}
-        {{--        //     });--}}
-        {{--        // }--}}
-        {{--    });--}}
     });
 </script>

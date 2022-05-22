@@ -152,7 +152,7 @@ class PhotoController extends Controller
 
             }
         } catch (\Throwable $e) {
-            Log::info('Download files notification message sent', [
+            Log::error('Error when creating ZIP', [
                 'User: ' => $user,
                 'Photo' => $photo,
                 'Album' => $album ?? null,

@@ -2,7 +2,6 @@
     <x-slot name="title">
         {{ $user->fullName() }}
     </x-slot>
-    <!--End of approve msg if role deleted from user -->
     <div class="w-full p-4  border-t flex flex-col">
         <h1 class="text-3xl text-black pb-6">{{ $user->fullName() }}</h1>
         <div class="w-full mt-6">
@@ -90,28 +89,38 @@
                     </div>
                 </div>
                 <!-- End of about section -->
-                <!-- Approve msg if role action succeed -->
-                <div class="user_role_action_success hidden" role="alert">
-                    <div class="bg-green-500 text-white font-bold rounded-t px-4 py-2 mt-3">
-                        <i class="fa fa-check mr-3"></i>Success
+                <!--Notifications for admin after actions-->
+                @if(session('status'))
+                    @if(session('status') == 'role-assigned')
+                        <x-notifications.approving
+                            :value="trans('admin-roles.role-assigned')">
+                        </x-notifications.approving>
+                    @endif
+                    @if(session('status') == 'role-disabled')
+                        <x-notifications.approving
+                            :value="trans('admin-roles.role-disabled')">
+                        </x-notifications.approving>
+                    @endif
+                    @if (session('status') == 'role-already-assigned')
+                        <x-notifications.error
+                            :icon="'fa fa-exclamation-triangle mr-3'"
+                            :value="trans('admin-roles.role-already-assigned')"></x-notifications.error>
+                    @endif
+                    @if (session('status') == 'role-assign-error')
+                        <x-notifications.error
+                            :icon="'fa fa-exclamation-triangle mr-3'"
+                            :value="trans('admin-roles.role-already-assigned')"></x-notifications.error>
+                    @endif
+                @endif
+                <div class="error-alert hidden" role="alert">
+                    <div class="bg-red-500 text-white font-bold rounded-t px-4 py-2 mt-3">
+                        <i class="'fa fa-exclamation-triangle mr-3'"></i> {{ trans('alert-blade.title') }}
                     </div>
-                    <div
-                        class="flex flex-col border border-t-0 border-green-400 rounded-b bg-green-100 px-4 py-3 text-green-700 font-bold">
+                    <div class="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700">
                         <p></p>
                     </div>
                 </div>
-                <!-- End of Approve msg if role action succeed -->
-                <!-- Warning msg if role action failed -->
-                <div class="user_role_action_fail hidden" role="alert">
-                    <div class="bg-orange-500 text-white font-bold rounded-t px-4 py-2 mt-3">
-                        <i class="fa fa-exclamation-triangle mr-3"></i>{{ trans('warning-blade.title') }}
-                    </div>
-                    <div
-                        class="flex flex-col border border-t-0 border-orange-400 rounded-b bg-orange-100 px-4 py-3 text-orange-700 font-bold">
-                        <p></p>
-                    </div>
-                </div>
-                <!-- End of Warning msg if role action failed -->
+                <!--End of admin notifications section-->
                 <!-- User Roles Section -->
                 <div class="hidden sm:block bg-white border border-blue-500 p-3  mt-3 shadow-sm rounded-sm">
                     <div class="flex items-center justify-between space-x-2 font-semibold text-gray-900 leading-8">
@@ -273,7 +282,6 @@
             _token: '{{ csrf_token() }}'
         })
             .success(function (response) {
-                console.log(response.msg);
                 if (!alert(response.msg)) {
                     window.location.reload();
                 }
@@ -286,7 +294,6 @@
             _token: '{{ csrf_token() }}'
         })
             .success(function (response) {
-                console.log(response.msg);
                 if (!alert(response.msg)) {
                     window.location.reload();
                 }
@@ -296,52 +303,36 @@
     $('.remove_user_role').on('click', function () {
         let url = "{{ route('removeUserRole', ['user' => $user]) }}";
         let roleId = $(this).attr('id').split('_')[3];
-
         $.post(url, {
             _token: '{{ csrf_token() }}',
             roleId: roleId
         })
-            .success(function (response) {
-                if (response.msg == 'Role deleted from user!') {
-                    $('.user_role_action_success p').text(response.msg);
-                    $('.user_role_action_success').slideDown(300);
-                    $(".user_role_action_success").delay(1000).slideUp(300, function () {
-                        window.location.reload();
-                    });
-                } else {
-                    $('.user_role_action_fail p').text(response.msg);
-                    $('.user_role_action_fail').slideDown(300);
-                    $(".user_role_action_fail").delay(1000).slideUp(300, function () {
-                        window.location.reload();
-                    });
-                }
-            });
+        window.location.reload();
+
     });
 
     $('.add_user_role').on('click', function () {
-        $('.choose_role').delay(100).slideDown(300);
+            console.log();
+        if (!$('.choose_role').is(':visible')) {
+            $('.choose_role').delay(100).slideDown(300);
+        } else {
+            $('.choose_role').delay(100).slideUp(300);
+        }
         $('.select-role').on('change', function () {
             let url = "{{ route('addUserRole', ['user' => $user]) }}";
             let roleId = $(this).val();
             $.post(url, {
                 _token: '{{ csrf_token() }}',
                 roleId: roleId
-            })
-                .success(function (response) {
-                    if (response.msg == 'Role added to user!') {
-                        $('.user_role_action_success p').text(response.msg);
-                        $('.user_role_action_success').slideDown(300);
-                        $(".user_role_action_success").delay(1000).slideUp(300, function () {
-                            window.location.reload();
-                        });
-                    } else {
-                        $('.user_role_action_fail p').text(response.msg);
-                        $('.user_role_action_fail').slideDown(300);
-                        $(".user_role_action_fail").delay(1000).slideUp(300, function () {
-                            window.location.reload();
-                        });
-                    }
-                });
+            }).fail(function (response) {
+                let errmsg = JSON.parse(response.responseText).message;
+                let errFile = JSON.parse(response.responseText).file + JSON.parse(response.responseText).line;
+
+                $('.error-alert p').text('{{ trans('base-phrases.admin-error-message') }}.' + ' Error message: ' + errmsg);
+                $('.error-alert').slideDown(300);
+                $(".error-alert").delay(3000).slideUp(300);
+            });
+            window.location.reload();
         });
     });
 </script>

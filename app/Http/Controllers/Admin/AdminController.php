@@ -227,22 +227,28 @@ class AdminController extends Controller
      * @param Request $request
      * @param User $user
      * @param RoleService $roleService
-     * @return JsonResponse
+     * @return RedirectResponse
      */
-    public function addUserRole(Request $request, User $user, RoleService $roleService): JsonResponse
+    public function addUserRole(Request $request, User $user, RoleService $roleService): RedirectResponse
     {
         $role = Role::find($request->get('roleId'));
-        if (!RoleHelper::has_role($role->name, $user->id) && $roleService->addRoleUser($role->name, $user->id)) {
-            Log::info('Add user new role', ['user' => $user, 'role' => $role]);
 
-            return response()->json([
-                'msg' => 'Role added to user!',
-            ]);
+        if (RoleHelper::has_role($role->name, $user->id)) {
+
+            return back()->with('status', 'role-already-assigned');
+
         }
 
-        return response()->json([
-            'msg' => 'Something wrong!',
-        ]);
+        if ($roleService->addRoleUser($role->name, $user->id)) {
+            Log::info('Add user new role', ['user' => $user, 'role' => $role]);
+
+            return back()->with('status', 'role-assigned');
+
+        }
+
+        Log::warning('Role wasnt assigned to user', ['user' => $user, 'role' => $role]);
+
+        return back()->with('status', 'role-assign-error');
     }
 
     /**
@@ -252,21 +258,17 @@ class AdminController extends Controller
      * @param Request $request
      * @param User $user
      * @param RoleService $roleService
-     * @return JsonResponse
+     * @return RedirectResponse
      */
-    public function removeUserRole(Request $request, User $user, RoleService $roleService): JsonResponse
+    public function removeUserRole(Request $request, User $user, RoleService $roleService): RedirectResponse
     {
         $role = Role::find($request->get('roleId'));
         if ($roleService->removeRoleUser($role->name, $user->id)) {
             Log::info('Role removed from user', ['user' => $user, 'role' => $role]);
 
-            return response()->json([
-                'msg' => 'Role deleted from user!',
-            ]);
+            return back()->with('status', 'role-disabled');
         }
 
-        return response()->json([
-            'msg' => 'Something wrong!',
-        ]);
+        return back()->with('status', 'role-assign-error');
     }
 }

@@ -8,7 +8,7 @@
 </div>
 
 <script>
-    if (['nothing-updated'].includes('{{session('status')}}')) {
+    if (['nothing-updated', 'role-already-assigned', 'role-assign-error'].includes('{{session('status')}}')) {
         $(function(){
             $('.alert').slideDown(300);
             $(".alert").delay(2000).slideUp(300);

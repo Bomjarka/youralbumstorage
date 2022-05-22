@@ -10,7 +10,7 @@
 </div>
 
 <script>
-    if (['verification-link-sent','role-created', 'role-updated'].includes('{{session('status')}}')) {
+    if (['verification-link-sent','role-created', 'role-updated', 'role-assigned', 'role-disabled'].includes('{{session('status')}}')) {
         $(function(){
             $('.success').slideDown(300);
             $(".success").delay(2000).slideUp(300);
