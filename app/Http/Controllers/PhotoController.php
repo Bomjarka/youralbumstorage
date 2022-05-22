@@ -129,6 +129,13 @@ class PhotoController extends Controller
             ->text[App::getLocale()];
 
         $user = User::find($request->get('userId'));
+
+        if ($user->photos->count() == 0) {
+            return response()->json([
+                'msg' => 'no-photos',
+            ]);
+        }
+
         $archivePath = Storage::path('public/userphotos/' . $user->id . '/photos.zip');
         $zip = new ZipArchive();
 
@@ -170,7 +177,7 @@ class PhotoController extends Controller
         Log::info('Download files notification message sent', ['UserId: ' => $user->id]);
 
         return response()->json([
-            'msg' => 'OK',
+            'msg' => 'success',
         ]);
     }
 
