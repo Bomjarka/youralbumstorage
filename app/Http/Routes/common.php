@@ -17,6 +17,9 @@ Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/albums', [AlbumController::class, 'index'])->name('albums');
 
 Route::get('/photos', [PhotoController::class, 'index'])->name('photos');
+
+Route::post('/feedback', [PageController::class, 'feedback'])->name('feedback');
+
 });
 
 //Смена языка

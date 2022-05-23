@@ -1,4 +1,4 @@
-<div class="px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500">
+<div class="px-1 pt-5 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500">
     <div class="locale-switcher">
         <a href="{{ route('changeLocale', ['locale' => 'ru']) }}"
            class="locale-ru-switcher-button bg-gray-200 border-gray-200 border-2 p-2 focus:outline-none hover:text-gray-700 hover:border-gray-300"

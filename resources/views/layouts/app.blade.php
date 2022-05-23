@@ -17,7 +17,7 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
 </head>
 <body class="font-sans antialiased">
-<div class="min-h-screen bg-gray-100">
+<div class=" bg-gray-100">
     @include('layouts.navigation')
 
     <!-- Page Heading -->
@@ -51,6 +51,7 @@
 </div>
 </body>
 <footer class="flex flex-col justify-center w-full bg-white text-center p-4">
+    <x-feedback-block></x-feedback-block>
     <x-translate-block></x-translate-block>
     <div class="pt-3">
         <a target="_blank" href="https://vk.com/xamas27" class="underline">Developed by Alexander Chirkin 2022 ©</a>.
