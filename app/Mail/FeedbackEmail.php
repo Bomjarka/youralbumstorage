@@ -45,7 +45,8 @@ class FeedbackEmail extends Mailable
                 ->view('letters.letter', ['emailFrom' => $this->emailFrom, 'userMessage' => $this->userMessage]);
         }
 
-        return $this->from($this->emailFrom)
+        return $this->from(config('mail.from.address', 'YourAlbumStorage'))
+            ->replyTo($this->emailFrom)
             ->subject('Feedback message from user' . $this->emailFrom)
             ->view('letters.letter', ['user' => $this->user, 'userMessage' => $this->userMessage]);
 
