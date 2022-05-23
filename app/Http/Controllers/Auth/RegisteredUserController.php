@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Rules\PasswordRules;
 use App\Services\Registration\RegistrationService;
 use App\Services\Registration\UserData;
 use Illuminate\Auth\Events\Registered;
@@ -10,7 +11,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
@@ -44,7 +44,7 @@ class RegisteredUserController extends Controller
             'phone' => ['required', 'string', 'min:11', 'max:11', 'unique:users'],
             'gender' => ['required', 'string'],
             'birthdate' => ['required', 'date'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'confirmed', PasswordRules::defaults()],
         ]);
 
         $user = $regisTrationService->registerUser(UserData::prepareData($request));

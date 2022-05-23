@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 
 use App\Models\Photo;
 use App\Models\User;
+use App\Rules\PasswordRules;
 use App\Services\RoleService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -20,6 +21,6 @@ class TestCommand extends Command
 
     public function handle(RoleService $roleService)
     {
-
+        dd(PasswordRules::defaults());
     }
 }
