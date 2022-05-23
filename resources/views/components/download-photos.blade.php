@@ -1,4 +1,4 @@
-@if (Auth::user()->photos->count() != 0)
+@if (Auth::user()->photos->count() != 0 && Auth::user()->isVerified())
     <div class="flex items-center pt-2">
         <button type="click"
                 class="download_photos bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
