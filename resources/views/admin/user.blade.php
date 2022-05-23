@@ -136,7 +136,7 @@
                         </button>
                     </div>
                     <div class="choose_role flex items-center justify-end hidden">
-                        <x-admin.role-search-input></x-admin.role-search-input>
+                        <x-admin.role-search-input :user="$user"></x-admin.role-search-input>
                     </div>
                     @if (RoleHelper::get_user_roles($user->id)->count() == 0)
                         {{ trans('admin-user-page-user-roles.no-roles') }}
@@ -333,6 +333,15 @@
                 $(".error-alert").delay(3000).slideUp(300);
             });
             window.location.reload();
+        });
+    });
+
+    jQuery(function($){
+        $(document).mouseup( function(e){
+            let chosserole = $( ".choose_role" );
+            if ( !chosserole.is(e.target)) {
+                chosserole.slideUp(300);
+            }
         });
     });
 </script>
