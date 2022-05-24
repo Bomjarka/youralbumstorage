@@ -40,13 +40,12 @@ class FeedbackEmail extends Mailable
     public function build()
     {
         if ($this->isFromGuest) {
-            return $this->from($this->emailFrom)
+            return $this->from(config('mail.from.address', 'YourAlbumStorage'))
                 ->subject('Feedback message from guest ' . $this->emailFrom)
                 ->view('letters.letter', ['emailFrom' => $this->emailFrom, 'userMessage' => $this->userMessage]);
         }
 
         return $this->from(config('mail.from.address', 'YourAlbumStorage'))
-            ->replyTo($this->emailFrom)
             ->subject('Feedback message from user' . $this->emailFrom)
             ->view('letters.letter', ['user' => $this->user, 'userMessage' => $this->userMessage]);
 
