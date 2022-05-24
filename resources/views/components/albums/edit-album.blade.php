@@ -22,39 +22,39 @@
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                                 <h3 class="text-lg leading-6 font-medium text-gray-900"
                                     id="modal-title">
-                                    Edit photo {{ $album->name }}
+                                     {{ trans('edit-album-form.title') . ' ' . $album->name }}
                                 </h3>
 
                                 <div class="mt-2">
                                     <p class="text-sm text-gray-500 mb-3">
-                                        You can change photo name or description. Press save when finish.
-                                    </p>
+                                        {{ trans('edit-album-form.description') }}
+                                     </p>
 
-                                    <form class="deleteAlbumForm"
-                                          x-on:submit="$dispatch('deleting')"
-                                          method="post"
-                                          action="{{ route('editAlbum', [$album->id]) }}">
+                                     <form class="deleteAlbumForm"
+                                           x-on:submit="$dispatch('deleting')"
+                                           method="post"
+                                           action="{{ route('editAlbum', [$album->id]) }}">
                                         @csrf
                                         @method('post')
-                                        <x-label for="album_name" :value="__('Album Name')"/>
+                                        <x-label for="album_name" :value="trans('view-albumpage.album-name')"/>
                                         <x-input id="album_name" class="block mt-1 w-full" type="text" name="album_name"
                                                  value="{{ $album->name }}"
                                                  required autofocus class="mb-3"/>
-                                        <x-label for="album_description" :value="__('Album Description')"/>
+                                        <x-label for="album_description" :value="trans('view-albumpage.album-description')"/>
                                         <x-input id="album_description" class="block mt-1 mb-3 w-full" type="text"
                                                  name="album_description" value="{{ $album->description }}"
-                                                 required autofocus/>
+                                                 autofocus/>
                                         <input class="album_id" type="hidden"
                                                name="album_id" value={{ $album->id }}>
 
                                         <div class="flex justify-end space-x-2 mt-3">
                                             <button @click="open = false"
                                                     class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
-                                                Cancel
+                                                {{ trans('edit-album-form.cancel-button') }}
                                             </button>
                                             <button type="submit"
                                                     class="editModalButton w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 s sm:w-auto sm:text-sm">
-                                                Save
+                                                {{ trans('edit-album-form.save-button') }}
                                             </button>
                                         </div>
                                     </form>

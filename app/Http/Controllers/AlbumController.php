@@ -107,7 +107,7 @@ class AlbumController extends Controller
     public function edit(Request $request, Album $album, AlbumService $albumService): RedirectResponse
     {
         $newName = $request->get('album_name');
-        $newDescription = $request->get('album_description');
+        $newDescription = $request->get('album_description') ?? '';
 
 
         Log::info('Album updated', ['album: ' => $album, 'New Name' => $newName, 'New Description' => $newDescription]);
