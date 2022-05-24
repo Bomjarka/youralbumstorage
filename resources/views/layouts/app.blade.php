@@ -31,7 +31,7 @@
         @if (session('status') == 'verification-link-sent')
             <div class="container my-12 mx-auto px-4 md:px-12">
                 <x-notifications.approving
-                    :value="__('A new verification link has been sent to the email address you provided during registration.')">
+                    :value="trans('verify-email-message.success-message')">
                 </x-notifications.approving>
             </div>
         @endif
