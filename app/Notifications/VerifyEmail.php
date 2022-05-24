@@ -2,12 +2,12 @@
 
 namespace App\Notifications;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\URL;
 
 class VerifyEmail extends Notification
@@ -26,11 +26,11 @@ class VerifyEmail extends Notification
      */
     public static $toMailCallback;
 
-    private  $firstName;
+    private $user;
 
-    public function __construct(string $firtName)
+    public function __construct(User $user)
     {
-        $this->firstName = $firtName;
+        $this->user = $user;
     }
 
     /**
@@ -71,7 +71,7 @@ class VerifyEmail extends Notification
     {
         return (new MailMessage)
             ->subject(trans('verify-email-message.subject'))
-            ->greeting(trans('verify-email-message.greeting') . ', ' . $this->firstName)
+            ->greeting(trans('verify-email-message.greeting') . ', ' . $this->user->fullName())
             ->line(trans('verify-email-message.message'))
             ->action(trans('verify-email-message.action'), $url)
             ->line(trans('verify-email-message.warning'))

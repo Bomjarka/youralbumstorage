@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\User;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -13,6 +14,8 @@ class ResetPassword extends Notification
      * @var string
      */
     public $token;
+
+    public $user;
 
     /**
      * The callback that should be used to create the reset password URL.
@@ -34,9 +37,10 @@ class ResetPassword extends Notification
      * @param  string  $token
      * @return void
      */
-    public function __construct($token)
+    public function __construct($token, User $user)
     {
         $this->token = $token;
+        $this->user = $user;
     }
 
     /**
@@ -47,7 +51,7 @@ class ResetPassword extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -75,10 +79,12 @@ class ResetPassword extends Notification
     {
         return (new MailMessage)
             ->subject(trans('reset-password-notification.subject'))
+            ->greeting(trans('verify-email-message.greeting') . ', ' . $this->user->fullName())
             ->line(trans('reset-password-notification.title'))
             ->action(trans('reset-password-notification.action'), $url)
             ->line(trans('reset-password-notification.expire', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
-            ->line(trans('reset-password-notification.no-action'));
+            ->line(trans('reset-password-notification.no-action'))
+            ->salutation(trans('verify-email-message.regards'));
     }
 
     /**
@@ -119,5 +125,20 @@ class ResetPassword extends Notification
     public static function toMailUsing($callback)
     {
         static::$toMailCallback = $callback;
+    }
+
+    /**
+     * Get the array representation of the notification.
+     *
+     * @param mixed $notifiable
+     * @return array
+     */
+    public function toArray($notifiable): array
+    {
+
+        return [
+            'email' => $notifiable->email,
+            'message' => 'Sent reset password notification',
+        ];
     }
 }

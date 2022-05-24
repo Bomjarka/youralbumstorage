@@ -54,7 +54,7 @@ class AddTranslationToResetPasswordNotification extends Migration
             'group' => 'reset-password-notification',
             'key' => 'no-action',
             'text' => [
-                'ru' => 'Если вы не запрашивали сменю пароля, то ничего не нужно делать.',
+                'ru' => 'Если вы не запрашивали смену пароля, то ничего не нужно делать.',
                 'en' => 'If you did not request a password reset, no further action is required.'
             ],
         ]);
