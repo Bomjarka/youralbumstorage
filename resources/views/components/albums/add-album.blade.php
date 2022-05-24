@@ -30,7 +30,7 @@
                      class="inline-block w-full max-w-xl p-8 my-20 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl 2xl:max-w-2xl"
                 >
                     <div class="flex items-center justify-between space-x-4">
-                        <h1 class="text-xl font-medium text-gray-800 ">Add new album</h1>
+                        <h1 class="text-xl font-medium text-gray-800 ">{{ trans('add-album-form.title') }}</h1>
 
                         <button @click="modelOpen = false"
                                 class="text-gray-600 focus:outline-none hover:text-gray-700">
@@ -39,7 +39,7 @@
                     </div>
 
                     <p class="mt-2 text-sm text-gray-500 ">
-                        Add album to your storage
+                        {{ trans('add-album-form.title-description') }}
                     </p>
 
                     <form class="mt-5" method="post" action="{{ route('createAlbum') }}">
@@ -51,23 +51,25 @@
                         </div>
                         <div>
                             <label for="album_name"
-                                   class="block text-sm text-gray-700 capitalize dark:text-gray-200">Album
-                                name</label>
-                            <input required placeholder="Album name" type="text" name="album_name"
+                                   class="block text-sm text-gray-700 capitalize dark:text-gray-200">
+                                {{ trans('view-albumpage.album-name') }}
+                            </label>
+                            <input required placeholder="{{ trans('view-albumpage.album-name') }}" type="text" name="album_name"
                                    class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
                         </div>
                         <div class="mt-4">
                             <label for="album_description"
-                                   class="block text-sm text-gray-700 capitalize dark:text-gray-200">Album
-                                Description</label>
-                            <input placeholder="This album of some photos" type="text"
+                                   class="block text-sm text-gray-700 capitalize dark:text-gray-200">
+                                {{ trans('view-albumpage.album-description') }}
+                            </label>
+                            <input placeholder="{{ trans('view-albumpage.album-description') }}" type="text"
                                    name="album_description"
                                    class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
                         </div>
                         <div class="flex justify-end mt-6">
                             <button type="submit"
                                     class="px-3 py-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800">
-                                Add
+                                {{ trans('add-album-form.button') }}
                             </button>
                         </div>
                     </form>

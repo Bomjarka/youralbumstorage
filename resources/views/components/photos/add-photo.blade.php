@@ -30,42 +30,42 @@
                      class="inline-block w-full max-w-xl p-8 my-20 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl 2xl:max-w-2xl"
                 >
                     <div class="flex items-center justify-between space-x-4">
-                        <h1 class="text-xl font-medium text-gray-800 ">Add new photo</h1>
+                        <h1 class="text-xl font-medium text-gray-800 ">{{ trans('add-photo-form.title') }}</h1>
 
                         <button @click="modelOpen = false"
                                 class="text-gray-600 focus:outline-none hover:text-gray-700">
                             <i class="fa fa-times w-6 h-6"></i>
                         </button>
                     </div>
-
                     <p class="mt-2 text-sm text-gray-500 ">
-                        Add photo to your storage
+                        {{ trans('add-photo-form.title-description') }}
                     </p>
-
                     <form class="mt-5" method="post" action="{{ route('createPhoto') }}" enctype="multipart/form-data">
                         @csrf
                         @method('post')
                         <div>
-                            <input type="hidden" type="text" name="user_id"
+                            <input type="hidden" name="user_id"
                                    value="{{Auth::user()->id}}"
                                    class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
                         </div>
                         <div>
                             <label for="photo_name"
-                                   class="block text-sm text-gray-700 capitalize dark:text-gray-200">Photo
-                                name</label>
-                            <input required placeholder="Photo 1" type="text" name="photo_name"
+                                   class="block text-sm text-gray-700 capitalize dark:text-gray-200">
+                                {{ trans('view-photospage.photo-name') }}
+                            </label>
+                            <input required placeholder="{{ trans('view-photospage.photo-name') }}" type="text" name="photo_name"
                                    class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
                         </div>
                         <div class="mt-4">
                             <label for="photo_description"
-                                   class="block text-sm text-gray-700 capitalize dark:text-gray-200">Photo
-                                Description</label>
-                            <input placeholder="This photo of a something somewhere" type="text"
+                                   class="block text-sm text-gray-700 capitalize dark:text-gray-200">
+                                {{ trans('view-photospage.photo-description') }}
+                            </label>
+                            <input placeholder="{{ trans('view-photospage.photo-description') }}" type="text"
                                    name="photo_description"
-                                   class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                   class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
                         </div>
-                        <div class="mt-2  text-sm text-gray-700 capitalize dark:text-gray-200"><span>Attachments</span>
+                        <div class="mt-2  text-sm text-gray-700 capitalize dark:text-gray-200"><span>{{ trans('add-photo-form.attachment-label') }}</span>
                             <div class="flex justify-between items-center">
                                 <span class="input_filename hidden font-bold"></span>
                                 <button type="button" class="remove_uploaded_image hidden">
@@ -80,7 +80,7 @@
                                                 <div class="flex flex-col items-center"><i
                                                         class="fa fa-folder-open fa-4x text-blue-700"></i>
                                                     <span
-                                                        class="block text-gray-400 font-normal">Attach you files here</span>
+                                                        class="block text-gray-400 font-normal">{{ trans('add-photo-form.attachment-text') }}</span>
                                                 </div>
                                             </div>
                                             <input id="user_photo" accept="image/*" type="file"
@@ -91,7 +91,7 @@
                                 </div>
                             </div>
                             <div class="flex justify-end items-center text-gray-400">
-                                <span>Accepted file types:.img/png</span>
+                                <span>{{ trans('add-photo-form.accepted-files') }}:.img/png</span>
                             </div>
                         </div>
                         <input class="album_id" type="hidden"
@@ -102,7 +102,7 @@
                         <div class="flex justify-end mt-6">
                             <button type="submit"
                                     class="px-3 py-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800">
-                                Add
+                                {{ trans('add-photo-form.add') }}
                             </button>
                         </div>
                     </form>
