@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use App\Notifications\ResetPassword;
 use App\Services\RoleService;
 use App\Traits\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -128,4 +129,16 @@ class User extends Authenticatable
     {
         return $this->photos()->onlyTrashed();
     }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPassword($token));
+    }
+
 }
