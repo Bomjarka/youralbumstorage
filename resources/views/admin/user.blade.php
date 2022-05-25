@@ -270,7 +270,7 @@
                     </div>
                     <div>
                         <button class="delete_user hover:text-red-500" name="delete" value="delete" type="button">
-                            <i class="fa fa-trash text-red-500 mr-3" aria-hidden="true"></i>Delete user
+                            <i class="fa fa-trash text-red-500 mr-3" aria-hidden="true"></i>{{ trans('admin-user-page-admin-actions.delete-user') }}
                         </button>
                     </div>
                 </div>
@@ -343,7 +343,7 @@
 
     $('.delete_user').on('click', function () {
         let url = "{{ route('deleteUser', ['user' => $user->id]) }}";
-        if (confirm('Are you sure?')) {
+        if (confirm('{{ trans('admin-user-page-admin-actions.delete-acceptance') }}')) {
             $.post(url, {
                 _token: '{{ csrf_token() }}'
             })

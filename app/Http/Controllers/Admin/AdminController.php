@@ -277,7 +277,7 @@ class AdminController extends Controller
         if ($userService->deleteUser($user)) {
 
             return response()->json([
-                'status' => 'success',
+                'status' => trans('approving-blade.title'),
                 'redirect' => route('adminUsers'),
             ]);
         }
