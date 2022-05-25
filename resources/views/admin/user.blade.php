@@ -130,10 +130,12 @@
                             </span>
                             {{ trans('admin-user-page-user-roles.title') }}
                         </div>
-                        <button type="click" id="add_user_role"
-                                class="add_user_role bg-green-600 text-white font-semibold h-8 px-4 m-2 rounded hover:bg-green-500">
-                            {{ trans('admin-user-page-user-roles.role-action-assign') }}
-                        </button>
+                        @if(\App\Helpers\RoleHelper::has_permission(\App\Models\Permission::ADD_ROLE_TO_USER, Auth::user()->id))
+                            <button type="click" id="add_user_role"
+                                    class="add_user_role bg-green-600 text-white font-semibold h-8 px-4 m-2 rounded hover:bg-green-500">
+                                {{ trans('admin-user-page-user-roles.role-action-assign') }}
+                            </button>
+                        @endif
                     </div>
                     <div class="choose_role flex items-center justify-end hidden">
                         <x-admin.role-search-input :user="$user"></x-admin.role-search-input>
@@ -146,7 +148,9 @@
                             <tr>
                                 <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-roles.role-name') }}</th>
                                 <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-roles.role-description') }}</th>
-                                <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-roles.role-action') }}</th>
+                                @if (\App\Helpers\RoleHelper::has_permission(\App\Models\Permission::REMOVE_ROLE_FROM_USER, Auth::user()->id))
+                                    <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-roles.role-action') }}</th>
+                                @endif
                             </tr>
                             </thead>
                             <tbody class="text-gray-700">
@@ -156,12 +160,14 @@
                                            value="{{ $role->id }}">
                                     <td class="w-1/3 text-center py-3 px-4">{{ $role->name }}</td>
                                     <td class="w-1/3 text-center py-3 px-4">{{ $role->description }}</td>
-                                    <td class="w-1/3 text-center py-3 px-4">
-                                        <button type="click" id="remove_user_role_{{$role->id}}"
-                                                class="remove_user_role bg-red-600 text-white font-semibold h-8 px-4 m-2 rounded hover:bg-red-500">
-                                            {{ trans('admin-user-page-user-roles.role-action-remove') }}
-                                        </button>
-                                    </td>
+                                    @if (\App\Helpers\RoleHelper::has_permission(\App\Models\Permission::REMOVE_ROLE_FROM_USER, Auth::user()->id))
+                                        <td class="w-1/3 text-center py-3 px-4">
+                                            <button type="click" id="remove_user_role_{{$role->id}}"
+                                                    class="remove_user_role bg-red-600 text-white font-semibold h-8 px-4 m-2 rounded hover:bg-red-500">
+                                                {{ trans('admin-user-page-user-roles.role-action-remove') }}
+                                            </button>
+                                        </td>
+                                    @endif
                                 </tr>
                             @endforeach
                             </tbody>
@@ -254,25 +260,34 @@
                             <i class="fa fa-tasks mr-3"></i>
                         </span>
                         {{ trans('admin-user-page-admin-actions.title') }}
-                    </div><hr>
-                    <div>
-                        @if(!$user->isBlocked())
-                            <button class="block_user hover:text-red-500" name="block" value="block" type="button"><i
-                                    class="fa fa-ban text-red-500 mr-3"
-                                    aria-hidden="true"></i>{{ trans('admin-user-page-admin-actions.block-user') }}
-                            </button>
-                        @else
-                            <button class="unblock_user hover:text-green-500" name="unblock" value="unblock" type="button"><i
-                                    class="fa fa-heart text-green-500 mr-3"
-                                    aria-hidden="true"></i>{{ trans('admin-user-page-admin-actions.unblock-user') }}
-                            </button>
-                        @endif
                     </div>
-                    <div>
-                        <button class="delete_user hover:text-red-500" name="delete" value="delete" type="button">
-                            <i class="fa fa-trash text-red-500 mr-3" aria-hidden="true"></i>{{ trans('admin-user-page-admin-actions.delete-user') }}
-                        </button>
-                    </div>
+                    <hr>
+                    @if(\App\Helpers\RoleHelper::has_permission(\App\Models\Permission::BLOCK_USER, Auth::user()->id)
+                            && (\App\Helpers\RoleHelper::has_permission(\App\Models\Permission::UNBLOCK_USER, Auth::user()->id)))
+                        <div>
+                            @if(!$user->isBlocked())
+                                <button class="block_user hover:text-red-500" name="block" value="block" type="button">
+                                    <i
+                                        class="fa fa-ban text-red-500 mr-3"
+                                        aria-hidden="true"></i>{{ trans('admin-user-page-admin-actions.block-user') }}
+                                </button>
+                            @else
+                                <button class="unblock_user hover:text-green-500" name="unblock" value="unblock"
+                                        type="button"><i
+                                        class="fa fa-heart text-green-500 mr-3"
+                                        aria-hidden="true"></i>{{ trans('admin-user-page-admin-actions.unblock-user') }}
+                                </button>
+                            @endif
+                        </div>
+                    @endif
+                    @if(\App\Helpers\RoleHelper::has_permission(\App\Models\Permission::DELETE_USER, Auth::user()->id))
+                        <div>
+                            <button class="delete_user hover:text-red-500" name="delete" value="delete" type="button">
+                                <i class="fa fa-trash text-red-500 mr-3"
+                                   aria-hidden="true"></i>{{ trans('admin-user-page-admin-actions.delete-user') }}
+                            </button>
+                        </div>
+                    @endif
                 </div>
             </div>
             <!-- End right aside section -->
@@ -317,7 +332,7 @@
     });
 
     $('.add_user_role').on('click', function () {
-            console.log();
+        console.log();
         if (!$('.choose_role').is(':visible')) {
             $('.choose_role').delay(100).slideDown(300);
         } else {
@@ -355,10 +370,10 @@
         }
     });
 
-    jQuery(function($){
-        $(document).mouseup( function(e){
-            let chosserole = $( ".choose_role" );
-            if ( !chosserole.is(e.target)) {
+    jQuery(function ($) {
+        $(document).mouseup(function (e) {
+            let chosserole = $(".choose_role");
+            if (!chosserole.is(e.target)) {
                 chosserole.slideUp(300);
             }
         });
