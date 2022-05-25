@@ -24,6 +24,11 @@
             <i class="fas fa-table mr-3"></i>
             {{ trans('admin-menu.roles') }}
         </a>
+        <a href="{{ route('adminPermissions') }}"
+           class="flex items-center text-white hover:opacity-100 py-4 pl-6 nav-item active-nav-link">
+            <i class="fas fa-table mr-3"></i>
+            Permissions
+        </a>
         <a href="{{ route('adminForms') }}"
            class="flex items-center text-white hover:opacity-100 py-4 pl-6 nav-item active-nav-link">
             <i class="fas fa-align-left mr-3"></i>

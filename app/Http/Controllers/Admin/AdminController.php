@@ -286,4 +286,11 @@ class AdminController extends Controller
             'status' => 'failed',
         ]);
     }
+
+    public function permissions(RoleService $roleService)
+    {
+        $permissions = $roleService->getAllPermissions()->sortBy('id');
+
+        return view('admin.permissions', ['permissions' => $permissions]);
+    }
 }
