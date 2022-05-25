@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\Permission;
 use App\Models\Role;
+use App\Models\RolePermission;
+use App\Models\User;
 use App\Models\UserPermission;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
@@ -29,6 +31,12 @@ class RoleService
      * @var EloquentCollection[]
      */
     protected $userPermissions;
+
+    /**
+     * Список привилегий пользователей. Ключ - id пользователя.
+     * @var EloquentCollection[]
+     */
+    protected $rolePermissions;
 
     /**
      * Список ролей пользователей. Ключ - id пользователя
@@ -133,6 +141,21 @@ class RoleService
     }
 
     /**
+     * Получение всех имеющихся у пользователя привилегий
+     * @param int $userId - id пользователя (user)
+     * @return EloquentCollection
+     */
+    public function getRolePermissions(int $roleId): EloquentCollection
+    {
+        if (!isset($this->rolePermissions[$roleId])) {
+            $ids = RolePermission::whereRoleId($roleId)->pluck('permission_id')->toArray();
+            $this->rolePermissions[$roleId] = $this->getAllPermissions()->whereIn('id', $ids);
+        }
+
+        return $this->rolePermissions[$roleId];
+    }
+
+    /**
      * Добавляет роль пользователю
      * @param string $role
      * @param int $userId
@@ -208,5 +231,17 @@ class RoleService
             return $v->id != $model->id;
         });
         return (bool)UserRole::whereRoleId($model->id)->whereUserId($userId)->delete();
+    }
+
+    /**
+     * Возвращает всех пользователей администраторов
+     *
+     * @return mixed
+     */
+    public function getAdministrators()
+    {
+        $adminRole = Role::whereName(Role::ROLE_ADMIN)->first();
+
+        return User::whereIn('id', UserRole::whereRoleId($adminRole->id)->pluck('user_id'))->get();
     }
 }
