@@ -70,4 +70,7 @@ return [
         public_path('storage') => storage_path('app/public'),
     ],
 
+    //Срок хранения файлов пользователя после их удаления
+    'lifetime' => 7,
+
 ];
