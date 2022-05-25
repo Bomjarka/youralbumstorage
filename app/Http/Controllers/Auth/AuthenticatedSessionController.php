@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        if (RoleHelper::has_role(Role::ROLE_ADMIN, Auth::user()->id)) {
+        if (RoleHelper::has_role_any([Role::ROLE_ADMIN, Role::ROLE_MODERATOR], Auth::user()->id)) {
             if ($request->get('usual_user')) {
                 return redirect('/');
             }
