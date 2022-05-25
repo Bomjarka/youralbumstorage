@@ -58,7 +58,7 @@ class AdminController extends Controller
      */
     public function blockUser(User $user, UserService $userService): JsonResponse
     {
-        $userService->block($user);
+        $userService->blockUser($user);
         Log::info('User blocked', ['user' => $user]);
 
         return response()->json([
@@ -76,7 +76,7 @@ class AdminController extends Controller
      */
     public function unblockUser(User $user, UserService $userService): JsonResponse
     {
-        $userService->unblock($user);
+        $userService->unblockUser($user);
         Log::info('User unblocked', ['user' => $user]);
 
         return response()->json([
@@ -270,5 +270,20 @@ class AdminController extends Controller
         }
 
         return back()->with('status', 'role-assign-error');
+    }
+
+    public function deleteUser(User $user, UserService $userService)
+    {
+        if ($userService->deleteUser($user)) {
+
+            return response()->json([
+                'status' => 'success',
+                'redirect' => route('adminUsers'),
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'failed',
+        ]);
     }
 }

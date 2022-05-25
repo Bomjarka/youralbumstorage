@@ -248,25 +248,30 @@
             <!-- Right aside section -->
             <div class="w-full lg:w-1/5 my-6 pr-0 lg:pr-2">
                 <!-- Start Actions Section -->
-                <div class="bg-white border border-blue-500 p-3  mt-3 shadow-sm rounded-sm">
-                    <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
+                <div class="bg-white border border-blue-500 p-3 mt-3 shadow-sm rounded-sm">
+                    <div class="flex items-center space-x-2 font-semibold  text-lg text-gray-900 leading-8">
                         <span class="text-blue-500">
                             <i class="fa fa-tasks mr-3"></i>
                         </span>
                         {{ trans('admin-user-page-admin-actions.title') }}
-                    </div>
+                    </div><hr>
                     <div>
                         @if(!$user->isBlocked())
-                            <button class="block_user" name="block" value="block" type="button"><i
+                            <button class="block_user hover:text-red-500" name="block" value="block" type="button"><i
                                     class="fa fa-ban text-red-500 mr-3"
                                     aria-hidden="true"></i>{{ trans('admin-user-page-admin-actions.block-user') }}
                             </button>
                         @else
-                            <button class="unblock_user" name="unblock" value="unblock" type="button"><i
+                            <button class="unblock_user hover:text-green-500" name="unblock" value="unblock" type="button"><i
                                     class="fa fa-heart text-green-500 mr-3"
                                     aria-hidden="true"></i>{{ trans('admin-user-page-admin-actions.unblock-user') }}
                             </button>
                         @endif
+                    </div>
+                    <div>
+                        <button class="delete_user hover:text-red-500" name="delete" value="delete" type="button">
+                            <i class="fa fa-trash text-red-500 mr-3" aria-hidden="true"></i>Delete user
+                        </button>
                     </div>
                 </div>
             </div>
@@ -334,6 +339,20 @@
             });
             window.location.reload();
         });
+    });
+
+    $('.delete_user').on('click', function () {
+        let url = "{{ route('deleteUser', ['user' => $user->id]) }}";
+        if (confirm('Are you sure?')) {
+            $.post(url, {
+                _token: '{{ csrf_token() }}'
+            })
+                .success(function (response) {
+                    if (!alert(response.status)) {
+                        window.location = response.redirect;
+                    }
+                });
+        }
     });
 
     jQuery(function($){

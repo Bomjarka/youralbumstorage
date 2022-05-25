@@ -27,6 +27,7 @@ Route::middleware(['userblocked', 'auth', 'admin'])->group(function () {
             Route::post('/unblock', [AdminController::class, 'unblockUser'])->name('unblockUser');
             Route::post('/add_role', [AdminController::class, 'addUserRole'])->name('addUserRole');
             Route::post('/remove_role', [AdminController::class, 'removeUserRole'])->name('removeUserRole');
+            Route::post('/delete_user', [AdminController::class, 'deleteUser'])->name('deleteUser');
         });
 
         Route::prefix('/roles')->group(function () {

@@ -11,7 +11,7 @@
                     <i class="fa fa-lock mr-3"></i> {{ trans('alert-blade.title') }}
                 </div>
                     <p class="text-white">{{ trans('userblocked-blade.message') }}
-                        <a href="#" class="hover:underline">{{ trans('userblocked-blade.action') }}</a></p>
+                        <a href="mailto::{{ config('mail.from.address', 'YourAlbumStorage') }}" class="hover:underline">{{ trans('userblocked-blade.action') }}</a></p>
                 </div>
             </div>
             <div class="flex justify-center pt-3">

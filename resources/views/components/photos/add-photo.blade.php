@@ -102,7 +102,7 @@
                         <div class="flex justify-end mt-6">
                             <button type="submit"
                                     class="px-3 py-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800">
-                                {{ trans('add-photo-form.add') }}
+                                {{ trans('add-photo-form.button') }}
                             </button>
                         </div>
                     </form>
