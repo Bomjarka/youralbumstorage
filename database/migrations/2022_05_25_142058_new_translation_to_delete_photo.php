@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Spatie\TranslationLoader\LanguageLine;
 
-class NewTranslationToDeleteAlbum extends Migration
+class NewTranslationToDeletePhoto extends Migration
 {
     /**
      * Run the migrations.
@@ -15,13 +15,13 @@ class NewTranslationToDeleteAlbum extends Migration
     public function up()
     {
         LanguageLine::create([
-            'group' => 'delete-album-form',
+            'group' => 'delete-photo-form',
             'key' => 'title',
             'text' => ['ru' => 'Внимание', 'en' => 'Delete warning'],
         ]);
 
         LanguageLine::create([
-            'group' => 'delete-album-form',
+            'group' => 'delete-photo-form',
             'key' => 'message',
             'text' => [
                 'ru' => 'Вы уверены, что хотите удалить альбома? Данные будут храниться на сервер в течение :period дней',
@@ -30,7 +30,7 @@ class NewTranslationToDeleteAlbum extends Migration
         ]);
 
         LanguageLine::create([
-            'group' => 'delete-album-form',
+            'group' => 'delete-photo-form',
             'key' => 'delete-button',
             'text' => [
                 'ru' => 'Удалить',
@@ -39,20 +39,11 @@ class NewTranslationToDeleteAlbum extends Migration
         ]);
 
         LanguageLine::create([
-            'group' => 'delete-album-form',
+            'group' => 'delete-photo-form',
             'key' => 'cancel-button',
             'text' => [
                 'ru' => 'Отменить',
                 'en' => 'Cancel'
-            ],
-        ]);
-
-        LanguageLine::create([
-            'group' => 'delete-album-form',
-            'key' => 'checkbox',
-            'text' => [
-                'ru' => 'Удалить все фотографии из альбома',
-                'en' => /** @lang text */ 'Delete photos from album'
             ],
         ]);
     }
