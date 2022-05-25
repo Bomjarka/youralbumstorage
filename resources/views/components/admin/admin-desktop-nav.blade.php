@@ -11,6 +11,7 @@
             <a href="{{ route('adminUser' ,['user' => Auth::user()]) }}" class="block px-4 py-2 account-link hover:text-blue-600 opacity-100">{{ trans('admin-dropdown-menu.profile') }}</a>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
+                @method('post')
                 <a href="{{ route('logout') }}" class="block px-4 py-2 account-link hover:text-blue-600"
                    onclick="event.preventDefault();
                                         this.closest('form').submit();">{{ trans('view-navigation.logout') }}</a>
