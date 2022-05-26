@@ -17,6 +17,11 @@
                 :icon="'fa fa-exclamation-triangle mr-3'"
                 :value="trans('admin-roles.nothing-update')"></x-notifications.error>
         @endif
+        @if (session('status') == 'role-exists')
+            <x-notifications.error
+                :icon="'fa fa-exclamation-triangle mr-3'"
+                :value="trans('admin-roles.role-exists')"></x-notifications.error>
+        @endif
     @endif
     <div class="w-full h-screen overflow-x-hidden border-t flex flex-col" x-data="{ modelOpen: false }">
         <main class="w-full flex-grow p-6">
@@ -59,7 +64,7 @@
                                     <i class="fa fa-times w-6 h-6"></i>
                                 </button>
                             </div>
-                            <form class="mt-5" method="post" action="{{ route('addRole') }}">
+                            <form class="mt-5" method="post" action="{{ route('createRole') }}">
                                 @csrf
                                 @method('post')
                                 <div>
@@ -159,6 +164,5 @@
         if ($(this).hasClass('disabled')) {
             return false;
         }
-        let url = "{{ route('editRole') }}";
     });
 </script>

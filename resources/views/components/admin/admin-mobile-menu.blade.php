@@ -25,7 +25,7 @@
         <a href="{{ route('adminPermissions') }}"
            class="flex items-center text-white hover:opacity-100 py-4 pl-6 nav-item active-nav-link">
             <i class="fas fa-table mr-3"></i>
-            Permissions
+            {{ trans('admin-permissions.title') }}
         </a>
         <a href="{{ route('adminForms') }}"
            class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">

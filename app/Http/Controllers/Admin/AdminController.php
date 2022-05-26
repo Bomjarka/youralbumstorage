@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Helpers\RoleHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Permission;
 use App\Models\Photo;
 use App\Models\Role;
 use App\Models\User;
@@ -170,7 +171,7 @@ class AdminController extends Controller
      * @param RoleService $roleService
      * @return RedirectResponse
      */
-    public function addRole(Request $request, RoleService $roleService): RedirectResponse
+    public function createRole(Request $request, RoleService $roleService): RedirectResponse
     {
         $request->validate([
             'role_name' => ['nullable', 'string', 'max:255'],
@@ -180,11 +181,14 @@ class AdminController extends Controller
         $roleName = $request->input('role_name');
         $roleDescription = $request->input('role_description');
 
-        $newRole = $roleService->createRole($roleName, $roleDescription);
+        if (!Role::whereName($roleName)->first()) {
+            $newRole = $roleService->createRole($roleName, $roleDescription);
+            Log::info('New Role created', ['role' => $newRole]);
 
-        Log::info('New Role created', ['photo' => $newRole]);
+            return back()->with('status', 'role-created');
+        }
 
-        return back()->with('status', 'role-created');
+        return back()->with('status', 'role-exists');
     }
 
 
@@ -287,10 +291,64 @@ class AdminController extends Controller
         ]);
     }
 
+    /**
+     * @param RoleService $roleService
+     * @return Application|Factory|View
+     */
     public function permissions(RoleService $roleService)
     {
         $permissions = $roleService->getAllPermissions()->sortBy('id');
 
         return view('admin.permissions', ['permissions' => $permissions]);
+    }
+
+    /**
+     * @param Request $request
+     * @param RoleService $roleService
+     * @return RedirectResponse
+     */
+    public function createPermission(Request $request, RoleService $roleService): RedirectResponse
+    {
+        $request->validate([
+            'permission_name' => ['string', 'max:255'],
+            'permission_description' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $permissionName = $request->input('permission_name');
+        $permissionDescription = $request->input('permission_description');
+
+        if (!Permission::whereName($permissionName)->first()) {
+            $newPermission = $roleService->createPermission($permissionName, $permissionDescription);
+            Log::info('New Permission created', ['permission' => $newPermission]);
+
+            return back()->with('status', 'permission-created');
+        }
+
+        return back()->with('status', 'permission-exists');
+    }
+
+    public function editPermission(Request $request)
+    {
+        $request->validate([
+            'newPermissionDescription' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $permissionId = $request->input('permissionId');
+        $permission = Permission::find($permissionId);
+        $newPermissionDescription = $request->input('newPermissionDescription');
+
+        if (!$permission || $newPermissionDescription == $permission->description) {
+
+            return back()->with('status', 'nothing-updated');
+        }
+
+        if ($newPermissionDescription) {
+            $permission->description = $newPermissionDescription;
+        }
+
+        Log::info('Permission updated', ['permission' => $permission, 'New Description' => $newPermissionDescription]);
+        $permission->save();
+
+        return back()->with('status', 'permission-updated');
     }
 }

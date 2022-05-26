@@ -37,7 +37,7 @@
 <article>
     <h1>{{ trans('maintenance-page.header') }}</h1>
     <div>
-        <p>{{ trans('maintenance-page.message'[], 'ru') }}</p>
+        <p>{{ trans('maintenance-page.message', [], 'ru') }}</p>
         <p>{{ trans('maintenance-page.message', [], 'en') }}</p>
         <p>&mdash; <a href="mailto:{{ config('mail.from.address', 'YourAlbumStorage') }}">{{ config('app.name') }} </p>
     </div>

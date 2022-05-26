@@ -99,6 +99,22 @@ class RoleService
     }
 
     /**
+     *
+     * Создание новой привилегии приложения
+     *
+     * @param string $name
+     * @param string|null $description
+     * @return Permission
+     */
+    public function createPermission(string $name, string $description = null): Permission
+    {
+        return Permission::create([
+            'name' => $name,
+            'description' => $description,
+        ]);
+    }
+
+    /**
      * Добавление новой привилегии пользователю
      * @param string $permission - наиенование привилегии
      * @param int $userId - id пользователя (user)

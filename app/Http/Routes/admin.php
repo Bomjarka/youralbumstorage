@@ -32,14 +32,14 @@ Route::middleware(['userblocked', 'auth', 'admin'])->group(function () {
 
         Route::prefix('/roles')->group(function () {
             Route::get('/', [AdminController::class, 'roles'])->name('adminRoles');
-            Route::post('/create', [AdminController::class, 'addRole'])->name('addRole');
+            Route::post('/create', [AdminController::class, 'createRole'])->name('createRole');
             Route::post('/edit', [AdminController::class, 'editRole'])->name('editRole');
         });
 
         Route::prefix('/permissions')->group(function () {
             Route::get('/', [AdminController::class, 'permissions'])->name('adminPermissions');
-//            Route::post('/create', [AdminController::class, 'addRole'])->name('addPermission');
-//            Route::post('/edit', [AdminController::class, 'editRole'])->name('editPermission');
+            Route::post('/create', [AdminController::class, 'createPermission'])->name('createPermission');
+            Route::post('/edit', [AdminController::class, 'editPermission'])->name('editPermission');
         });
 
         Route::get('/forms', function () {
