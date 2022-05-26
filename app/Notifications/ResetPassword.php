@@ -135,7 +135,6 @@ class ResetPassword extends Notification
      */
     public function toArray($notifiable): array
     {
-
         return [
             'email' => $notifiable->email,
             'message' => 'Sent reset password notification',
