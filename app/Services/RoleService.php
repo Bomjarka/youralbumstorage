@@ -7,10 +7,10 @@ use App\Models\Role;
 use App\Models\RolePermission;
 use App\Models\User;
 use App\Models\UserPermission;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-
-
 use App\Models\UserRole;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Facades\DB;
+
 
 class RoleService
 {
@@ -93,8 +93,8 @@ class RoleService
     public function createRole(string $name, string $description = null): Role
     {
         return Role::create([
-           'name' => $name,
-           'description' => $description,
+            'name' => $name,
+            'description' => $description,
         ]);
     }
 
@@ -179,13 +179,24 @@ class RoleService
      */
     public function addRoleUser(string $role, int $userId): bool
     {
-        $roleModel = $this->getAllRoles()->keyBy('name')->get($role);
-        if (!$roleModel || $this->hasRole($role, $userId)) {
-            return false;
-        }
-        $this->userRoles[$userId]->add($roleModel);
+        $roleAddedToUser = DB::transaction(
+            function () use ($role, $userId) {
+                $roleModel = $this->getAllRoles()->keyBy('name')->get($role);
+                if (!$roleModel || $this->hasRole($role, $userId)) {
+                    return false;
+                }
+                $this->userRoles[$userId]->add($roleModel);
+                //после добавления роли добавим и привилегии
+                $rolePermissions = $this->getRolePermissions($roleModel->id);
 
-        return (bool)UserRole::create(['user_id' => $userId, 'role_id' => $roleModel->id]);
+                foreach ($rolePermissions as $rolePermission) {
+                    $this->addPermissionUser($rolePermission->name, $userId);
+                }
+
+                return (bool)UserRole::create(['user_id' => $userId, 'role_id' => $roleModel->id]);
+            });
+
+        return $roleAddedToUser;
     }
 
     /**
@@ -239,14 +250,26 @@ class RoleService
      */
     public function removeRoleUser(string $role, int $userId): bool
     {
-        $model = $this->getUserRoles($userId)->keyBy('name')->get($role);
-        if (!$model) {
-            return false;
-        }
-        $this->userRoles[$userId] = $this->userRoles[$userId]->filter(function ($v) use ($model) {
-            return $v->id != $model->id;
-        });
-        return (bool)UserRole::whereRoleId($model->id)->whereUserId($userId)->delete();
+        $roleRemovedFromUser = DB::transaction(
+            function () use ($role, $userId) {
+                $model = $this->getUserRoles($userId)->keyBy('name')->get($role);
+                if (!$model) {
+                    return false;
+                }
+                $this->userRoles[$userId] = $this->userRoles[$userId]->filter(function ($v) use ($model) {
+                    return $v->id != $model->id;
+                });
+                //после удаления роли удалим и привилегии
+                $rolePermissions = $this->getRolePermissions($model->id);
+
+                foreach ($rolePermissions as $rolePermission) {
+                    $this->removePermissionUser($rolePermission->name, $userId);
+                }
+
+                return (bool)UserRole::whereRoleId($model->id)->whereUserId($userId)->delete();
+            });
+
+        return $roleRemovedFromUser;
     }
 
     /**
