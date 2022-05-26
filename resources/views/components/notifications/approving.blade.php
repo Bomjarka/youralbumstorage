@@ -11,8 +11,15 @@
 </div>
 
 <script>
-    $(function () {
-        $('.success').slideDown(300);
-        $(".success").delay(2000).slideUp(300);
-    });
+    if (['verification-link-sent',
+        'role-updated',
+        'role-assigned',
+        'role-disabled',
+        'permission-updated'
+    ].includes('{{session('status')}}')) {
+        $(function () {
+            $('.success').slideDown(300);
+            $(".success").delay(2000).slideUp(300);
+        });
+    }
 </script>
