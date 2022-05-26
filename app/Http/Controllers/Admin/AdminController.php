@@ -18,7 +18,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -196,7 +195,6 @@ class AdminController extends Controller
     }
 
     /**
-     *
      * Назначить роль пользователю
      *
      * @param Request $request
@@ -211,14 +209,13 @@ class AdminController extends Controller
         if (RoleHelper::has_role($role->name, $user->id)) {
 
             return back()->with('status', 'role-already-assigned');
-
         }
 
         if ($roleService->addRoleUser($role->name, $user->id)) {
+
             Log::info('Add user new role', ['user' => $user, 'role' => $role]);
 
             return back()->with('status', 'role-assigned');
-
         }
 
         Log::warning('Role wasnt assigned to user', ['user' => $user, 'role' => $role]);
