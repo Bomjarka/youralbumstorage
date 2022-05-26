@@ -45,7 +45,7 @@ class DownloadPhotosNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject(trans('download-photo-email-messagee.subject'))
+            ->subject(trans('download-photo-email-message.subject'))
             ->greeting(trans('verify-email-message.greeting') . ', ' . $notifiable->fullName())
             ->line(trans('download-photo-email-message.message'))
             ->action(trans('download-photo-email-message.action'), $this->downloadFileUrl($notifiable))
