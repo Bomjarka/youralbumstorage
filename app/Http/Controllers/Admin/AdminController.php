@@ -165,35 +165,6 @@ class AdminController extends Controller
 
     /**
      *
-     * Создать новую роль в приложении
-     *
-     * @param Request $request
-     * @param RoleService $roleService
-     * @return RedirectResponse
-     */
-    public function createRole(Request $request, RoleService $roleService): RedirectResponse
-    {
-        $request->validate([
-            'role_name' => ['nullable', 'string', 'max:255'],
-            'role_description' => ['nullable', 'string', 'max:255'],
-        ]);
-
-        $roleName = $request->input('role_name');
-        $roleDescription = $request->input('role_description');
-
-        if (!Role::whereName($roleName)->first()) {
-            $newRole = $roleService->createRole($roleName, $roleDescription);
-            Log::info('New Role created', ['role' => $newRole]);
-
-            return back()->with('status', 'role-created');
-        }
-
-        return back()->with('status', 'role-exists');
-    }
-
-
-    /**
-     *
      * Отредактировать данные роли
      *
      * @param Request $request
@@ -300,31 +271,6 @@ class AdminController extends Controller
         $permissions = $roleService->getAllPermissions()->sortBy('id');
 
         return view('admin.permissions', ['permissions' => $permissions]);
-    }
-
-    /**
-     * @param Request $request
-     * @param RoleService $roleService
-     * @return RedirectResponse
-     */
-    public function createPermission(Request $request, RoleService $roleService): RedirectResponse
-    {
-        $request->validate([
-            'permission_name' => ['string', 'max:255'],
-            'permission_description' => ['nullable', 'string', 'max:255'],
-        ]);
-
-        $permissionName = $request->input('permission_name');
-        $permissionDescription = $request->input('permission_description');
-
-        if (!Permission::whereName($permissionName)->first()) {
-            $newPermission = $roleService->createPermission($permissionName, $permissionDescription);
-            Log::info('New Permission created', ['permission' => $newPermission]);
-
-            return back()->with('status', 'permission-created');
-        }
-
-        return back()->with('status', 'permission-exists');
     }
 
     public function editPermission(Request $request)
