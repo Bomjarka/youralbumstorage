@@ -4,7 +4,6 @@ namespace App\Notifications;
 
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Arr;
@@ -46,9 +45,12 @@ class DownloadPhotosNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line('You are receiving this email because we received a request for downloading all photos from you.')
-            ->action('Click here to download your archive', $this->downloadFileUrl($notifiable))
-            ->line('Thank you for using our application!');
+            ->subject(trans('download-photo-email-messagee.subject'))
+            ->greeting(trans('verify-email-message.greeting') . ', ' . $notifiable->fullName())
+            ->line(trans('download-photo-email-message.message'))
+            ->action(trans('download-photo-email-message.action'), $this->downloadFileUrl($notifiable))
+            ->line(trans('email.link-lifetime', ['period' => config('links.email.lifetime')]))
+            ->salutation(trans('verify-email-message.regards'));
     }
 
 
@@ -65,7 +67,7 @@ class DownloadPhotosNotification extends Notification
 
         return URL::temporarySignedRoute(
             'download',
-            Carbon::now()->addMinutes(5),
+            Carbon::now()->addMinutes(config('links.email.lifetime')),
             [
                 'id' => $notifiable->getKey(),
                 'notification' => $this->id,

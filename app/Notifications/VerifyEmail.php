@@ -2,7 +2,6 @@
 
 namespace App\Notifications;
 
-use App\Models\User;
 use Closure;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -26,12 +25,6 @@ class VerifyEmail extends Notification
      */
     public static $toMailCallback;
 
-    private $user;
-
-    public function __construct(User $user)
-    {
-        $this->user = $user;
-    }
 
     /**
      * Get the notification's channels.
@@ -58,23 +51,25 @@ class VerifyEmail extends Notification
             return call_user_func(static::$toMailCallback, $notifiable, $verificationUrl);
         }
 
-        return $this->buildMailMessage($verificationUrl);
+        return $this->buildMailMessage($verificationUrl, $notifiable);
     }
 
     /**
      * Get the verify email notification mail message for the given URL.
      *
      * @param string $url
+     * @param $notifiable
      * @return MailMessage
      */
-    protected function buildMailMessage($url): MailMessage
+    protected function buildMailMessage($url, $notifiable): MailMessage
     {
         return (new MailMessage)
             ->subject(trans('verify-email-message.subject'))
-            ->greeting(trans('verify-email-message.greeting') . ', ' . $this->user->fullName())
+            ->greeting(trans('verify-email-message.greeting') . ', ' . $notifiable->fullName())
             ->line(trans('verify-email-message.message'))
             ->action(trans('verify-email-message.action'), $url)
             ->line(trans('verify-email-message.warning'))
+            ->line(trans('email.link-lifetime', ['period' => Config::get('auth.verification.expire', 60)]))
             ->salutation(trans('verify-email-message.regards'));
     }
 
