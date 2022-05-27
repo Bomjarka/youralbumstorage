@@ -293,7 +293,7 @@ class PasswordRules implements Rule, DataAwareRule, ValidatorAwareRule
         $validator = Validator::make(
             $this->data,
             [$attribute => array_merge(['string', 'min:' . $this->min], $this->customRules)],
-            $this->validator->customMessages,
+            ['min' => trans('validation-registration.password-length', ['length' => $this->min])],
             $this->validator->customAttributes
         )->after(function ($validator) use ($attribute, $value) {
             if (!is_string($value)) {
@@ -303,19 +303,19 @@ class PasswordRules implements Rule, DataAwareRule, ValidatorAwareRule
             $value = (string)$value;
 
             if ($this->mixedCase && !preg_match('/(\p{Ll}+.*\p{Lu})|(\p{Lu}+.*\p{Ll})/u', $value)) {
-                $validator->errors()->add($attribute, 'The :attribute must contain at least one uppercase and one lowercase letter.');
+                $validator->errors()->add($attribute, trans('validation-registration.password-case'));
             }
 
             if ($this->letters && !preg_match('/\pL/u', $value)) {
-                $validator->errors()->add($attribute, 'The :attribute must contain at least one letter.');
+                $validator->errors()->add($attribute, trans('validation-registration.password-letter'));
             }
 
             if ($this->symbols && !preg_match('/\p{Z}|\p{S}|\p{P}/u', $value)) {
-                $validator->errors()->add($attribute, 'The :attribute must contain at least one symbol.');
+                $validator->errors()->add($attribute, trans('validation-registration.password-symbol'));
             }
 
             if ($this->numbers && !preg_match('/\pN/u', $value)) {
-                $validator->errors()->add($attribute, 'The :attribute must contain at least one number.');
+                $validator->errors()->add($attribute, trans('validation-registration.password-number'));
             }
         });
 
