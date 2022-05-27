@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Rules\PasswordRules;
+use App\Http\Requests\RegisterUserRequest;
 use App\Services\Registration\RegistrationService;
 use App\Services\Registration\UserData;
 use Illuminate\Auth\Events\Registered;
@@ -29,29 +29,21 @@ class RegisteredUserController extends Controller
      * Handle an incoming registration request.
      *
      * @param Request $request
-     * @param RegistrationService $regisTrationService
+     * @param RegistrationService $registrationService
      * @return RedirectResponse
      *
      */
-    public function store(Request $request, RegistrationService $regisTrationService): RedirectResponse
+    public function store(RegisterUserRequest $request, RegistrationService $registrationService): RedirectResponse
     {
-        $request->validate([
-            'login' => ['required', 'string', 'max:255', 'unique:users'],
-            'first_name' => ['required', 'string', 'max:255'],
-            'second_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'phone' => ['required', 'string', 'min:11', 'max:11', 'unique:users'],
-            'gender' => ['required', 'string'],
-            'birthdate' => ['required', 'date'],
-            'password' => ['required', 'confirmed', PasswordRules::defaults()],
-        ]);
+        if ($request->validated()) {
+            $user = $registrationService->registerUser(UserData::prepareData($request));
+            Log::info('New user registered', ['user: ' => $user]);
+            event(new Registered($user));
+            Auth::login($user);
 
-        $user = $regisTrationService->registerUser(UserData::prepareData($request));
-        Log::info('New user registered', ['user: ' => $user]);
-        event(new Registered($user));
-        Auth::login($user);
+            return redirect('/')->with('status', 'verification-link-sent');
+        }
 
-        return redirect('/')->with('status', 'verification-link-sent');
+        return back()->with('status', 'registration-error');
     }
 }
