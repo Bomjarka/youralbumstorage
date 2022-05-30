@@ -49,7 +49,6 @@ class PageController extends Controller
         $fromName = $request->get('name');
         $fromEmail = $request->get('email');
 
-
         if ($user = User::find($request->get('userId'))) {
             Mail::to($toEmail)->send(new FeedbackEmail($user->email, $message, $fromName, $user));
 
