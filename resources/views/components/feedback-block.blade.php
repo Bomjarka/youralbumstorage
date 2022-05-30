@@ -98,7 +98,7 @@
                                                     <textarea class="w-full px-5 py-2 text-gray-700 bg-gray-200 rounded"
                                                               id="message" name="message" rows="6" required=""
                                                               placeholder="{{ trans('feedback-form.message-placeholder') }}..."
-                                                              aria-label="Email"></textarea>
+                                                              aria-label="message"></textarea>
                                                 </div>
                                                 <div class="mt-6">
                                                     <button

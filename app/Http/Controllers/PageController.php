@@ -46,15 +46,17 @@ class PageController extends Controller
     {
         $toEmail = config('mail.mailers.smtp.username');
         $message = $request->get('message');
+        $fromName = $request->get('name');
+        $fromEmail = $request->get('email');
+
 
         if ($user = User::find($request->get('userId'))) {
-            Mail::to($toEmail)->send(new FeedbackEmail($user->email, $message, $user));
+            Mail::to($toEmail)->send(new FeedbackEmail($user->email, $message, $fromName, $user));
 
             return back();
         }
 
-        $fromEmail = $request->get('email');
-        Mail::to($toEmail)->send(new FeedbackEmail($fromEmail, $message, null,true));
+        Mail::to($toEmail)->send(new FeedbackEmail($fromEmail, $message, $fromName));
 
         return back();
     }
