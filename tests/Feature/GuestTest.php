@@ -2,17 +2,15 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\App;
 use Tests\TestCase;
 
-class GuestTests extends TestCase
+class GuestTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
+    use DatabaseMigrations, DatabaseTransactions;
+
     public function test_guset_view_home()
     {
         $response = $this->get('/');
