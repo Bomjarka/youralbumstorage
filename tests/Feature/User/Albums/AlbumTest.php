@@ -6,10 +6,14 @@ use App\Models\Album;
 use App\Models\AlbumPhotos;
 use App\Models\Photo;
 use App\Models\User;
+use App\Services\AlbumService;
+use App\Services\PhotoService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class AlbumTest extends TestCase
@@ -121,13 +125,13 @@ class AlbumTest extends TestCase
         ];
 
         $this->assertNotNull($album);
-        $this->assertNull($album->deleted_at);
+        $this->assertNotSoftDeleted($album);
         $this->actingAs($user);
 
         $response = $this->post('/albums/' . $album->id . '/delete', $data);
         $album = $album->fresh();
 
-        $this->assertNotNull($album->deleted_at);
+        $this->assertSoftDeleted($album);
         $response->assertStatus(302);
     }
 
@@ -156,5 +160,30 @@ class AlbumTest extends TestCase
         $this->assertNotEquals($oldAlbumName, $album->name);
         $this->assertNotEquals($oldAlbumDescription, $album->description);
         $response->assertStatus(302);
+    }
+
+    public function test_user_can_restore_album()
+    {
+        Storage::fake('public');
+
+        $user = User::factory()->create(['is_blocked' => false]);
+        $album = Album::factory()->create([
+            'user_id' => $user->id,
+        ]);
+
+        $this->assertNotSoftDeleted($album);
+        $this->actingAs($user);
+
+        (new AlbumService())->deleteAlbum($album);
+
+        $this->assertSoftDeleted($album);
+
+
+        $restoreResponse = $this->post('profile/trash/albums', ['albumId' => $album->id]);
+        $album->refresh();
+
+        $restoreResponse->assertJson(['msg' => 'Album restored!']);
+        $restoreResponse->assertStatus(200);
+        $this->assertNotSoftDeleted($album);
     }
 }

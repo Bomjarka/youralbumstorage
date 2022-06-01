@@ -16,7 +16,8 @@ class AlbumFactory extends Factory
         return [
             'user_id' => $this->faker->randomDigitNotZero(),
             'name' => 'test album name',
-            'description' => 'test album description'
+            'description' => 'test album description',
+            'deleted_at' => null,
         ];
     }
 }
