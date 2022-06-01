@@ -100,7 +100,7 @@ class PhotoController extends Controller
         $photoService->changePhotoDescription($photo, $newDescription);
 
         if ($request->get('album_id')) {
-            //Если фото принадлежит какому то альбому, то необходимо удалить связь между ними
+            //Если фото принадлежит какому-то альбому, то необходимо удалить связь между ними
             if ($photo->album->first()) {
                 $photo->disassociateAlbumPhoto($photo->album->first()->id);
                 Log::info('Photo disassociated from album', ['photo' => $photo, 'album: ' => $photo->album]);
@@ -136,7 +136,7 @@ class PhotoController extends Controller
             ]);
         }
 
-        $archivePath = Storage::path('public/userphotos/' . $user->id . '/photos.zip');
+        $archivePath = Storage::disk('public')->path('userphotos/' . $user->id . '/photos.zip');
         $zip = new ZipArchive();
 
         $zip->open($archivePath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
@@ -145,7 +145,7 @@ class PhotoController extends Controller
             foreach ($user->albums as $album) {
                 if ($album->photos->count() != 0) {
                     foreach ($album->photos as $photo) {
-                        $image = Image::make(Storage::disk('local')->path('public/' . $photo->photo_path));
+                        $image = Image::make(Storage::disk('public')->path($photo->photo_path));
                         $zip->addFromString($album->name . '/' . $photo->name . '.' . $image->extension, $image->encode($image->extension));
                     }
                 }
@@ -153,10 +153,9 @@ class PhotoController extends Controller
             //скачаем все фото без альбомов
             foreach ($user->photos as $photo) {
                 if (!$photo->album->first()) {
-                    $image = Image::make(Storage::disk('local')->path('public/' . $photo->photo_path));
+                    $image = Image::make(Storage::disk('public')->path($photo->photo_path));
                     $zip->addFromString($withoutAlbum . '/' . $photo->name . '.' . $image->extension, $image->encode($image->extension));
                 }
-
             }
         } catch (\Throwable $e) {
             Log::error('Error when creating ZIP', [
@@ -172,7 +171,7 @@ class PhotoController extends Controller
             $zip->close();
         }
 
-        //Отправим пользователю письмо с ссылкой на скачивание архива
+        //Отправим пользователю письмо со ссылкой на скачивание архива
         $user->notify(new DownloadPhotosNotification($archivePath));
         Log::info('Download files notification message sent', ['UserId: ' => $user->id]);
 
@@ -192,7 +191,7 @@ class PhotoController extends Controller
     public function download(Request $request, string $filename)
     {
         $user = Auth::user();
-        $filePath = Storage::path('public/userphotos/' . $user->id . '/' . $filename);
+        $filePath = Storage::disk('public')->path('userphotos/' . $user->id . '/' . $filename);
         if ($filePath) {
             event(new NotificationRead($user, $request->get('notification')));
 
