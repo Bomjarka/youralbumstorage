@@ -2,9 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Album;
-use App\Models\AlbumPhotos;
-use App\Models\Photo;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -24,10 +21,6 @@ class UserTest extends TestCase
         $response->assertViewHas('user', $user);
         $response->assertStatus(200);
     }
-
-
-
-
 
     public function test_user_view_about()
     {
@@ -50,9 +43,6 @@ class UserTest extends TestCase
         $response->assertStatus(200);
     }
 
-
-
-
     public function test_user_can_send_feedback()
     {
         $user = User::factory()->create(['is_blocked' => false]);
@@ -66,6 +56,15 @@ class UserTest extends TestCase
         $response = $this->post('/feedback', $data);
 
         $response->assertStatus(302);
+    }
+
+    public function test_user_can_not_view_admin()
+    {
+        $user = User::factory()->create(['is_blocked' => false]);
+        $this->actingAs($user);
+
+        $response = $this->get('/admin');
+        $response->assertRedirect('/login');
     }
 
 
