@@ -7,12 +7,10 @@ use App\Models\AlbumPhotos;
 use App\Models\Photo;
 use App\Models\User;
 use App\Notifications\DownloadPhotosNotification;
+use App\Services\PhotoService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Notifications\Notification;
-use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Notification as FakeNotification;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -56,8 +54,8 @@ class PhotoTest extends TestCase
         Storage::fake('public');
 
         $user = User::factory()->create(['is_blocked' => false]);
-        $userPhotos = Photo::whereUserId($user->id)->first();
-        $this->assertNull($userPhotos);
+        $userPhoto = Photo::whereUserId($user->id)->first();
+        $this->assertNull($userPhoto);
 
         $data = [
             'user_id' => $user->id,
@@ -70,13 +68,13 @@ class PhotoTest extends TestCase
         $this->actingAs($user);
 
         $response = $this->post('/photos/create', $data);
-        $userPhotos = Photo::whereUserId($user->id)->first();
+        $userPhoto = Photo::whereUserId($user->id)->first();
 
-        Storage::disk('public')->assertExists($userPhotos->photo_path);
-        Storage::disk('public')->assertExists($userPhotos->photo_preview_path);
-        $this->assertNotNull($userPhotos);
-        $this->assertEquals('Test create photo name', $userPhotos->name);
-        $this->assertEquals('Test create photo description', $userPhotos->description);
+        Storage::disk('public')->assertExists($userPhoto->photo_path);
+        Storage::disk('public')->assertExists($userPhoto->photo_preview_path);
+        $this->assertNotNull($userPhoto);
+        $this->assertEquals('Test create photo name', $userPhoto->name);
+        $this->assertEquals('Test create photo description', $userPhoto->description);
         $response->assertStatus(302);
     }
 
@@ -191,7 +189,7 @@ class PhotoTest extends TestCase
         $response = $this->post('/photos/' . $userPhoto->id . '/delete', $dataForDeletePhoto);
         $userPhoto->refresh();
 
-        $this->assertNotNull($userPhoto->deleted_at);
+        $this->assertSoftDeleted($userPhoto);
         $response->assertStatus(302);
     }
 
@@ -305,4 +303,36 @@ class PhotoTest extends TestCase
         $downloadArchiveResponse->assertDownload('photos.zip');
     }
 
+    public function test_user_can_restore_photo()
+    {
+        Storage::fake('public');
+        $user = User::factory()->create(['is_blocked' => false]);
+        $userPhoto = Photo::whereUserId($user->id)->first();
+        $this->assertNull($userPhoto);
+
+        $data = [
+            'user_id' => $user->id,
+            'photo_name' => 'Test create photo name',
+            'photo_description' => 'Test create photo description',
+            'user_photo' => UploadedFile::fake()->image('testphoto.jpg'),
+            '_token' => csrf_token(),
+        ];
+
+        $this->actingAs($user);
+
+        $response = $this->post('/photos/create', $data);
+
+        $userPhoto = Photo::whereUserId($user->id)->first();
+        (new PhotoService())->deletePhoto($userPhoto);
+
+        $this->assertSoftDeleted($userPhoto);
+
+
+        $restoreResponse = $this->post('profile/trash/photos', ['photoId' => $userPhoto->id]);
+        $userPhoto->refresh();
+
+        $restoreResponse->assertJson(['msg' => 'Photo restored!']);
+        $restoreResponse->assertStatus(200);
+        $this->assertNotSoftDeleted($userPhoto);
+    }
 }

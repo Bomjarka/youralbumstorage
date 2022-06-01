@@ -19,6 +19,7 @@ class PhotoFactory extends Factory
             'description' => 'test photo description',
             'photo_path' => 'path',
             'photo_preview_path' => 'preview_path',
+            'deleted_at' => null,
         ];
     }
 }
