@@ -60,7 +60,7 @@ class GuestTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_guset_change_locale_to_en()
+    public function test_guest_change_locale_to_en()
     {
         $ruLocale = App::getLocale();
         $response = $this->get('/locale/en');
@@ -69,7 +69,7 @@ class GuestTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_guset_change_locale_to_ru()
+    public function test_guest_change_locale_to_ru()
     {
         App::setLocale('en');
         $enLocale = App::getLocale();
@@ -79,11 +79,11 @@ class GuestTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_guset_can_send_feedback()
+    public function test_guest_can_send_feedback()
     {
         $data = [
             'name' => 'guest',
-            'email' => 'guset@gmail.com',
+            'email' => 'guest@gmail.com',
             'message' => 'Message from guest!',
         ];
 
