@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 
 class AlbumController extends Controller
@@ -85,12 +86,23 @@ class AlbumController extends Controller
      */
     public function create(Request $request, AlbumService $albumService): RedirectResponse
     {
-        $request->validate([
-            'album_name' => ['required', 'string', 'max:255'],
-            'album_description' => ['nullable', 'string', 'max:255'],
-        ]);
+        $validator = Validator::make($request->all(),
+            [
+                'album_name' => ['required', 'string', 'max:255'],
+                'album_description' => ['nullable', 'string', 'max:255'],
+            ]
+        );
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
 
-        $albumService->createAlbum($request);
+        $photoData = [
+            'user_id' => $request->get('user_id'),
+            'album_name' => $request->get('album_name'),
+            'album_description' => $request->get('album_description'),
+        ];
+
+        $albumService->createAlbum($photoData);
 
         return redirect()->back();
     }

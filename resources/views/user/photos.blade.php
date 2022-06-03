@@ -9,7 +9,6 @@
             </h2>
             <x-download-photos></x-download-photos>
         </div>
-
         @if($errors->any())
             @foreach($errors->all() as $error)
                 <x-notifications.error
