@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 use Spatie\TranslationLoader\LanguageLine;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -50,16 +51,32 @@ class PhotoController extends Controller
      *
      * @param Request $request
      * @param PhotoService $photoService
-     * @return RedirectResponse
      */
-    public function create(Request $request, PhotoService $photoService): RedirectResponse
+    public function create(Request $request, PhotoService $photoService)
     {
-        $request->validate([
-            'photo_name' => ['required', 'string', 'max:255'],
-            'photo_description' => ['nullable', 'string', 'max:255'],
-        ]);
+        $validator = Validator::make($request->all(),
+            [
+                'photo_name' => ['required', 'string', 'max:255'],
+                'photo_description' => ['nullable', 'string', 'max:255'],
+                'user_photo' => ['required', 'mimes:jpg,png']
+            ],
+            [
+                'user_photo.uploaded' => 'You try to upload wrong file',
+            ]
+        );
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
 
-        $photo = $photoService->createPhoto($request);
+        $photoData = [
+            'user_id' => $request->get('user_id'),
+            'photo_name' => $request->get('photo_name'),
+            'photo_description' => $request->get('photo_description'),
+            'album_id' => $request->get('album_id'),
+            'user_photo' => $request->file('user_photo'),
+        ];
+
+        $photo = $photoService->createPhoto($photoData);
         Log::info('New photo created', ['Photo' => $photo]);
 
         return redirect()->back();

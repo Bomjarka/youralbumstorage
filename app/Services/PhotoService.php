@@ -5,34 +5,32 @@ namespace App\Services;
 
 use App\Models\Photo;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class PhotoService
 {
     /**
-     * @param $request
-     * @return mixed
+     * @param array $data
+     * @return Photo
      */
-    public function createPhoto($request)
+    public function createPhoto(array $data): Photo
     {
         DB::beginTransaction();
         $imageService = new ImageService();
-        $file = $request->file('user_photo');
+        $file = $data['user_photo'];
 
-        $filePath = $imageService->createImage($file, $request->get('user_id'));
-        $previewFilePath = $imageService->createPreview($file, $request->get('user_id'));
+        $filePath = $imageService->createImage($file, $data['user_id']);
+        $previewFilePath = $imageService->createPreview($file, $data['user_id']);
 
         $photo = Photo::create([
-            'user_id' => $request->get('user_id'),
-            'name' => $request->get('photo_name'),
-            'description' => $request->get('photo_description'),
+            'user_id' => $data['user_id'],
+            'name' => $data['photo_name'],
+            'description' => $data['photo_description'],
             'photo_path' => $filePath,
             'photo_preview_path' => $previewFilePath,
         ]);
 
-
-        if ($request->get('album_id')) {
-            $photo->associateAlbumPhoto($request->get('album_id'), $photo->id);
+        if ($data['album_id']) {
+            $photo->associateAlbumPhoto($data['album_id'], $photo->id);
         }
         DB::commit();
 
