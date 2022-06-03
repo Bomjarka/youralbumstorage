@@ -19,8 +19,11 @@ class PhotoTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
 
-    //страница без фото
-    public function test_user_view_empty_photos_page()
+    /**
+     * Пользователь может просматривать страницу фотографий без них
+     *
+     */
+    public function test_user_view_empty_photos_page(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
 
@@ -31,8 +34,11 @@ class PhotoTest extends TestCase
         $response->assertStatus(200);
     }
 
-    //страница со всеми фото
-    public function test_user_view_photos_page()
+    /**
+     * Пользователь может просматривать страницу фотографий с ними
+     *
+     */
+    public function test_user_view_photos_page(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
 
@@ -49,7 +55,11 @@ class PhotoTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_user_can_create_photo()
+    /**
+     * Пользователь может создавать фото
+     *
+     */
+    public function test_user_can_create_photo(): void
     {
         Storage::fake('public');
 
@@ -78,7 +88,11 @@ class PhotoTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_user_can_create_photo_in_album()
+    /**
+     * Пользователь может создать фото в альбоме
+     *
+     */
+    public function test_user_can_create_photo_in_album(): void
     {
         Storage::fake('public');
 
@@ -112,7 +126,11 @@ class PhotoTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_user_can_edit_photo()
+    /**
+     * Пользователь может редактировать фото
+     *
+     */
+    public function test_user_can_edit_photo(): void
     {
         Storage::fake('public');
 
@@ -154,7 +172,11 @@ class PhotoTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_user_can_delete_photo()
+    /**
+     * Пользователь может удалить фото
+     *
+     */
+    public function test_user_can_delete_photo(): void
     {
         Storage::fake('public');
 
@@ -193,7 +215,11 @@ class PhotoTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_user_can_move_photo_to_album()
+    /**
+     * Пользователь может переместить фото в альбом
+     *
+     */
+    public function test_user_can_move_photo_to_album(): void
     {
         Storage::fake('public');
 
@@ -249,7 +275,11 @@ class PhotoTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_user_can_download_all_photos()
+    /**
+     * Пользователь может скачать все фото
+     *
+     */
+    public function test_user_can_download_all_photos(): void
     {
         Storage::fake('public');
         FakeNotification::fake();
@@ -303,7 +333,11 @@ class PhotoTest extends TestCase
         $downloadArchiveResponse->assertDownload('photos.zip');
     }
 
-    public function test_user_can_restore_photo()
+    /**
+     * Пользователь может восстановить фото
+     *
+     */
+    public function test_user_can_restore_photo(): void
     {
         Storage::fake('public');
         $user = User::factory()->create(['is_blocked' => false]);

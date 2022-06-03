@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Admin;
+namespace Tests\Feature\Moderator;
 
 use App\Models\Role;
 use App\Models\User;
@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-class AdminRolesTest extends TestCase
+class ModeratorRolesTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
 
@@ -17,11 +17,11 @@ class AdminRolesTest extends TestCase
      *
      * @return void
      */
-    public function test_admin_can_edit_role(): void
+    public function test_moderator_can_edit_role(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
         $roleService = new RoleService();
-        $roleService->addRoleUser(Role::ROLE_ADMIN, $user->id);
+        $roleService->addRoleUser(Role::ROLE_MODERATOR, $user->id);
 
         $role = Role::create([
             'name' => 'Test role',

@@ -11,7 +11,11 @@ class UserTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
 
-    public function test_user_view_home()
+    /**
+     * Пользователь может просматривать главную
+     *
+     */
+    public function test_user_view_home(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
 
@@ -22,7 +26,11 @@ class UserTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_user_view_about()
+    /**
+     * Пользователь может просматривать about
+     *
+     */
+    public function test_user_view_about(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
 
@@ -32,7 +40,11 @@ class UserTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_user_view_profile()
+    /**
+     * Пользователь может просматривать профиль
+     *
+     */
+    public function test_user_view_profile(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
         $this->actingAs($user);
@@ -43,7 +55,11 @@ class UserTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_user_can_send_feedback()
+    /**
+     * Пользователь может отправлять обратную связь
+     *
+     */
+    public function test_user_can_send_feedback(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
         $data = [
@@ -58,7 +74,11 @@ class UserTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_user_can_not_view_admin()
+    /**
+     * Пользователь без роли не может просматривать админку
+     *
+     */
+    public function test_user_can_not_view_admin(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
         $this->actingAs($user);

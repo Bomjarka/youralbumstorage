@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Admin;
+namespace Tests\Feature\Moderator;
 
 use App\Models\Role;
 use App\Models\User;
@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-class AdminUserTest extends TestCase
+class ModeratorUserTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
 
@@ -18,15 +18,15 @@ class AdminUserTest extends TestCase
      * Админ может блокировать пользователя
      *
      */
-    public function test_admin_can_block_user(): void
+    public function test_moderator_can_block_user(): void
     {
-        $admin = User::factory()->create(['is_blocked' => false]);
+        $moderator = User::factory()->create(['is_blocked' => false]);
         $roleService = new RoleService();
-        $roleService->addRoleUser(Role::ROLE_ADMIN, $admin->id);
+        $roleService->addRoleUser(Role::ROLE_MODERATOR, $moderator->id);
 
         $user = User::factory()->create(['is_blocked' => false]);
 
-        $this->actingAs($admin);
+        $this->actingAs($moderator);
         $response = $this->post('/admin/users/' . $user->id . '/block');
         $user->refresh();
 
@@ -39,15 +39,15 @@ class AdminUserTest extends TestCase
      * Админ может разблокировать пользователя
      *
      */
-    public function test_admin_can_unblock_user(): void
+    public function test_moderator_can_unblock_user(): void
     {
-        $admin = User::factory()->create(['is_blocked' => false]);
+        $moderator = User::factory()->create(['is_blocked' => false]);
         $roleService = new RoleService();
-        $roleService->addRoleUser(Role::ROLE_ADMIN, $admin->id);
+        $roleService->addRoleUser(Role::ROLE_MODERATOR, $moderator->id);
 
         $user = User::factory()->create(['is_blocked' => true]);
 
-        $this->actingAs($admin);
+        $this->actingAs($moderator);
         $response = $this->post('/admin/users/' . $user->id . '/unblock');
         $user->refresh();
 
@@ -60,21 +60,21 @@ class AdminUserTest extends TestCase
      * Админ может удалить пользователя
      *
      */
-    public function test_admin_can_delete_user(): void
+    public function test_moderator_can_not_delete_user(): void
     {
-        $admin = User::factory()->create(['is_blocked' => false]);
+        $moderator = User::factory()->create(['is_blocked' => false]);
         $roleService = new RoleService();
-        $roleService->addRoleUser(Role::ROLE_ADMIN, $admin->id);
+        $roleService->addRoleUser(Role::ROLE_MODERATOR, $moderator->id);
 
         $user = User::factory()->create(['is_blocked' => false]);
 
-        $this->actingAs($admin);
+        $this->actingAs($moderator);
         $response = $this->post('/admin/users/' . $user->id . '/delete_user');
+        $user->refresh();
 
-        $this->assertDeleted($user);
+        $this->assertModelExists($user);
         $response->assertJson([
-            'status' => trans('approving-blade.title'),
-            'redirect' => route('adminUsers')
+            'status' => 'failed',
         ]);
         $response->assertStatus(200);
     }
@@ -83,18 +83,18 @@ class AdminUserTest extends TestCase
      * Админ может выдавать роль
      *
      */
-    public function test_admin_can_give_user_a_role(): void
+    public function test_moderator_can_give_user_a_role(): void
     {
-        $admin = User::factory()->create(['is_blocked' => false]);
+        $moderator = User::factory()->create(['is_blocked' => false]);
         $roleService = new RoleService();
-        $roleService->addRoleUser(Role::ROLE_ADMIN, $admin->id);
+        $roleService->addRoleUser(Role::ROLE_MODERATOR, $moderator->id);
 
         $user = User::factory()->create(['is_blocked' => false]);
         $data = [
             'roleId' => Role::whereName(Role::ROLE_ADMIN)->first()->id,
         ];
 
-        $this->actingAs($admin);
+        $this->actingAs($moderator);
         $response = $this->post('/admin/users/' . $user->id . '/add_role', $data);
 
         $this->assertNotEmpty($roleService->getUserRoles($user->id));
@@ -103,16 +103,15 @@ class AdminUserTest extends TestCase
         $response->assertStatus(302);
     }
 
-
     /**
      * Админ может забирать роль
      *
      */
-    public function test_admin_can_take_a_role_from_user(): void
+    public function test_moderator_can_take_a_role_from_user(): void
     {
-        $admin = User::factory()->create(['is_blocked' => false]);
+        $moderator = User::factory()->create(['is_blocked' => false]);
         $roleService = new RoleService();
-        $roleService->addRoleUser(Role::ROLE_ADMIN, $admin->id);
+        $roleService->addRoleUser(Role::ROLE_MODERATOR, $moderator->id);
 
         $user = User::factory()->create(['is_blocked' => false]);
         $roleService->addRoleUser(Role::ROLE_MODERATOR, $user->id);
@@ -125,7 +124,7 @@ class AdminUserTest extends TestCase
             ->first();
         $this->assertNotNull($userRole);
 
-        $this->actingAs($admin);
+        $this->actingAs($moderator);
         $response = $this->post('/admin/users/' . $user->id . '/remove_role', $data);
 
         $this->assertDeleted($userRole);

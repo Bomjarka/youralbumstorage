@@ -1,16 +1,18 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Moderator;
 
 use App\Models\Role;
 use App\Models\User;
 use App\Services\RoleService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\App;
 use Tests\TestCase;
 
-class AdminTest extends TestCase
+class ModeratorTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
 
@@ -18,11 +20,11 @@ class AdminTest extends TestCase
      *
      * @return void
      */
-    public function test_admin_can_view_admin(): void
+    public function test_moderator_can_view_admin(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
         $roleService = new RoleService();
-        $roleService->addRoleUser(Role::ROLE_ADMIN, $user->id);
+        $roleService->addRoleUser(Role::ROLE_MODERATOR, $user->id);
 
         $this->actingAs($user);
 
@@ -43,14 +45,14 @@ class AdminTest extends TestCase
 //    }
 
     /**
-     * Админ может просматривать всех пользователей
+     * Модератор может просматривать всех пользователей
      *
      */
-    public function test_admin_can_view_users(): void
+    public function test_moderator_can_view_users(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
         $roleService = new RoleService();
-        $roleService->addRoleUser(Role::ROLE_ADMIN, $user->id);
+        $roleService->addRoleUser(Role::ROLE_MODERATOR, $user->id);
 
         $this->actingAs($user);
 
@@ -60,14 +62,14 @@ class AdminTest extends TestCase
     }
 
     /**
-     * Админ может просматривать каждого пользователя
+     * Модератор может просматривать каждого пользователя
      *
      */
-    public function test_admin_can_view_user(): void
+    public function test_moderator_can_view_user(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
         $roleService = new RoleService();
-        $roleService->addRoleUser(Role::ROLE_ADMIN, $user->id);
+        $roleService->addRoleUser(Role::ROLE_MODERATOR, $user->id);
 
         $this->actingAs($user);
 
@@ -77,14 +79,14 @@ class AdminTest extends TestCase
     }
 
     /**
-     * Админ может просматривать роли
+     * Модератор может просматривать роли
      *
      */
-    public function test_admin_can_view_roles(): void
+    public function test_moderator_can_view_roles(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
         $roleService = new RoleService();
-        $roleService->addRoleUser(Role::ROLE_ADMIN, $user->id);
+        $roleService->addRoleUser(Role::ROLE_MODERATOR, $user->id);
 
         $this->actingAs($user);
 
@@ -94,14 +96,14 @@ class AdminTest extends TestCase
     }
 
     /**
-     * Админ может просматривать привилегии
+     * Модератор может просматривать привилегии
      *
      */
-    public function test_admin_can_view_permissions(): void
+    public function test_moderator_can_view_permissions(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
         $roleService = new RoleService();
-        $roleService->addRoleUser(Role::ROLE_ADMIN, $user->id);
+        $roleService->addRoleUser(Role::ROLE_MODERATOR, $user->id);
 
         $this->actingAs($user);
 
@@ -110,7 +112,7 @@ class AdminTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_admin_change_locale_to_en(): void
+    public function test_moderator_change_locale_to_en(): void
     {
         $ruLocale = App::getLocale();
         $response = $this->get('/locale/en');
@@ -119,7 +121,7 @@ class AdminTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_admin_change_locale_to_ru(): void
+    public function test_moderator_change_locale_to_ru(): void
     {
         App::setLocale('en');
         $enLocale = App::getLocale();

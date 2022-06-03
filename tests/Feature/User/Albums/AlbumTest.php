@@ -16,8 +16,11 @@ class AlbumTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
 
-    //страница без альбомов
-    public function test_user_view_empty_albums_page()
+    /**
+     * Пользователь может просматривать страницу альбомов без них
+     *
+     */
+    public function test_user_view_empty_albums_page(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
 
@@ -28,8 +31,11 @@ class AlbumTest extends TestCase
         $response->assertStatus(200);
     }
 
-    //страница со всеми альбомами
-    public function test_user_view_albums_page()
+    /**
+     * Пользователь может просматривать страницу альбомов с ними
+     *
+     */
+    public function test_user_view_albums_page(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
         $album = Album::factory()->create([
@@ -45,8 +51,11 @@ class AlbumTest extends TestCase
         $response->assertStatus(200);
     }
 
-    //страница альбома без фото
-    public function test_user_view_empty_album_page()
+    /**
+     * Пользователь может просматривать страницу альбома без фотографий
+     *
+     */
+    public function test_user_view_empty_album_page(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
         $album = Album::factory()->create([
@@ -61,8 +70,11 @@ class AlbumTest extends TestCase
         $response->assertStatus(200);
     }
 
-    //страница альбома с фото
-    public function test_user_view_not_empty_album()
+    /**
+     * Пользователь может просматривать страницу альбома с фотографиями
+     *
+     */
+    public function test_user_view_not_empty_album(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
         $album = Album::factory()->create([
@@ -86,7 +98,11 @@ class AlbumTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_user_can_create_album()
+    /**
+     * Пользователь может создать альбом
+     *
+     */
+    public function test_user_can_create_album(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
         $userAlbums = Album::whereUserId($user->id)->first();
@@ -109,7 +125,11 @@ class AlbumTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_user_can_delete_album()
+    /**
+     * Пользователь может удалить альбом
+     *
+     */
+    public function test_user_can_delete_album(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
         $album = Album::factory()->create([
@@ -131,7 +151,11 @@ class AlbumTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_user_can_edit_album()
+    /**
+     * Пользователь может редактировать альбом
+     *
+     */
+    public function test_user_can_edit_album(): void
     {
         $user = User::factory()->create(['is_blocked' => false]);
 
@@ -158,7 +182,11 @@ class AlbumTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_user_can_restore_album()
+    /**
+     * Пользователь может восстановить альбом
+     *
+     */
+    public function test_user_can_restore_album(): void
     {
         Storage::fake('public');
 
