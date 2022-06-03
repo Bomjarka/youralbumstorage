@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\Photo;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -10,27 +12,28 @@ use Intervention\Image\Facades\Image;
 
 class ImageService
 {
-    public const FILEPATH = 'userphotos/';
+    public const USERPHOTOS = 'userphotos/';
+
+    public const PREVIEW = '/preview';
 
     public function __construct()
     {
-        if (!Storage::disk('public')->exists(self::FILEPATH)) {
-            Storage::disk('public')->makeDirectory(self::FILEPATH);
+        if (!Storage::disk('public')->exists(self::USERPHOTOS)) {
+            Storage::disk('public')->makeDirectory(self::USERPHOTOS);
         }
     }
 
     /**
+     * Создаём изображение и сохраняем в папку пользователя
      *
-     * Создаём изображение
-     *
-     * @param $file
-     * @param $userid
+     * @param UploadedFile $file
+     * @param int $userid
      * @return string
      */
-    public function createImage($file, $userid): ?string
+    public function createImage(UploadedFile $file, int $userid): ?string
     {
         try {
-            $filePath = self::FILEPATH . $userid;
+            $filePath = self::USERPHOTOS . $userid;
             $this->checkFolder($filePath);
             $fileName = $this->createFilename($file);
             $img = Image::make($file);
@@ -46,17 +49,16 @@ class ImageService
     }
 
     /**
+     * Создаём превью изображения и сохраняем в папку пользователя
      *
-     * Создаём превью изображения
-     *
-     * @param $file
-     * @param $userid
+     * @param UploadedFile $file
+     * @param int $userid
      * @return string
      */
-    public function createPreview($file, $userid): ?string
+    public function createPreview(UploadedFile $file, int $userid): ?string
     {
         try {
-            $filePath = self::FILEPATH . $userid . '/preview';
+            $filePath = self::USERPHOTOS . $userid . self::PREVIEW;
             $this->checkFolder($filePath);
             $fileName = $this->createFilename($file);
             $img = Image::make($file);
@@ -74,10 +76,10 @@ class ImageService
     /**
      * Удаляет файлы с фотографиями
      *
-     * @param $photo
+     * @param Photo $photo
      * @return bool
      */
-    public function deleteImage($photo): bool
+    public function deleteImage(Photo $photo): bool
     {
         try {
             Storage::disk('public')->delete($photo->photo_path);
@@ -92,19 +94,19 @@ class ImageService
     }
 
     /**
-     * @param $file
+     * @param UploadedFile $file
      * @return string
      */
-    private function createFilename($file): string
+    private function createFilename(UploadedFile $file): string
     {
         return Str::random(20) . $file->getClientOriginalName();
     }
 
     /**
-     * @param $filepath
+     * @param string $filepath
      * @return void
      */
-    private function checkFolder($filepath): void
+    private function checkFolder(string $filepath): void
     {
         if (!Storage::disk('public')->exists($filepath)) {
             Storage::disk('public')->makeDirectory($filepath);

@@ -53,7 +53,8 @@
                                    class="block text-sm text-gray-700 capitalize dark:text-gray-200">
                                 {{ trans('view-photospage.photo-name') }}
                             </label>
-                            <input required placeholder="{{ trans('view-photospage.photo-name') }}" type="text" name="photo_name"
+                            <input required placeholder="{{ trans('view-photospage.photo-name') }}" type="text"
+                                   name="photo_name"
                                    class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
                         </div>
                         <div class="mt-4">
@@ -65,7 +66,8 @@
                                    name="photo_description"
                                    class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40">
                         </div>
-                        <div class="mt-2  text-sm text-gray-700 capitalize dark:text-gray-200"><span>{{ trans('add-photo-form.attachment-label') }}</span>
+                        <div class="files_div mt-2 text-sm text-gray-700 dark:text-gray-200">
+                            <span>{{ trans('add-photo-form.attachment-label') }}</span>
                             <div class="flex justify-between items-center">
                                 <span class="input_filename hidden font-bold"></span>
                                 <button type="button" class="remove_uploaded_image hidden">
@@ -75,7 +77,8 @@
                             <div class="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl">
                                 <div class="md:flex">
                                     <div class="w-full p-3">
-                                        <div class="input_area flex justify-center items-center  border-dotted h-48 rounded-lg border-dashed border-2 border-blue-700 bg-gray-100">
+                                        <div
+                                            class="input_area flex justify-center items-center border-dotted h-48 rounded-lg border-dashed border-2 border-blue-700 bg-gray-100">
                                             <div class="input_box absolute">
                                                 <div class="flex flex-col items-center"><i
                                                         class="fa fa-folder-open fa-4x text-blue-700"></i>
@@ -83,15 +86,15 @@
                                                         class="block text-gray-400 font-normal">{{ trans('add-photo-form.attachment-text') }}</span>
                                                 </div>
                                             </div>
-                                            <input id="user_photo" accept="image/*" type="file"
+                                            <input id="user_photo" accept="image/*" type="file" required
                                                    class="user_photo h-full w-full opacity-0" name="user_photo">
                                             <img id="img_preview" class="img_preview hidden" src="#">
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex justify-end items-center text-gray-400">
-                                <span>{{ trans('add-photo-form.accepted-files') }}:.img/png</span>
+                            <div class="flex justify-end items-center text-gray-400 font-bold">
+                                <span>{{ trans('add-photo-form.accepted-files') }}: jpg/jpeg/png</span>
                             </div>
                         </div>
                         <input class="album_id" type="hidden"
@@ -113,24 +116,32 @@
 </div>
 
 <script>
-        let hiddenField = true;
-        $('.photo-to-album').on('click', function () {
+    let hiddenField = true;
+    $('.photo-to-album').on('click', function () {
         if (hiddenField == false) {
-        $('.form-select').addClass('hidden');
-        hiddenField = true;
-    } else {
-        $('.form-select').removeClass('hidden');
-        hiddenField = false
-    }
+            $('.form-select').addClass('hidden');
+            hiddenField = true;
+        } else {
+            $('.form-select').removeClass('hidden');
+            hiddenField = false
+        }
         $('.form-select').change(function () {
-        var value = $(this).val();
-        $('.album_id').val(value);
-    });
+            var value = $(this).val();
+            $('.album_id').val(value);
+        });
     });
     let imgInput = document.getElementById('user_photo');
     imgInput.addEventListener('change', function (e) {
         if (e.target.files) {
             let imageFile = e.target.files[0];
+            let extension = imageFile.name.substring(imageFile.name.lastIndexOf('.') + 1);
+            // if (!['png', 'jpeg', 'jpg'].includes(extension)) {
+            //     $('.files_div').addClass('border-2 border-red-500 rounded')
+            //     $('.input_area').addClass('border-red-500');
+            //     $('.input_filename').addClass('text-red-500')
+            //     alert('Wrong file type!')
+            // }
+
             var reader = new FileReader();
             reader.onload = function (e) {
                 var img = document.createElement("img");
@@ -145,8 +156,7 @@
                     ctx.drawImage(img, 0, 0, 300, 200);
 
                     // Show resized image in preview element
-                    var dataurl = canvas.toDataURL(imageFile.type);
-                    document.getElementById("img_preview").src = dataurl;
+                    document.getElementById("img_preview").src = canvas.toDataURL(imageFile.type);
                 }
                 img.src = e.target.result;
             }
@@ -168,5 +178,9 @@
         $('.user_photo').removeClass('hidden');
         $('.img_preview').addClass('hidden');
         $('.input_filename').addClass('hidden');
+
+        $('.files_div').removeClass('border-2 border-red-500 rounded')
+        $('.input_area').removeClass('border-red-500');
+        $('.input_filename').removeClass('text-red-500')
     });
 </script>
