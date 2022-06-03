@@ -102,7 +102,7 @@
                         @if(!$fromAlbums)
                             <x-select-album-for-photo></x-select-album-for-photo>
                         @endif
-                        <div class="flex justify-end mt-6">
+                        <div class="add-photo-div flex justify-end mt-6">
                             <button type="submit"
                                     class="px-3 py-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800">
                                 {{ trans('add-photo-form.button') }}
@@ -136,9 +136,10 @@
             let imageFile = e.target.files[0];
             let extension = imageFile.name.substring(imageFile.name.lastIndexOf('.') + 1);
             if (!['png', 'jpeg', 'jpg'].includes(extension)) {
-                $('.files_div').addClass('border-2 border-red-500 rounded')
+                $('.files_div').addClass('border-2 border-red-500 rounded');
                 $('.input_area').addClass('border-red-500');
-                $('.input_filename').addClass('text-red-500')
+                $('.input_filename').addClass('text-red-500');
+                $('.add-photo-div').addClass('hidden');
                 alert('Wrong file type!')
             }
 
@@ -182,5 +183,6 @@
         $('.files_div').removeClass('border-2 border-red-500 rounded')
         $('.input_area').removeClass('border-red-500');
         $('.input_filename').removeClass('text-red-500')
+        $('.add-photo-div').removeClass('hidden');
     });
 </script>
