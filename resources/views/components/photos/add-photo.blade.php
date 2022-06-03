@@ -135,12 +135,12 @@
         if (e.target.files) {
             let imageFile = e.target.files[0];
             let extension = imageFile.name.substring(imageFile.name.lastIndexOf('.') + 1);
-            // if (!['png', 'jpeg', 'jpg'].includes(extension)) {
-            //     $('.files_div').addClass('border-2 border-red-500 rounded')
-            //     $('.input_area').addClass('border-red-500');
-            //     $('.input_filename').addClass('text-red-500')
-            //     alert('Wrong file type!')
-            // }
+            if (!['png', 'jpeg', 'jpg'].includes(extension)) {
+                $('.files_div').addClass('border-2 border-red-500 rounded')
+                $('.input_area').addClass('border-red-500');
+                $('.input_filename').addClass('text-red-500')
+                alert('Wrong file type!')
+            }
 
             var reader = new FileReader();
             reader.onload = function (e) {
