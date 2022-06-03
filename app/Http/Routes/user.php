@@ -18,10 +18,6 @@ Route::middleware(['userblocked', 'auth'])->group(function () {
         Route::post('/trash/albums', [UserController::class, 'restoreAlbum'])->name('restoreAlbum');
 
         Route::post('/trash/photos', [UserController::class, 'restorePhoto'])->name('restorePhoto');
-
-        Route::post('/albums_and_photos', [PhotoController::class, 'downloadAllPhotos'])->name('downloadAllPhotos');
-
-        Route::get('/download/{filename}', [PhotoController::class, 'download'])->name('download');
     });
 
     //Страница с галлереей
@@ -55,6 +51,11 @@ Route::middleware(['userblocked', 'auth'])->group(function () {
         Route::post('/{album}/{photo}/delete', [PhotoController::class, 'delete'])
             ->name('deletePhotoFromAlbum');
     });
+
+    //Нажатие на кнопку скачивания фото
+    Route::post('/download_all_photos', [PhotoController::class, 'downloadAllPhotos'])->name('downloadAllPhotos');
+    //скачивание архива с фотографиями
+    Route::get('/download/{filename}', [PhotoController::class, 'download'])->name('download');
 });
 
 
