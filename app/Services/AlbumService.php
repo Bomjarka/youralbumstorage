@@ -9,25 +9,26 @@ use Illuminate\Support\Facades\Log;
 
 class AlbumService
 {
+
     /**
-     * @param $request
+     * @param array $data
      * @return void
      */
-    public function createAlbum($request): void
+    public function createAlbum(array $data): void
     {
         Album::create([
-            'user_id' => $request->get('user_id'),
-            'name' => $request->get('album_name'),
-            'description' => $request->get('album_description')
+            'user_id' => $data['user_id'],
+            'name' => $data['album_name'],
+            'description' => $data['album_description']
         ]);
     }
 
     /**
-     * @param $album
+     * @param Album $album
      * @param string $newName
      * @return void
      */
-    public function changeAlbumName($album, string $newName): void
+    public function changeAlbumName(Album $album, string $newName): void
     {
         $album->name = $newName;
         $album->save();
@@ -35,7 +36,12 @@ class AlbumService
 
     }
 
-    public function changeAlbumDescription($album, string $newDescription): void
+    /**
+     * @param Album $album
+     * @param string $newDescription
+     * @return void
+     */
+    public function changeAlbumDescription(Album $album, string $newDescription): void
     {
         $album->description = $newDescription;
         $album->save();

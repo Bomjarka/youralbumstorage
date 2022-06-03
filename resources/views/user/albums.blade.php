@@ -9,6 +9,14 @@
             </h2>
             <x-download-photos></x-download-photos>
         </div>
+        @if($errors->any())
+            @foreach($errors->all() as $error)
+                <x-notifications.error
+                    :icon="'fa fa-lock mr-3'"
+                    :value="$error">
+                </x-notifications.error>
+            @endforeach
+        @endif
     </x-slot>
     <div class="container my-12 mx-auto px-4 md:px-12">
         <x-notifications.approving
