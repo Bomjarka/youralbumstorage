@@ -96,13 +96,13 @@ class AlbumController extends Controller
             return redirect()->back()->withErrors($validator);
         }
 
-        $photoData = [
+        $albumData = [
             'user_id' => $request->get('user_id'),
             'album_name' => $request->get('album_name'),
             'album_description' => $request->get('album_description'),
         ];
 
-        $albumService->createAlbum($photoData);
+        $albumService->createAlbum($albumData);
 
         return redirect()->back();
     }
