@@ -173,16 +173,16 @@ class RoleService
 
     /**
      * Добавляет роль пользователю
-     * @param string $role
+     * @param string $roleName
      * @param int $userId
      * @return bool
      */
-    public function addRoleUser(string $role, int $userId): bool
+    public function addRoleUser(string $roleName, int $userId): bool
     {
         $roleAddedToUser = DB::transaction(
-            function () use ($role, $userId) {
-                $roleModel = $this->getAllRoles()->keyBy('name')->get($role);
-                if (!$roleModel || $this->hasRole($role, $userId)) {
+            function () use ($roleName, $userId) {
+                $roleModel = $this->getAllRoles()->keyBy('name')->get($roleName);
+                if (!$roleModel || $this->hasRole($roleName, $userId)) {
                     return false;
                 }
                 $this->userRoles[$userId]->add($roleModel);
@@ -244,15 +244,15 @@ class RoleService
 
     /**
      * Удаляет роль у пользователя
-     * @param string $role - наименование роли
+     * @param string $roleName - наименование роли
      * @param int $userId - id пользователя (user)
      * @return bool
      */
-    public function removeRoleUser(string $role, int $userId): bool
+    public function removeRoleUser(string $roleName, int $userId): bool
     {
         $roleRemovedFromUser = DB::transaction(
-            function () use ($role, $userId) {
-                $model = $this->getUserRoles($userId)->keyBy('name')->get($role);
+            function () use ($roleName, $userId) {
+                $model = $this->getUserRoles($userId)->keyBy('name')->get($roleName);
                 if (!$model) {
                     return false;
                 }
