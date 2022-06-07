@@ -4,8 +4,6 @@ namespace App\Services;
 
 
 use App\Models\Album;
-use App\Models\User;
-use Illuminate\Support\Facades\Log;
 
 class AlbumService
 {
@@ -32,8 +30,6 @@ class AlbumService
     {
         $album->name = $newName;
         $album->save();
-
-
     }
 
     /**
@@ -67,7 +63,8 @@ class AlbumService
 
     /**
      *
-     * Удаляем альбом из базы
+     * Удаляем альбом из базы (такая процедура производится либо по истечению срока хранения
+     * либо при удалении пользователя)
      *
      * @param Album $album
      * @return void
@@ -90,6 +87,5 @@ class AlbumService
         foreach ($album->trashedPhotos as $trashedPhoto) {
             $trashedPhoto->restore();
         }
-
     }
 }
