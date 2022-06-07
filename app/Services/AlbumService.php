@@ -3,7 +3,9 @@
 namespace App\Services;
 
 
+use App\Events\Album\DeleteAlbumWithPhotos;
 use App\Models\Album;
+use Illuminate\Support\Facades\Log;
 
 class AlbumService
 {
@@ -50,15 +52,13 @@ class AlbumService
      */
     public function deleteAlbum(Album $album, bool $isDeletePhotosFromAlbum = false): void
     {
-        $photoService = new PhotoService();
-
         if ($isDeletePhotosFromAlbum) {
-            foreach ($album->photos as $photo) {
-                $photoService->deletePhoto($photo);
-            }
+            event(new DeleteAlbumWithPhotos($album));
         }
 
         $album->delete();
+
+        Log::info('Album deleted by user', ['album: ' => $album, 'Are photo deleted from album' => $isDeletePhotosFromAlbum]);
     }
 
     /**

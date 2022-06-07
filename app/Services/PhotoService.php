@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Models\Photo;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PhotoService
 {
@@ -67,6 +68,8 @@ class PhotoService
     public function deletePhoto($photo): void
     {
         $photo->delete();
+
+        Log::info('Photo deleted', ['photo: ' => $photo]);
     }
 
     /**

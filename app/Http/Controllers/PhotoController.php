@@ -93,7 +93,6 @@ class PhotoController extends Controller
     public function delete(Photo $photo, PhotoService $photoService): RedirectResponse
     {
         $photoService->deletePhoto($photo);
-        Log::info('Photo deleted by user', ['album: ' => $photo]);
 
         return redirect()->back();
     }

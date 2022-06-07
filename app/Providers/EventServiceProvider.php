@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Listeners\AlbumEventSubscriber;
 use App\Listeners\NotificationEventSubscriber;
 use App\Listeners\UserEventSubscriber;
 use Illuminate\Auth\Events\Registered;
@@ -21,6 +22,7 @@ class EventServiceProvider extends ServiceProvider
     protected $subscribe = [
         NotificationEventSubscriber::class,
         UserEventSubscriber::class,
+        AlbumEventSubscriber::class,
     ];
 
     /**

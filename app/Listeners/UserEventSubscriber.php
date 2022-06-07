@@ -15,7 +15,7 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
-class UserEventSubscriber
+class UserEventSubscriber extends EventSubscriber
 {
     /**
      *

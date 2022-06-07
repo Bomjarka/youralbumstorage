@@ -71,8 +71,6 @@ class AlbumController extends Controller
             $albumService->deleteAlbum($album, $isDeletePhotosFromAlbum);
         }
 
-        Log::info('Album deleted by user', ['album: ' => $album, 'Are photo deleted from album' => $isDeletePhotosFromAlbum]);
-
         return redirect('albums');
     }
 
