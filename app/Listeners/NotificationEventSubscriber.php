@@ -6,7 +6,7 @@ namespace App\Listeners;
 use App\Events\NotificationRead;
 use Illuminate\Support\Facades\Log;
 
-class NotificationEventSubscriber
+class NotificationEventSubscriber extends EventSubscriber
 {
     /**
      *
@@ -27,7 +27,11 @@ class NotificationEventSubscriber
         Log::info('User read notification message', ['UserId: ' => $user->id, 'NotificationId:' => $event->notification]);
     }
 
-    public function subscribe($events)
+    /**
+     * @param $events
+     * @return void
+     */
+    public function subscribe($events): void
     {
         $events->listen(
             NotificationRead::class,
