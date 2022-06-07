@@ -19,7 +19,7 @@ class UserEventSubscriber extends EventSubscriber
 {
     /**
      *
-     * Помечаем нотификацию прочитанной если ловим событие
+     * Отправляем письмо с подтверждением профиля
      *
      * @param $event
      * @return void
