@@ -73,7 +73,7 @@
                                  class="inline-block w-full max-w-xl p-8 my-20 overflow-hidden text-left transition-all transform bg-white rounded-lg shadow-xl 2xl:max-w-2xl"
                             >
                                 <div class="flex items-center justify-between space-x-4">
-                                    <h1 class="text-xl font-medium text-gray-800 ">Registration</h1>
+                                    <h1 class="text-xl font-medium text-gray-800 ">{{ trans('form-register.subject') }}</h1>
 
                                     <button @click="modelOpen = false"
                                             class="text-gray-600 focus:outline-none hover:text-gray-700">
@@ -81,7 +81,7 @@
                                     </button>
                                 </div>
                                 <p class="mt-2 text-sm text-gray-500 ">
-                                    Complete registration to start using our service
+                                    {{ trans('form-register.subject-label') }}
                                 </p>
                                 <x-registration-form></x-registration-form>
                             </div>
@@ -94,18 +94,18 @@
 </div>
 
 <script>
-    // $(window).load(function () {
-    //     $(document).on('mouseenter', '.article-div', function () {
-    //         $('.article-div').removeClass('scale-100');
-    //         $('.article-div').not(this).addClass('scale-75');
-    //         $(this).addClass('hover:scale-125');
-    //         $('.new-album-button').addClass('scale-75');
-    //     });
-    //     $(document).on('mouseleave', '.article-div', function () {
-    //         $('.article-div').removeClass('scale-75');
-    //         $('.new-album-button').removeClass('scale-75');
-    //         $('.article-div').addClass('scale-100');
-    //     });
-    // });
+    $(window).load(function () {
+        $(document).on('mouseenter', '.article-div', function () {
+            $('.article-div').removeClass('scale-100');
+            $('.article-div').not(this).addClass('scale-75');
+            $(this).addClass('hover:scale-125');
+            $('.new-album-button').addClass('scale-75');
+        });
+        $(document).on('mouseleave', '.article-div', function () {
+            $('.article-div').removeClass('scale-75');
+            $('.new-album-button').removeClass('scale-75');
+            $('.article-div').addClass('scale-100');
+        });
+    });
 </script>
 
