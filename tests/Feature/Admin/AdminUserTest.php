@@ -132,4 +132,43 @@ class AdminUserTest extends TestCase
         $response->assertSessionHas('status', 'role-disabled');
         $response->assertStatus(302);
     }
+
+    /**
+     * @return void
+     */
+    public function test_admin_can_edit_user(): void
+    {
+        $admin = User::factory()->create(['is_blocked' => false]);
+        $roleService = new RoleService();
+        $roleService->addRoleUser(Role::ROLE_ADMIN, $admin->id);
+
+        $user = User::factory()->create(['is_blocked' => false]);
+
+        $data = [
+            'userId' => $user->id,
+            'login' => 'New login',
+            'firstName' => 'New name',
+            'secondName' => 'New second name',
+            'lastName' => 'New last name',
+            'email' => 'new@mail.ru',
+            'phone' => '81234567891',
+            'gender' => 'male',
+            'birthdate' => $user->birthdate,
+        ];
+
+        $this->actingAs($admin);
+
+        $response = $this->post('/admin/users/' . $user->id . '/edit', $data);
+        $user->refresh();
+
+        $this->assertEquals($user->login, $data['login']);
+        $this->assertEquals($user->first_name, $data['firstName']);
+        $this->assertEquals($user->second_name, $data['secondName']);
+        $this->assertEquals($user->last_name, $data['lastName']);
+        $this->assertEquals($user->email, $data['email']);
+        $this->assertEquals($user->phone, $data['phone']);
+        $response->assertJson(['msg' => 'User data updated!']);
+        $response->assertStatus(200);
+
+    }
 }

@@ -23,6 +23,7 @@ Route::middleware(['userblocked', 'auth', 'admin'])->group(function () {
         Route::get('/users/{user}', [AdminController::class, 'user'])->name('adminUser');
 
         Route::prefix('/users/{user}')->group(function () {
+            Route::post('/edit', [AdminController::class, 'editUser'])->name('editUser');
             Route::post('/block', [AdminController::class, 'blockUser'])->name('blockUser');
             Route::post('/unblock', [AdminController::class, 'unblockUser'])->name('unblockUser');
             Route::post('/add_role', [AdminController::class, 'addUserRole'])->name('addUserRole');

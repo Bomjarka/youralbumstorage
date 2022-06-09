@@ -51,6 +51,44 @@ class AdminController extends Controller
 
     /**
      *
+     * Редактировать данные пользователя
+     *
+     * @param Request $request
+     * @param UserService $userService
+     * @return JsonResponse
+     */
+    public function editUser(Request $request, UserService $userService): JsonResponse
+    {
+        $user = User::find($request->get('userId'));
+
+        $request->validate([
+            'login' => ['string', 'max:255'],
+            'first_name' => ['string', 'max:255'],
+            'second_name' => ['string', 'max:255'],
+            'last_name' => ['string', 'max:255'],
+            'email' => ['string', 'email', 'max:255'],
+            'phone' => ['string', 'min:11', 'max:11'],
+            'gender' => ['required', 'string'],
+            'birthdate' => ['date'],
+        ]);
+
+        $userData = [];
+        foreach ($request->all() as $key => $value) {
+            if ($key == '_token') {
+                continue;
+            }
+            $userData[$key] = $value;
+        }
+
+        $userService->editData($userData, $user);
+
+        return response()->json([
+            'msg' => 'User data updated!',
+        ]);
+    }
+
+    /**
+     *
      * Блокировка пользователя из админки
      *
      * @param User $user
