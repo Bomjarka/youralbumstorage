@@ -7,7 +7,7 @@
             <h1 class="text-3xl text-black pb-6">{{ trans('admin-common.title') }}</h1>
             <div class="w-full mt-6">
                 <p class="text-xl pb-3 flex items-center">
-                    <i class="fa fa-user mr-3"></i>{{ trans('admin-common.greeting') . ', ' . Auth::user()->fullName() }}
+                    <i class="fa fa-user mr-3 capitalize"></i>{{ trans('admin-common.greeting') . ', ' . Auth::user()->fullName() }}
                 </p>
             </div>
         </main>
