@@ -53,7 +53,7 @@
                             <div class="grid grid-cols-2">
                                 <div
                                     class="px-4 py-2 font-semibold">{{ trans('view-profilepage-profile.firstname') }}</div>
-                                <div class="px-4 py-2">{{ $user->first_name }}</div>
+                                <div class="px-4 py-2 capitalize">{{ $user->first_name }}</div>
                             </div>
                             <div class="grid grid-cols-2">
                                 <div class="px-4 py-2 font-semibold">{{ trans('view-profilepage-profile.phone') }}</div>
@@ -62,7 +62,7 @@
                             <div class="grid grid-cols-2">
                                 <div
                                     class="px-4 py-2 font-semibold">{{ trans('view-profilepage-profile.secondname') }}</div>
-                                <div class="px-4 py-2">{{ $user->second_name }}</div>
+                                <div class="px-4 py-2 capitalize">{{ $user->second_name }}</div>
                             </div>
                             <div class="grid grid-cols-2">
                                 <div class="px-4 py-2 font-semibold">{{ trans('view-profilepage-profile.email') }}</div>
@@ -73,7 +73,7 @@
                             <div class="grid grid-cols-2">
                                 <div
                                     class="px-4 py-2 font-semibold">{{ trans('view-profilepage-profile.lastname') }}</div>
-                                <div class="px-4 py-2">{{ $user->last_name }}</div>
+                                <div class="px-4 py-2 capitalize">{{ $user->last_name }}</div>
                             </div>
                             <div class="grid grid-cols-2">
                                 <div

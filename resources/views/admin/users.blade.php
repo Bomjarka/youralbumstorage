@@ -29,7 +29,7 @@
                         @foreach($users as $user)
                             <tr>
                                 <td class="text-left py-3 px-4">{{ $user->id }}</td>
-                                <td class="text-left py-3 px-4"><a class="hover:text-blue-500"
+                                <td class="text-left py-3 px-4"><a class="capitalize hover:text-blue-500"
                                                                          href="{{ route('adminUser', [$user]) }}">{{ $user->fullName() }}</a>
                                 </td>
                                 <td class="text-left py-3 px-4">{{ $user->login }}</td>

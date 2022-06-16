@@ -17,7 +17,7 @@
                     <x-slot name="trigger">
                         <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
                             @if (Auth::user())
-                                <div>{{ Auth::user()->first_name . ' ' . Auth::user()->last_name }}</div>
+                                <div class="capitalize">{{ Auth::user()->first_name . ' ' . Auth::user()->last_name }}</div>
                             @else
                                 <div>{{ trans('view-navigation.guest') }}</div>
                             @endif
@@ -56,7 +56,7 @@
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 @if (Auth::user())
-                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->first_name }}</div>
+                    <div class="font-medium text-base text-gray-800 capitalize">{{ Auth::user()->first_name }}</div>
                     <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
                 @else
                     <div>{{ trans('view-navigation.guest') }}</div>
