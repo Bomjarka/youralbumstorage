@@ -283,6 +283,60 @@ class AdminController extends Controller
         return back()->with('status', 'role-assign-error');
     }
 
+    /**
+     * Добавить привилегию пользователю
+     *
+     * @param Request $request
+     * @param User $user
+     * @param RoleService $roleService
+     * @return RedirectResponse
+     */
+    public function addUserPermission(Request $request, User $user, RoleService $roleService): RedirectResponse
+    {
+        $permission = Permission::find($request->get('permissionId'));
+
+        if (RoleHelper::has_permission($permission->name, $user->id)) {
+
+            return back()->with('status', 'permission-already-assigned');
+        }
+
+        if ($roleService->addPermissionUser($permission->name, $user->id)) {
+
+            Log::info('Add user new permission', ['user' => $user, 'permission' => $permission]);
+
+            return back()->with('status', 'permission-assigned');
+        }
+
+        Log::warning('Role wasnt assigned to user', ['user' => $user, 'permission' => $permission]);
+
+        return back()->with('status', 'permission-assign-error');
+    }
+
+    /**
+     * Снять привилегию с пользователя
+     *
+     * @param Request $request
+     * @param User $user
+     * @param RoleService $roleService
+     * @return RedirectResponse
+     */
+    public function removeUserPermission(Request $request, User $user, RoleService $roleService): RedirectResponse
+    {
+        $permission = Permission::find($request->get('permissionId'));
+        if ($roleService->removePermissionUser($permission->name, $user->id)) {
+            Log::info('Permission removed from user', ['user' => $user, 'permission' => $permission]);
+
+            return back()->with('status', 'permission-disabled');
+        }
+
+        return back()->with('status', 'permission-assign-error');
+    }
+
+    /**
+     * @param User $user
+     * @param UserService $userService
+     * @return JsonResponse
+     */
     public function deleteUser(User $user, UserService $userService)
     {
         if (RoleHelper::has_role(Role::ROLE_ADMIN, Auth::user()->id) && $userService->deleteUser($user)) {

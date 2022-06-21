@@ -7,7 +7,7 @@
                 @if (RoleHelper::has_role($role->name, $user->id))
                     @continue
                 @endif
-                <option name="album_id" value="{{ $role->id }}">{{ $role->name }}</option>
+                <option name="role_id" value="{{ $role->id }}">{{ $role->name }}</option>
             @endforeach
         </select>
     </div>
