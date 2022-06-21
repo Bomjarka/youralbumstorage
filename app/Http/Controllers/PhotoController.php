@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\NotificationRead;
+use App\Jobs\DownloadPhotosJob;
 use App\Models\Photo;
 use App\Models\User;
 use App\Notifications\DownloadPhotosNotification;
@@ -153,39 +154,7 @@ class PhotoController extends Controller
         }
 
         $archivePath = Storage::disk('public')->path('userphotos/' . $user->id . '/photos.zip');
-        $zip = new ZipArchive();
-
-        $zip->open($archivePath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-        //скачаем все фото в альбомах и разложим по папкам
-        try {
-            foreach ($user->albums as $album) {
-                if ($album->photos->count() != 0) {
-                    foreach ($album->photos as $photo) {
-                        $image = Image::make(Storage::disk('public')->path($photo->photo_path));
-                        $zip->addFromString($album->name . '/' . $photo->name . '.' . $image->extension, $image->encode($image->extension));
-                    }
-                }
-            }
-            //скачаем все фото без альбомов
-            foreach ($user->photos as $photo) {
-                if (!$photo->album->first()) {
-                    $image = Image::make(Storage::disk('public')->path($photo->photo_path));
-                    $zip->addFromString($withoutAlbum . '/' . $photo->name . '.' . $image->extension, $image->encode($image->extension));
-                }
-            }
-        } catch (\Throwable $e) {
-            Log::error('Error when creating ZIP', [
-                'User: ' => $user,
-                'Photo' => $photo,
-                'Album' => $album ?? null,
-                'ZIP' => $zip,
-            ]);
-
-            throw new Exception('Something wrong while creating ZIP archive');
-
-        } finally {
-            $zip->close();
-        }
+        dispatch(new DownloadPhotosJob($user, $archivePath, $withoutAlbum))->onQueue('downloads');
 
         //Отправим пользователю письмо со ссылкой на скачивание архива
         $user->notify(new DownloadPhotosNotification($archivePath));
