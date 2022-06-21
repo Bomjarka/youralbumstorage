@@ -284,6 +284,8 @@ class AdminController extends Controller
     }
 
     /**
+     * Добавить привилегию пользователю
+     *
      * @param Request $request
      * @param User $user
      * @param RoleService $roleService
@@ -310,10 +312,18 @@ class AdminController extends Controller
         return back()->with('status', 'permission-assign-error');
     }
 
+    /**
+     * Снять привилегию с пользователя
+     *
+     * @param Request $request
+     * @param User $user
+     * @param RoleService $roleService
+     * @return RedirectResponse
+     */
     public function removeUserPermission(Request $request, User $user, RoleService $roleService): RedirectResponse
     {
         $permission = Permission::find($request->get('permissionId'));
-        if ($roleService->removeRoleUser($permission->name, $user->id)) {
+        if ($roleService->removePermissionUser($permission->name, $user->id)) {
             Log::info('Permission removed from user', ['user' => $user, 'permission' => $permission]);
 
             return back()->with('status', 'permission-disabled');

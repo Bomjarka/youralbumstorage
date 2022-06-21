@@ -33,12 +33,19 @@
         <div class="flex flex-wrap">
             <div class="w-full lg:w-4/5 my-6 pr-0 lg:pr-2">
                 <!-- Start About Section -->
-                <div class="bg-white border border-blue-500 p-3 mt-3 shadow-sm rounded-sm">
-                    <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
-                        <span class="text-blue-500">
+                <div class="about-section bg-white border border-blue-500 p-3 mt-3 shadow-sm rounded-sm">
+                    <div class="flex items-center justify-between space-x-2 font-semibold text-gray-900 leading-8">
+                        <div>
+                            <span class="text-blue-500">
                             <i class="fa fa-user mr-3"></i>
                         </span>
-                        {{ trans('admin-user-page-user-data.about') }}
+                            {{ trans('admin-user-page-user-data.about') }}
+                        </div>
+                        <div>
+                            <button id="user_data" class="hide-div text-blue-500 hover:text-green-500">
+                                <i class="fa fa-minus fa-xl" aria-hidden="true"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="user_data text-gray-700">
                         <div class="grid md:grid-cols-2 text-sm">
@@ -85,21 +92,19 @@
                                     class="px-4 py-2 font-semibold">{{ trans('view-profilepage-profile.registered') }}</div>
                                 <div class="px-4 py-2">{{ $user->created_at }}</div>
                             </div>
-                        </div>
+                        </div> @if(\App\Helpers\RoleHelper::has_permission(\App\Models\Permission::EDIT_USER, Auth::user()->id))
+                            <div class="flex items-center justify-end space-x-2">
+                                <button
+                                    class="edit_profile bg-amber-500 hover:bg-amber-700 text-white font-semibold hover:text-white h-8 px-4 m-2 hover: rounded">
+                                    {{ trans('view-profilepage-profile-button.edit') }}
+                                </button>
+                                <button
+                                    class="hidden bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white h-8 px-4 m-2 border border-blue-500 hover:border-transparent rounded focus:text-red-500">
+                                    {{ trans('view-profilepage-profile-button.save') }}
+                                </button>
+                            </div>
+                        @endif
                     </div>
-                    @if(\App\Helpers\RoleHelper::has_permission(\App\Models\Permission::EDIT_USER, Auth::user()->id))
-                        <div class="flex items-center justify-end space-x-2">
-                            <button
-                                class="edit_profile bg-amber-500 hover:bg-amber-700 text-white font-semibold hover:text-white h-8 px-4 m-2 hover: rounded">
-                                {{ trans('view-profilepage-profile-button.edit') }}
-                            </button>
-                            <button
-                                class="hidden bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white h-8 px-4 m-2 border border-blue-500 hover:border-transparent rounded focus:text-red-500">
-                                {{ trans('view-profilepage-profile-button.save') }}
-                            </button>
-                        </div>
-                    @endif
-
                     <div class="user_input sticky top-0 p-4 w-full hidden">
                         <div class="text-gray-700">
                             <div class="grid md:grid-cols-2 text-sm">
@@ -222,7 +227,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- End of about section -->
                 <!--Notifications for admin after actions-->
                 @if(session('status'))
@@ -246,6 +250,24 @@
                             :icon="'fa fa-exclamation-triangle mr-3'"
                             :value="trans('admin-roles.role-already-assigned')"></x-notifications.error>
                     @endif
+                    @if (session('status') == 'permission-already-assigned')
+                        <x-notifications.error
+                            :icon="'fa fa-exclamation-triangle mr-3'"
+                            :value="trans('admin-permissions.permission-already-assigned')"></x-notifications.error>
+                    @endif
+                    @if (session('status') == 'permission-assigned')
+                        <x-notifications.approving
+                            :value="trans('admin-permissions.permission-assigned')"></x-notifications.approving>
+                    @endif
+                    @if (session('status') == 'permission-disabled')
+                        <x-notifications.approving
+                            :value="trans('admin-permissions.permission-disabled')"></x-notifications.approving>
+                    @endif
+                    @if (session('status') == 'permission-assign-error')
+                        <x-notifications.error
+                            :icon="'fa fa-exclamation-triangle mr-3'"
+                            :value="trans('admin-permissions.permission-assign-error')"></x-notifications.error>
+                    @endif
                 @endif
                 <div class="error-alert hidden" role="alert">
                     <div class="bg-red-500 text-white font-bold rounded-t px-4 py-2 mt-3">
@@ -265,47 +287,54 @@
                             </span>
                             {{ trans('admin-user-page-user-roles.title') }}
                         </div>
+                        <div>
+                            <button id="user_roles" class="hide-div text-blue-500 hover:text-green-500">
+                                <i class="fa fa-minus fa-xl" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="user_roles">
                         @if(\App\Helpers\RoleHelper::has_permission(\App\Models\Permission::ADD_ROLE_TO_USER, Auth::user()->id))
                             <button type="click" id="add_user_role"
                                     class="add_user_role bg-green-600 text-white font-semibold h-8 px-4 m-2 rounded hover:bg-green-500">
                                 {{ trans('admin-user-page-user-roles.role-action-assign') }}
                             </button>
                         @endif
-                    </div>
-                    <div class="choose_role flex items-center justify-end hidden">
-                        <x-admin.role-search-input :user="$user"></x-admin.role-search-input>
-                    </div>
-                    @if (RoleHelper::get_user_roles($user->id)->count() == 0)
-                        {{ trans('admin-user-page-user-roles.no-roles') }}
-                    @else
-                        <table class="min-w-full bg-white mt-3">
-                            <thead class="bg-gray-800 text-white">
-                            <tr>
-                                <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-roles.role-name') }}</th>
-                                <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-roles.role-description') }}</th>
-                                <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-roles.role-action') }}</th>
-                            </tr>
-                            </thead>
-                            <tbody class="text-gray-700">
-                            @foreach(RoleHelper::get_user_roles($user->id)->sortBy('id') as $role)
+                        <div class="choose_role flex items-center justify-end hidden">
+                            <x-admin.role-search-input :user="$user"></x-admin.role-search-input>
+                        </div>
+                        @if (RoleHelper::get_user_roles($user->id)->count() == 0)
+                            {{ trans('admin-user-page-user-roles.no-roles') }}
+                        @else
+                            <table class="min-w-full bg-white mt-3">
+                                <thead class="bg-gray-800 text-white">
                                 <tr>
-                                    <input type="hidden" class="role_id_{{ $role->id }}" name="role_id"
-                                           value="{{ $role->id }}">
-                                    <td class="w-1/3 text-center py-3 px-4">{{ $role->name }}</td>
-                                    <td class="w-1/3 text-center py-3 px-4">{{ $role->description }}</td>
-                                    @if (\App\Helpers\RoleHelper::has_permission(\App\Models\Permission::REMOVE_ROLE_FROM_USER, Auth::user()->id))
-                                        <td class="w-1/3 text-center py-3 px-4">
-                                            <button type="click" id="remove_user_role_{{$role->id}}"
-                                                    class="remove_user_role bg-red-600 text-white font-semibold h-8 px-4 m-2 rounded hover:bg-red-500">
-                                                {{ trans('admin-user-page-user-roles.role-action-remove') }}
-                                            </button>
-                                        </td>
-                                    @endif
+                                    <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-roles.role-name') }}</th>
+                                    <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-roles.role-description') }}</th>
+                                    <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-roles.role-action') }}</th>
                                 </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    @endif
+                                </thead>
+                                <tbody class="text-gray-700">
+                                @foreach(RoleHelper::get_user_roles($user->id)->sortBy('id') as $role)
+                                    <tr>
+                                        <input type="hidden" class="role_id_{{ $role->id }}" name="role_id"
+                                               value="{{ $role->id }}">
+                                        <td class="w-1/3 text-center py-3 px-4">{{ $role->name }}</td>
+                                        <td class="w-1/3 text-center py-3 px-4">{{ $role->description }}</td>
+                                        @if (\App\Helpers\RoleHelper::has_permission(\App\Models\Permission::REMOVE_ROLE_FROM_USER, Auth::user()->id))
+                                            <td class="w-1/3 text-center py-3 px-4">
+                                                <button type="click" id="remove_user_role_{{$role->id}}"
+                                                        class="remove_user_role bg-red-600 text-white font-semibold h-8 px-4 m-2 rounded hover:bg-red-500">
+                                                    {{ trans('admin-user-page-user-roles.role-action-remove') }}
+                                                </button>
+                                            </td>
+                                        @endif
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        @endif
+                    </div>
                 </div>
                 <!-- End user roles Section -->
                 <!-- User permissions Section -->
@@ -317,122 +346,144 @@
                             </span>
                             {{ trans('admin-user-page-user-permissions.title') }}
                         </div>
+                        <div>
+                            <button id="user_permissions" class="hide-div text-blue-500 hover:text-green-500">
+                                <i class="fa fa-minus fa-xl" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="user_permissions">
                         @if(RoleHelper::has_permission(\App\Models\Permission::ADD_PERMISSION_TO_USER, Auth::user()->id))
                             <button type="click" id="add_user_permission"
                                     class="add_user_permission bg-green-600 text-white font-semibold h-8 px-4 m-2 rounded hover:bg-green-500">
                                 {{ trans('admin-user-page-user-permissions.permissions-action-assign') }}
                             </button>
                         @endif
-                    </div>
-                    <div class="choose_permission flex items-center justify-end hidden">
-                        <x-admin.permission-search-input :user="$user"></x-admin.permission-search-input>
-                    </div>
-                    @if (RoleHelper::get_user_permissions($user->id)->count() == 0)
-                        {{ trans('admin-user-page-user-permissions.no-permissions') }}
-                    @else
-                        <table class="min-w-full bg-white mt-3">
-                            <thead class="bg-gray-800 text-white">
-                            <tr>
-                                <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-permissions.permission-name') }}</th>
-                                <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-permissions.permission-description') }}</th>
-                                <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-permissions.permission-action') }}</th>
-                            </tr>
-                            </thead>
-                            <tbody class="text-gray-700">
-                            @foreach(RoleHelper::get_user_permissions($user->id)->sortBy('id') as $permission)
+                        <div class="choose_permission flex items-center justify-end hidden">
+                            <x-admin.permission-search-input :user="$user"></x-admin.permission-search-input>
+                        </div>
+                        @if (RoleHelper::get_user_permissions($user->id)->count() == 0)
+                            {{ trans('admin-user-page-user-permissions.no-permissions') }}
+                        @else
+                            <table class="min-w-full bg-white mt-3">
+                                <thead class="bg-gray-800 text-white">
                                 <tr>
-                                    <input type="hidden" class="role_id_{{ $permission->id }}" name="role_id"
-                                           value="{{ $permission->id }}">
-                                    <td class="w-1/3 text-center py-3 px-4">{{ $permission->name }}</td>
-                                    <td class="w-1/3 text-center py-3 px-4">{{ $permission->description }}</td>
-                                    @if (RoleHelper::has_permission(\App\Models\Permission::REMOVE_PERMISSION_FROM_USER, Auth::user()->id))
-                                        <td class="w-1/3 text-center py-3 px-4">
-                                            <button type="click" id="remove_user_permission_{{$permission->id}}"
-                                                    class="remove_user_role bg-red-600 text-white font-semibold h-8 px-4 m-2 rounded hover:bg-red-500">
-                                                {{ trans('admin-user-page-user-permissions.permission-action-remove') }}
-                                            </button>
-                                        </td>
-                                    @endif
+                                    <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-permissions.permission-name') }}</th>
+                                    <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-permissions.permission-description') }}</th>
+                                    <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-permissions.permission-action') }}</th>
                                 </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    @endif
+                                </thead>
+                                <tbody class="text-gray-700">
+                                @foreach(RoleHelper::get_user_permissions($user->id)->sortBy('id') as $permission)
+                                    <tr>
+                                        <input type="hidden" class="role_id_{{ $permission->id }}" name="role_id"
+                                               value="{{ $permission->id }}">
+                                        <td class="w-1/3 text-center py-3 px-4">{{ $permission->name }}</td>
+                                        <td class="w-1/3 text-center py-3 px-4">{{ $permission->description }}</td>
+                                        @if (RoleHelper::has_permission(\App\Models\Permission::REMOVE_PERMISSION_FROM_USER, Auth::user()->id))
+                                            <td class="w-1/3 text-center py-3 px-4">
+                                                <button type="click" id="remove_user_permission_{{$permission->id}}"
+                                                        class="remove_user_permission bg-red-600 text-white font-semibold h-8 px-4 m-2 rounded hover:bg-red-500">
+                                                    {{ trans('admin-user-page-user-permissions.permission-action-remove') }}
+                                                </button>
+                                            </td>
+                                        @endif
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        @endif
+                    </div>
                 </div>
                 <!-- End user permissions Section -->
                 <!-- Albums Section -->
                 <div class="hidden sm:block bg-white border border-blue-500 p-3  mt-3 shadow-sm rounded-sm">
-                    <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
-                    <span class="text-blue-500">
+                    <div class="flex items-center justify-between space-x-2 font-semibold text-gray-900 leading-8">
+                        <div>
+                            <span class="text-blue-500">
                             <i class="fa fa-book mr-3"></i>
                         </span>
-                        {{ trans('view-profilepage-albums-and-photos.albums') }}
+                            {{ trans('view-profilepage-albums-and-photos.albums') }}
+                        </div>
+                        <div>
+                            <button id="user_albums" class="hide-div text-blue-500 hover:text-green-500">
+                                <i class="fa fa-minus fa-xl" aria-hidden="true"></i>
+                            </button>
+                        </div>
                     </div>
-                    @if ($user->albums->count() == 0)
-                        {{ trans('view-profilepage-albums-and-photos.no-albums') }}
-                    @else
-                        <table class="min-w-full bg-white mt-3">
-                            <thead class="bg-gray-800 text-white">
-                            <tr>
-                                <th class="text-center py-3 px-4 uppercase font-semibold text-sm">ID</th>
-                                <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('view-albumpage.album-name') }}</th>
-                                <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('view-albumpage.album-description') }}</th>
-                                <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('base-phrases.created') }}</th>
-                            </tr>
-                            </thead>
-                            <tbody class="text-gray-700">
-                            @foreach($user->albums as $album)
+                    <div class="user_albums">
+                        @if ($user->albums->count() == 0)
+                            {{ trans('view-profilepage-albums-and-photos.no-albums') }}
+                        @else
+                            <table class="min-w-full bg-white mt-3">
+                                <thead class="bg-gray-800 text-white">
                                 <tr>
-                                    <td class="text-center py-3 px-4">{{ $album->id }}</td>
-                                    <td class="text-center py-3 px-4"><a class="hover:text-blue-500"
-                                                                         href="#">{{ $album->name }}</a></td>
-                                    <td class="text-center py-3 px-4">{{ $album->description ?? '-' }}</td>
-                                    <td class="text-center py-3 px-4">{{ $album->created_at->toDateString() }}</td>
+                                    <th class="text-center py-3 px-4 uppercase font-semibold text-sm">ID</th>
+                                    <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('view-albumpage.album-name') }}</th>
+                                    <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('view-albumpage.album-description') }}</th>
+                                    <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('base-phrases.created') }}</th>
                                 </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-
-                    @endif
+                                </thead>
+                                <tbody class="text-gray-700">
+                                @foreach($user->albums as $album)
+                                    <tr>
+                                        <td class="text-center py-3 px-4">{{ $album->id }}</td>
+                                        <td class="text-center py-3 px-4"><a class="hover:text-blue-500"
+                                                                             href="#">{{ $album->name }}</a></td>
+                                        <td class="text-center py-3 px-4">{{ $album->description ?? '-' }}</td>
+                                        <td class="text-center py-3 px-4">{{ $album->created_at->toDateString() }}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        @endif
+                    </div>
                 </div>
                 <!-- End albums Section -->
                 <!-- Photos Section -->
                 <div class="hidden sm:block bg-white border border-blue-500 p-3  mt-3 shadow-sm rounded-sm">
-                    <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
-                    <span class="text-blue-500">
+                    <div class="flex items-center justify-between space-x-2 font-semibold text-gray-900 leading-8">
+                        <div>
+                            <span class="text-blue-500">
                             <i class="fa fa-camera mr-3"></i>
                         </span>
-                        {{ trans('view-profilepage-albums-and-photos.photos') }}
+                            {{ trans('view-profilepage-albums-and-photos.photos') }}
+                        </div>
+                        <button id="user_photos" class="hide-div text-blue-500 hover:text-green-500">
+                            <i class="fa fa-minus fa-xl" aria-hidden="true"></i>
+                        </button>
                     </div>
-                    @if ($user->photos->count() == 0)
-                        {{ trans('view-profilepage-albums-and-photos.no-photos') }}
-                    @else
-                        <table class="min-w-full bg-white mt-3">
-                            <thead class="bg-gray-800 text-white">
-                            <tr>
-                                <th class="text-center py-3 px-4 uppercase font-semibold text-sm">ID</th>
-                                <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('view-albumpage.album-name') }}</th>
-                                <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('view-photospage.photo-name') }}</th>
-                                <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('view-photospage.photo-description') }}</th>
-                                <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('base-phrases.created') }}</th>
-                            </tr>
-                            </thead>
-                            <tbody class="text-gray-700">
-                            @foreach($user->photos as $photo)
+                    <div class="user_photos">
+                        @if ($user->photos->count() == 0)
+                            {{ trans('view-profilepage-albums-and-photos.no-photos') }}
+                        @else
+                            <table class="min-w-full bg-white mt-3">
+                                <thead class="bg-gray-800 text-white">
                                 <tr>
-                                    <td class="text-center py-3 px-4">{{ $photo->id }}</td>
-                                    <td class="text-center py-3 px-4"><a class="hover:text-blue-500"
-                                                                         href="#">{{ $photo->album->first()->name ?? trans('admin-user-page-user-albums.not-in-album') }}</a>
-                                    </td>
-                                    <td class="text-center py-3 px-4"><a class="hover:text-blue-500"
-                                                                         href="#">{{ $photo->name }}</a></td>
-                                    <td class="text-center py-3 px-4">{{ $photo->description }}</td>
-                                    <td class="text-center py-3 px">{{ $photo->created_at->toDateString() }}</td>
+                                    <th class="text-center py-3 px-4 uppercase font-semibold text-sm">ID</th>
+                                    <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('view-albumpage.album-name') }}</th>
+                                    <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('view-photospage.photo-name') }}</th>
+                                    <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('view-photospage.photo-description') }}</th>
+                                    <th class="text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('base-phrases.created') }}</th>
                                 </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    @endif
+                                </thead>
+                                <tbody class="text-gray-700">
+                                @foreach($user->photos as $photo)
+                                    <tr>
+                                        <td class="text-center py-3 px-4">{{ $photo->id }}</td>
+                                        <td class="text-center py-3 px-4"><a class="hover:text-blue-500"
+                                                                             href="#">{{ $photo->album->first()->name ?? trans('admin-user-page-user-albums.not-in-album') }}</a>
+                                        </td>
+                                        <td class="text-center py-3 px-4"><a class="hover:text-blue-500"
+                                                                             href="#">{{ $photo->name }}</a></td>
+                                        <td class="text-center py-3 px-4">{{ $photo->description }}</td>
+                                        <td class="text-center py-3 px">{{ $photo->created_at->toDateString() }}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        @endif
+                    </div>
                 </div>
                 <!-- End photos Section -->
             </div>
@@ -517,7 +568,6 @@
     });
 
     $('.add_user_role').on('click', function () {
-        console.log();
         if (!$('.choose_role').is(':visible')) {
             $('.choose_role').delay(100).slideDown(300);
         } else {
@@ -679,6 +729,15 @@
                     window.location.reload();
                 }
             })
+    });
+
+    $('.hide-div').on('click', function () {
+        let divToHide = $(this).attr('id');
+        if (!$('.' + divToHide).is(':visible')) {
+            $('.' + divToHide).delay(100).slideDown(300);
+        } else {
+            $('.' + divToHide).delay(100).slideUp(300);
+        }
     });
 </script>
 

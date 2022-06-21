@@ -2,10 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Requests\RegisterUserRequest;
-use Faker\Generator as Faker;
+
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 
 class TestCommand extends Command
 {
@@ -14,13 +12,7 @@ class TestCommand extends Command
     protected $name = 'TestCommand';
 
 
-    public function handle(Faker $faker)
+    public function handle()
     {
-       dd($faker->userName());
-
-
     }
-
-
-
 }

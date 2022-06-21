@@ -15,7 +15,9 @@
         'role-updated',
         'role-assigned',
         'role-disabled',
-        'permission-updated'
+        'permission-updated',
+        'permission-assigned',
+        'permission-disabled'
     ].includes('{{session('status')}}')) {
         $(function () {
             $('.success').slideDown(300);

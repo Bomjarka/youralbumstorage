@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\UserPermission;
 use App\Models\UserRole;
 use App\Services\RoleService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -169,6 +171,61 @@ class AdminUserTest extends TestCase
         $this->assertEquals($user->phone, $data['phone']);
         $response->assertJson(['msg' => 'User data updated!']);
         $response->assertStatus(200);
+    }
 
+    /**
+     * Админ может выдавать роль
+     *
+     */
+    public function test_admin_can_give_user_a_permission(): void
+    {
+        $admin = User::factory()->create(['is_blocked' => false]);
+        $roleService = new RoleService();
+        $roleService->addRoleUser(Role::ROLE_ADMIN, $admin->id);
+
+        $user = User::factory()->create(['is_blocked' => false]);
+        $data = [
+            'permissionId' => Permission::whereName(Permission::EDIT_USER)->first()->id,
+        ];
+
+        $this->actingAs($admin);
+        $response = $this->post('/admin/users/' . $user->id . '/add_permission', $data);
+
+        $this->assertNotEmpty($roleService->getUserPermissions($user->id));
+        $this->assertTrue($roleService->hasPermission(Permission::EDIT_USER, $user->id));
+        $response->assertSessionHas('status', 'permission-assigned');
+        $response->assertStatus(302);
+    }
+
+
+    /**
+     * Админ может забирать роль
+     *
+     */
+    public function test_admin_can_take_a_permission_from_user(): void
+    {
+        $admin = User::factory()->create(['is_blocked' => false]);
+        $roleService = new RoleService();
+        $roleService->addRoleUser(Role::ROLE_ADMIN, $admin->id);
+
+        $user = User::factory()->create(['is_blocked' => false]);
+        $roleService->addPermissionUser(Permission::EDIT_USER, $user->id);
+
+        $data = [
+            'permissionId' => Permission::whereName(Permission::EDIT_USER)->first()->id,
+        ];
+
+        $userPermission = UserPermission::whereUserId($user->id)
+            ->wherePermissionId(Permission::whereName(Permission::EDIT_USER)->first()->id)
+            ->first();
+
+        $this->assertNotNull($userPermission);
+
+        $this->actingAs($admin);
+        $response = $this->post('/admin/users/' . $user->id . '/remove_permission', $data);
+
+        $this->assertDeleted($userPermission);
+        $response->assertSessionHas('status', 'permission-disabled');
+        $response->assertStatus(302);
     }
 }
