@@ -25,4 +25,5 @@ class Permission extends Model
     public const DELETE_USER = 'delete_user';
     public const CREATE_ROLE = 'create_role';
     public const EDIT_ROLE = 'edit_role';
+    public const EDIT_USER = 'edit_user_data';
 }
