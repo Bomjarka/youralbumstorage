@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Rule;
 interface UserNameRule extends Rule
 {
     //содержит только буквы без пробелов и других символов
-    public const NAME_PATTERN = "/(^[а-яёА-ЯЁa-zA-z])([а-яёА-ЯЁa-zA-z]+)*$/";
+    public const NAME_PATTERN = "/(^[а-яёА-ЯЁa-zA-Z])([а-яёА-ЯЁa-zA-Z]+)*$/u";
 
     /**
      * Determine if the validation rule passes.
