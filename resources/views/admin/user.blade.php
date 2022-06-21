@@ -283,9 +283,7 @@
                             <tr>
                                 <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-roles.role-name') }}</th>
                                 <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-roles.role-description') }}</th>
-                                @if (\App\Helpers\RoleHelper::has_permission(\App\Models\Permission::REMOVE_ROLE_FROM_USER, Auth::user()->id))
-                                    <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-roles.role-action') }}</th>
-                                @endif
+                                <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-roles.role-action') }}</th>
                             </tr>
                             </thead>
                             <tbody class="text-gray-700">
@@ -310,6 +308,58 @@
                     @endif
                 </div>
                 <!-- End user roles Section -->
+                <!-- User permissions Section -->
+                <div class="hidden sm:block bg-white border border-blue-500 p-3  mt-3 shadow-sm rounded-sm">
+                    <div class="flex items-center justify-between space-x-2 font-semibold text-gray-900 leading-8">
+                        <div>
+                            <span class="text-blue-500">
+                            <i class="fa fa-book mr-3"></i>
+                            </span>
+                            {{ trans('admin-user-page-user-permissions.title') }}
+                        </div>
+                        @if(RoleHelper::has_permission(\App\Models\Permission::ADD_PERMISSION_TO_USER, Auth::user()->id))
+                            <button type="click" id="add_user_permission"
+                                    class="add_user_permission bg-green-600 text-white font-semibold h-8 px-4 m-2 rounded hover:bg-green-500">
+                                {{ trans('admin-user-page-user-permissions.permissions-action-assign') }}
+                            </button>
+                        @endif
+                    </div>
+                    <div class="choose_permission flex items-center justify-end hidden">
+                        <x-admin.permission-search-input :user="$user"></x-admin.permission-search-input>
+                    </div>
+                    @if (RoleHelper::get_user_permissions($user->id)->count() == 0)
+                        {{ trans('admin-user-page-user-permissions.no-permissions') }}
+                    @else
+                        <table class="min-w-full bg-white mt-3">
+                            <thead class="bg-gray-800 text-white">
+                            <tr>
+                                <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-permissions.permission-name') }}</th>
+                                <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-permissions.permission-description') }}</th>
+                                <th class="w-1/3 text-center py-3 px-4 uppercase font-semibold text-sm">{{ trans('admin-user-page-user-permissions.permission-action') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody class="text-gray-700">
+                            @foreach(RoleHelper::get_user_permissions($user->id)->sortBy('id') as $permission)
+                                <tr>
+                                    <input type="hidden" class="role_id_{{ $permission->id }}" name="role_id"
+                                           value="{{ $permission->id }}">
+                                    <td class="w-1/3 text-center py-3 px-4">{{ $permission->name }}</td>
+                                    <td class="w-1/3 text-center py-3 px-4">{{ $permission->description }}</td>
+                                    @if (RoleHelper::has_permission(\App\Models\Permission::REMOVE_PERMISSION_FROM_USER, Auth::user()->id))
+                                        <td class="w-1/3 text-center py-3 px-4">
+                                            <button type="click" id="remove_user_permission_{{$permission->id}}"
+                                                    class="remove_user_role bg-red-600 text-white font-semibold h-8 px-4 m-2 rounded hover:bg-red-500">
+                                                {{ trans('admin-user-page-user-permissions.permission-action-remove') }}
+                                            </button>
+                                        </td>
+                                    @endif
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    @endif
+                </div>
+                <!-- End user permissions Section -->
                 <!-- Albums Section -->
                 <div class="hidden sm:block bg-white border border-blue-500 p-3  mt-3 shadow-sm rounded-sm">
                     <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
@@ -505,11 +555,51 @@
         }
     });
 
+    $('.add_user_permission').on('click', function () {
+        console.log();
+        if (!$('.choose_permission').is(':visible')) {
+            $('.choose_permission').delay(100).slideDown(300);
+        } else {
+            $('.choose_permission').delay(100).slideUp(300);
+        }
+        $('.select-permission').on('change', function () {
+            let url = "{{ route('addUserPermission', ['user' => $user]) }}";
+            let permissionId = $(this).val();
+            $.post(url, {
+                _token: '{{ csrf_token() }}',
+                permissionId: permissionId
+            }).fail(function (response) {
+                let errmsg = JSON.parse(response.responseText).message;
+                let errFile = JSON.parse(response.responseText).file + JSON.parse(response.responseText).line;
+
+                $('.error-alert p').text('{{ trans('base-phrases.admin-error-message') }}.' + ' Error message: ' + errmsg);
+                $('.error-alert').slideDown(300);
+                $(".error-alert").delay(3000).slideUp(300);
+            });
+            window.location.reload();
+        });
+    });
+
+    $('.remove_user_permission').on('click', function () {
+        let url = "{{ route('removeUserPermission', ['user' => $user]) }}";
+        let permissionId = $(this).attr('id').split('_')[3];
+        $.post(url, {
+            _token: '{{ csrf_token() }}',
+            permissionId: permissionId
+        })
+        window.location.reload();
+
+    });
+
     jQuery(function ($) {
         $(document).mouseup(function (e) {
             let chosserole = $(".choose_role");
             if (!chosserole.is(e.target)) {
                 chosserole.slideUp(300);
+            }
+            let chosepermissions = $(".choose_permission");
+            if (!chosepermissions.is(e.target)) {
+                chosepermissions.slideUp(300);
             }
         });
     });

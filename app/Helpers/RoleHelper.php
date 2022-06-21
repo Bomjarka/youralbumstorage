@@ -91,12 +91,21 @@ class RoleHelper
     }
 
     /**
-     * Получение списка всех ролей, установленных в приложени
+     * Получение списка всех ролей, установленных в приложении
      * @return EloquentCollection of Role
      */
     public static function get_all_roles(): EloquentCollection
     {
         return self::rs()->getAllRoles();
+    }
+
+    /**
+     * Получение списка всех привилегий, установленных в приложении
+     * @return EloquentCollection of Permissions
+     */
+    public static function get_all_permissions(): EloquentCollection
+    {
+        return self::rs()->getAllPermissions();
     }
 
     /**
@@ -107,6 +116,16 @@ class RoleHelper
     public static function get_user_roles(int $userId): EloquentCollection
     {
         return self::rs()->getUserRoles($userId);
+    }
+
+    /**
+     * Получение списка привилегий для переданного пользователя
+     * @param int $userId - id пользователя (user)
+     * @return EloquentCollection of Permissions
+     */
+    public static function get_user_permissions(int $userId): EloquentCollection
+    {
+        return self::rs()->getUserPermissions($userId);
     }
 
     /**
