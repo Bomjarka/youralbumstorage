@@ -55,7 +55,9 @@ Route::middleware(['userblocked', 'auth'])->group(function () {
     //Нажатие на кнопку скачивания фото
     Route::post('/download_all_photos', [PhotoController::class, 'downloadAllPhotos'])->name('downloadAllPhotos');
     //скачивание архива с фотографиями
-    Route::get('/download/{filename}', [PhotoController::class, 'download'])->name('download');
+    Route::get('/download/{filename}', [PhotoController::class, 'download'])
+        ->middleware(['signed'])
+        ->name('download');
 });
 
 

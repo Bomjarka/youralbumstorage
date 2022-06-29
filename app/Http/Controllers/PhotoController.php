@@ -15,16 +15,13 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Redirector;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Intervention\Image\Facades\Image;
 use Spatie\TranslationLoader\LanguageLine;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use ZipArchive;
 
 class PhotoController extends Controller
 {
@@ -171,13 +168,21 @@ class PhotoController extends Controller
      *
      * @param Request $request
      * @param string $filename
-     * @return Application|RedirectResponse|Redirector|BinaryFileResponse
+     * @return Application|RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector|\Symfony\Component\HttpFoundation\BinaryFileResponse
      */
     public function download(Request $request, string $filename)
     {
         $user = Auth::user();
         $filePath = Storage::disk('public')->path('userphotos/' . $user->id . '/' . $filename);
         if ($filePath) {
+            $notification = $request->get('notification');
+
+//            if (App::environment(['production'])) {
+                if (DatabaseNotification::find($notification)->read()) {
+                    return response()->view('errors.link-already-used');
+                }
+//            }
+
             event(new NotificationRead($user, $request->get('notification')));
 
             return response()->download($filePath)

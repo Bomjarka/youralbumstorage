@@ -34,7 +34,6 @@ class Album extends Model
     ];
 
     /**
-     *
      * Возвращает пользователя, которому принадлежит альбом
      *
      * @return BelongsTo

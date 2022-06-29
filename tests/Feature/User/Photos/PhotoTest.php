@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\User\Photos;
 
+use App\Http\Middleware\ValidateSignature;
+use App\Jobs\DownloadPhotosJob;
 use App\Models\Album;
 use App\Models\AlbumPhotos;
 use App\Models\Photo;
@@ -11,6 +13,7 @@ use App\Services\PhotoService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Notification as FakeNotification;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -323,13 +326,16 @@ class PhotoTest extends TestCase
         $presDownloadButtonResponse->assertJson(['msg' => 'success']);
         $presDownloadButtonResponse->assertStatus(200);
         Storage::disk('public')->assertExists($archivePath);
+
         FakeNotification::assertSentTo($user, DownloadPhotosNotification::class);
+        $this->expectsJobs(DownloadPhotosJob::class);
 
         $dataToDownloadArchive = [
             '_token' => csrf_token(),
         ];
-
+        $this->withoutMiddleware(ValidateSignature::class);
         $downloadArchiveResponse = $this->get('/download/photos.zip', $dataToDownloadArchive);
+
         $downloadArchiveResponse->assertDownload('photos.zip');
     }
 
