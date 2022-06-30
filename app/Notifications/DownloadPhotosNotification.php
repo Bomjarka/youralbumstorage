@@ -86,7 +86,8 @@ class DownloadPhotosNotification extends Notification
     {
         return [
             'email' => $notifiable->email,
-            'message' => 'Link for download photos sent!'
+            'message' => 'Link for download photos sent!',
+            'link' => $this->downloadFileUrl($notifiable),
         ];
     }
 }

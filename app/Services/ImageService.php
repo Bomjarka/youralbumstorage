@@ -43,9 +43,9 @@ class ImageService
         } catch (\Exception $e) {
             Log::critical('Error when create Image: ' . $e->getMessage(), ['fileData' => $file, 'errorRow' => $e->getLine()]);
             DB::rollBack();
+
             return null;
         }
-
     }
 
     /**
