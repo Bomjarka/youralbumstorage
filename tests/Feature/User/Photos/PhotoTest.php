@@ -3,18 +3,14 @@
 namespace Tests\Feature\User\Photos;
 
 use App\Http\Middleware\ValidateSignature;
-use App\Jobs\DownloadPhotosJob;
 use App\Models\Album;
 use App\Models\AlbumPhotos;
 use App\Models\Photo;
 use App\Models\User;
-use App\Notifications\DownloadPhotosNotification;
 use App\Services\PhotoService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Queue;
-use Illuminate\Support\Facades\Notification as FakeNotification;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -285,7 +281,6 @@ class PhotoTest extends TestCase
     public function test_user_can_download_all_photos(): void
     {
         Storage::fake('public');
-        FakeNotification::fake();
 
         $user = User::factory()->create(['is_blocked' => false]);
         $userPhotos = Photo::whereUserId($user->id)->first();
@@ -327,14 +322,18 @@ class PhotoTest extends TestCase
         $presDownloadButtonResponse->assertStatus(200);
         Storage::disk('public')->assertExists($archivePath);
 
-        FakeNotification::assertSentTo($user, DownloadPhotosNotification::class);
-        $this->expectsJobs(DownloadPhotosJob::class);
 
-        $dataToDownloadArchive = [
-            '_token' => csrf_token(),
-        ];
+        $notificationLink = $user->notifications->first()->data['link'];
+        $array = explode('?', $notificationLink);
+        $arrayOfParts = explode('&', $array[1]);
+        $values = [];
+
+        foreach ($arrayOfParts as $part) {
+            $values[explode('=', $part)[0]] = explode('=', $part)[1];
+        }
+
         $this->withoutMiddleware(ValidateSignature::class);
-        $downloadArchiveResponse = $this->get('/download/photos.zip', $dataToDownloadArchive);
+        $downloadArchiveResponse = $this->call('GET', '/download/photos.zip', ['notification' => $values['notification']]);
 
         $downloadArchiveResponse->assertDownload('photos.zip');
     }

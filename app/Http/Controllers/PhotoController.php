@@ -177,11 +177,9 @@ class PhotoController extends Controller
         if ($filePath) {
             $notification = $request->get('notification');
 
-//            if (App::environment(['production'])) {
-                if (DatabaseNotification::find($notification)->read()) {
-                    return response()->view('errors.link-already-used');
-                }
-//            }
+            if (DatabaseNotification::find($notification)->read()) {
+                return response()->view('errors.link-already-used');
+            }
 
             event(new NotificationRead($user, $request->get('notification')));
 

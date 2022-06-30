@@ -5,8 +5,7 @@ namespace App\Console\Commands;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -33,14 +32,14 @@ class DeleteRedundantPhotoArchives extends Command
      */
     public function handle()
     {
-        $databaseQuery = "SELECT id FROM users
-                    WHERE EXISTS(SELECT 1 FROM photos WHERE user_id = users.id AND deleted_at IS NULL)";
-        $userIds = Arr::flatten(json_decode(json_encode(DB::select($databaseQuery)), true));
-        $deletedArchives = [];
-        Log::info('Start deleting users archives, total users: ' . count($userIds));
+        $usersQuery = User::whereExists(static function (Builder $query) {
+            $query->from('photos')->whereRaw('user_id = users.id');
+        });
 
-        foreach ($userIds as $userId) {
-            $user = User::find($userId);
+        $deletedArchives = [];
+        Log::info('Start deleting users archives, total users: ' . $usersQuery->count());
+
+        foreach ($usersQuery->cursor() as $user) {
             if ($user->photos->count() != 0) {
                 $userArchivePath = 'userphotos/' . $user->id . '/photos.zip';
                 if (!Storage::disk('public')->exists($userArchivePath)) {
@@ -48,7 +47,7 @@ class DeleteRedundantPhotoArchives extends Command
                 }
                 $fileCreated = Storage::disk('public')->lastModified($userArchivePath);
 
-                if (Carbon::createFromTimestamp($fileCreated) > Carbon::now()->subMinutes(10)) {
+                if (Carbon::createFromTimestamp($fileCreated) > Carbon::now()->subMinutes(1)) {
                     continue;
                 }
 
