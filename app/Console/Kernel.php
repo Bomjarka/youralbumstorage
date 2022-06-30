@@ -16,6 +16,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('delete-photos-and-albums')->dailyAt('00:00');
+
+        $schedule->command('delete-redundant-archives')->everyThirtyMinutes()->withoutOverlapping();
     }
 
     /**
