@@ -47,8 +47,6 @@ b
 -resources/views/errors/link-expired.blade.php,e/9/e959c3f4a9272ea414a106c3235a65b5d401befc
 Y
 )app/Http/Middleware/ValidateSignature.php,d/6/d66f53b16fa19ce231c63063dd8fb4062687b39c
-v
-Fdatabase/migrations/2022_06_29_162215_translate_for_used_link_page.php,9/d/9db98a9cdb2937d69ba666fa8a86dcb6bf0eab02
 y
 Idatabase/migrations/2022_06_29_150530_translate_for_expired_link_page.php,e/d/ed27d522bea3aaa830d48188d08057da0698417f
 c
