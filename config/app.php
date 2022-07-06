@@ -161,7 +161,7 @@ return [
         Spatie\TranslationLoader\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-
+        \Mews\Captcha\CaptchaServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -176,7 +176,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\HelpersServiceProvider::class,
-
     ],
 
     /*
@@ -233,6 +232,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'RoleHelper' => App\Helpers\RoleHelper::class,
         'Image' => \Intervention\Image\Facades\Image::class,
+        'Captcha' => \Mews\Captcha\Facades\Captcha::class,
     ],
 
 ];

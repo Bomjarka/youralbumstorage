@@ -43,6 +43,7 @@ class RegisterUserRequest extends FormRequest
             'gender' => ['required', 'string'],
             'birthdate' => ['required', 'date', new UserAgeRule()],
             'password' => ['required', 'confirmed', PasswordRules::defaults()],
+            'captcha' => ['string', 'required', 'max:255', 'captcha'],
         ];
     }
 
@@ -64,7 +65,9 @@ class RegisterUserRequest extends FormRequest
             'phone.unique' => trans('validation-registration.phone-unique'),
             'phone.required' => trans('validation-registration.phone-required'),
             //Возраст
-            'birthdate.required' => trans('validation-registration.birthdate-required')
+            'birthdate.required' => trans('validation-registration.birthdate-required'),
+            //капча
+            'captcha' => trans('validation-captcha.failed')
         ];
     }
 }

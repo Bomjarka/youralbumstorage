@@ -20,6 +20,8 @@ Route::get('/photos', [PhotoController::class, 'index'])->name('photos');
 
 Route::post('/feedback', [PageController::class, 'feedback'])->name('feedback');
 
+Route::get('/test', [PageController::class, 'refreshCaptcha'])->name('test');
+
 });
 
 //Смена языка

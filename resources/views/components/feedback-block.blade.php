@@ -1,13 +1,13 @@
 <div class="pt-5 lg:py-0 lg:grid place-content-center">
     <div class="text-center mb-14">
-        <h1 class="text-gray-900 text-4xl font-semibold">{{ trans('feedback-section.title') }}</h1>
-        <p class="text-lg text-gray-700 mt-4 px-2">{{ trans('feedback-section.title-question') }}</p>
+        {{--        <h1 class="text-gray-900 text-4xl font-semibold">{{ trans('feedback-section.title') }}</h1>--}}
+        {{--        <p class="text-lg text-gray-700 mt-4 px-2">{{ trans('feedback-section.title-question') }}</p>--}}
     </div>
     <div class="lg:flex items-center justify-center lg:gap-10">
         <div
             class="bg-white rounded-lg pt-16 pb-10 px-10 border-t-8 border-green-400 my-5 lg:my-0 shadow-lg max-w-xs mx-auto lg:mx-0 flex-grow">
             <div>
-                <h2 class="font-semibold text-2xl text-gray-900">{{ trans('feedback-section.help-support-title') }}</h2>
+                {{--                <h2 class="font-semibold text-2xl text-gray-900">{{ trans('feedback-section.help-support-title') }}</h2>--}}
                 <p class="text-gray-400 mt-2.5 text-lg">{{ trans('feedback-section.help-support') }}</p>
 
                 <div x-data="{ modelOpen: false }">
@@ -50,8 +50,9 @@
                                                 <input type="hidden" name="userId" value="{{ Auth::user()->id }}">
                                                 <div class="mt-2">
                                                     <label class="block"
-                                                           for="message">{{ trans('feedback-form.message-label') }}:</label>
-                                                    <textarea class="w-full px-5 py-2 text-gray-700 bg-gray-200 rounded"
+                                                           for="message">{{ trans('feedback-form.message-label') }}
+                                                        :</label>
+                                                    <textarea class="w-full px-5 py-2 text-gray-700 rounded"
                                                               id="message" name="message" rows="6" required=""
                                                               placeholder="{{ trans('feedback-form.message-placeholder') }}..."
                                                               aria-label="Email"></textarea>
@@ -79,7 +80,7 @@
                                                 <div class="">
                                                     <label class="block text-sm text-gray-600"
                                                            for="name">{{ trans('feedback-form.name-label') }}</label>
-                                                    <input class="w-full px-5 py-1 text-gray-700 bg-gray-200 rounded"
+                                                    <input class="w-full px-5 py-1 text-gray-700 rounded"
                                                            id="name" name="name" type="text" required=""
                                                            placeholder="{{ trans('feedback-form.name-label') }}"
                                                            aria-label="Name">
@@ -87,7 +88,7 @@
                                                 <div class="mt-2">
                                                     <label class="block text-sm text-gray-600"
                                                            for="email">{{ trans('feedback-form.email-label') }}</label>
-                                                    <input class="w-full px-5  py-4 text-gray-700 bg-gray-200 rounded"
+                                                    <input class="w-full px-5  py-4 text-gray-700 rounded"
                                                            id="email" name="email" type="email" required=""
                                                            placeholder="{{ trans('feedback-form.email-label') }}"
                                                            aria-label="Email">
@@ -95,11 +96,12 @@
                                                 <div class="mt-2">
                                                     <label class=" block text-sm text-gray-600"
                                                            for="message">{{ trans('feedback-form.message-label') }}</label>
-                                                    <textarea class="w-full px-5 py-2 text-gray-700 bg-gray-200 rounded"
+                                                    <textarea class="w-full px-5 py-2 text-gray-700 rounded"
                                                               id="message" name="message" rows="6" required=""
                                                               placeholder="{{ trans('feedback-form.message-placeholder') }}..."
                                                               aria-label="message"></textarea>
                                                 </div>
+                                                <x-captcha></x-captcha>
                                                 <div class="mt-6">
                                                     <button
                                                         class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded
@@ -120,3 +122,4 @@
         </div>
     </div>
 </div>
+

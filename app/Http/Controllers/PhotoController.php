@@ -15,13 +15,16 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Spatie\TranslationLoader\LanguageLine;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PhotoController extends Controller
 {
@@ -168,7 +171,7 @@ class PhotoController extends Controller
      *
      * @param Request $request
      * @param string $filename
-     * @return Application|RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @return Application|RedirectResponse|Response|Redirector|BinaryFileResponse
      */
     public function download(Request $request, string $filename)
     {

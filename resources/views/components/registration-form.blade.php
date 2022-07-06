@@ -36,7 +36,8 @@
     <div class="mt-2">
         <x-label for="email" :value="trans('form-register.email')"/>
 
-        <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required placeholder="example@domain"/>
+        <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required
+                 placeholder="example@domain"/>
     </div>
     <!--Phone-->
     <div class="mt-2">
@@ -44,7 +45,8 @@
         <ul class="phone-help ml-2 block font-medium text-sm text-gray-700 opacity-50 hidden">
             <li>{{ trans('form-register.phone-help') }}</li>
         </ul>
-        <x-input id="phone" class="phone-input block mt-1 w-full" type="text" name="phone" :value="old('phone')" required placeholder="81234567891"/>
+        <x-input id="phone" class="phone-input block mt-1 w-full" type="text" name="phone" :value="old('phone')"
+                 required placeholder="81234567891"/>
     </div>
     <!--Gender-->
     <div class="mt-2">
@@ -95,6 +97,7 @@
                  type="password"
                  name="password_confirmation" required/>
     </div>
+    <x-captcha></x-captcha>
     <div class="flex items-center justify-end mt-4">
         <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
             {{ trans('form-register.already-registered') }}
@@ -115,14 +118,14 @@
         $('.phone-help').slideDown(300);
     });
 
-    jQuery(function($){
-        $(document).mouseup( function(e){
-            let pwd = $( ".pwd-help" );
-            let phone = $( ".phone-help" );
-            if ( !phone.is(e.target)) {
+    jQuery(function ($) {
+        $(document).mouseup(function (e) {
+            let pwd = $(".pwd-help");
+            let phone = $(".phone-help");
+            if (!phone.is(e.target)) {
                 phone.slideUp(300);
             }
-            if ( !pwd.is(e.target)) {
+            if (!pwd.is(e.target)) {
                 pwd.slideUp(300);
             }
         });

@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -44,10 +45,18 @@ class PageController extends Controller
 
     public function feedback(Request $request)
     {
+
+        $request->validate([
+            'name' => ['string', 'required', 'max:255'],
+            'email' => ['string', 'required', 'email', 'max:255'],
+            'message' => ['string', 'required', 'max:255'],
+            'captcha' => ['string', 'required', 'max:255', 'captcha'],
+        ]);
+
         $toEmail = config('mail.mailers.smtp.username');
-        $message = $request->get('message');
+        $message = $request->get('name');
         $fromName = $request->get('name');
-        $fromEmail = $request->get('email');
+        $fromEmail = $request->get('name');
 
         if ($user = User::find($request->get('userId'))) {
             Mail::to($toEmail)->send(new FeedbackEmail($user->email, $message, $fromName, $user));
@@ -58,5 +67,15 @@ class PageController extends Controller
         Mail::to($toEmail)->send(new FeedbackEmail($fromEmail, $message, $fromName));
 
         return back();
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function refreshCaptcha(): JsonResponse
+    {
+        return response()->json([
+           captcha_src()
+        ]);
     }
 }
