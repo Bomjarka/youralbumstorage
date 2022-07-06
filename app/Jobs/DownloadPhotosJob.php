@@ -49,11 +49,19 @@ class DownloadPhotosJob implements ShouldQueue
         $zip->open($this->archivePath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
         //скачаем все фото в альбомах и разложим по папкам
         try {
+            $processedPhotos = [];
             foreach ($this->user->albums as $album) {
                 if ($album->photos->count() != 0) {
                     foreach ($album->photos as $photo) {
                         $image = Image::make(Storage::disk('public')->path($photo->photo_path));
-                        $zip->addFromString($album->name . '/' . $photo->name . '.' . $image->extension, $image->encode($image->extension));
+                        //проверяем нет ли у пользователя фотографий с одинаковым именем и если есть, то добавляем к названию число уже обработанных фотографий
+                        if (in_array($photo->name . '.' . $image->extension, $processedPhotos, true)) {
+                            $zip->addFromString($this->withoutAlbum . '/' . $photo->name . count($processedPhotos) . '.' . $image->extension, $image->encode($image->extension));
+                        } else {
+                            $zip->addFromString($album->name . '/' . $photo->name . '.' . $image->extension, $image->encode($image->extension));
+                        }
+
+                        $processedPhotos[] = $photo->name . '.' . $image->extension;
                     }
                 }
             }
@@ -61,7 +69,15 @@ class DownloadPhotosJob implements ShouldQueue
             foreach ($this->user->photos as $photo) {
                 if (!$photo->album->first()) {
                     $image = Image::make(Storage::disk('public')->path($photo->photo_path));
-                    $zip->addFromString($this->withoutAlbum . '/' . $photo->name . '.' . $image->extension, $image->encode($image->extension));
+                    //проверяем нет ли у пользователя фотографий с одинаковым именем и если есть, то добавляем к названию число уже обработанных фотографий
+                    if (in_array($photo->name . '.' . $image->extension, $processedPhotos, true)) {
+                        $zip->addFromString($this->withoutAlbum . '/' . $photo->name . count($processedPhotos) . '.' . $image->extension, $image->encode($image->extension));
+                    } else {
+                        $zip->addFromString($this->withoutAlbum . '/' . $photo->name . '.' . $image->extension, $image->encode($image->extension));
+                    }
+
+                    $processedPhotos[] = $photo->name . '.' . $image->extension;
+
                 }
             }
         } catch (\Throwable $e) {
