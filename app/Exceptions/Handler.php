@@ -7,8 +7,11 @@ use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
+use Request;
 
 class Handler extends ExceptionHandler
 {
@@ -18,7 +21,6 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        NotFoundHttpException::class,
     ];
 
     /**
@@ -43,9 +45,23 @@ class Handler extends ExceptionHandler
     public function report(Throwable $exception)
     {
         if (!$exception instanceof NotFoundHttpException) {
-            $this->sendEmail($exception);
+            $url = Request::url() . '/' . Request::method();
+            $this->sendEmail($exception, $url);
 
-            parent::report($exception);
+            try {
+                $logger = $this->container->make(LoggerInterface::class);
+            } catch (Exception $ex) {
+                throw $exception;
+            }
+
+            $logger->error(
+                $exception->getMessage(),
+                array_merge(
+                    $this->exceptionContext($exception),
+                    $this->context(),
+                    ['url' => $url]
+                )
+            );
         }
     }
 
@@ -53,12 +69,13 @@ class Handler extends ExceptionHandler
      * Отправляем письмо с ошибкой на почту
      *
      * @param Throwable $exception
+     * @param string $url
      * @return void
      */
-    public function sendEmail(Throwable $exception): void
+    public function sendEmail(Throwable $exception, string $url): void
     {
         try {
-            Mail::to('admin@youralbumstorage.ru')->send(new ErrorHandled($exception));
+            Mail::to('admin@youralbumstorage.ru')->send(new ErrorHandled($exception, $url));
         } catch (Throwable $exception) {
             Log::error($exception);
         }

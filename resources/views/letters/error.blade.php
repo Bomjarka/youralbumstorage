@@ -4,6 +4,9 @@
         <h3 class="text-2xl">Error</h3>
         <div class="mt-4">
             <h4>Message: {{ $error->getMessage() }}</h4>
+            @isset($url)
+                <h4>Route: {{ $url }}</h4>
+            @endisset
             <h4>Where: {{ $error->getFile() . ':' . $error->getLine() }}</h4>
             <p> {{ $error->getTraceAsString() }}</p>
         </div>

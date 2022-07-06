@@ -14,14 +14,16 @@ class ErrorHandled extends Mailable
      * @var
      */
     public $error;
+    private string $url;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($error)
+    public function __construct($error, string $url)
     {
+        $this->url = $url;
         $this->error = $error;
     }
 
@@ -34,6 +36,6 @@ class ErrorHandled extends Mailable
     {
         return $this->from(config('mail.from.address', 'YourAlbumStorage'))
             ->subject('Error log')
-            ->view('letters.error', ['error' => $this->error]);
+            ->view('letters.error', ['error' => $this->error, 'url' => $this->url]);
     }
 }
