@@ -1,12 +1,6 @@
 
 ?
 config/auth.php,c/d/cddba0f39ef2cbe4d8189e8f5621a3bb533d6bc2
-u
-Eapp/Http/Controllers/Auth/EmailVerificationNotificationController.php,6/7/67bfc5a666a08d7b72af8bf4aac554b6d8dc8bfd
-c
-3app/Http/Controllers/Auth/VerifyEmailController.php,3/f/3f7c71ab9c3a746fa5983593a0ccce359a284cc4
-C
-app/Models/User.php,a/9/a90f2e50cb06863b54effced365aa5f1fe7d9c88
 T
 $resources/views/errors/503.blade.php,3/6/36d8c6a8db8f761752a50b38902972be60a8bcad
 c
@@ -23,8 +17,6 @@ Jdatabase/migrations/2022_06_21_171155_translation_to_admin_permissions.php,0/0
 Ldatabase/migrations/2022_05_21_223631_add_translation_user_blocked_blade.php,a/2/a213d37c955f9ef68a6274ac5e03b0e76508f26c
 U
 %app/View/Components/BlockedLayout.php,9/d/9d20d1c32d86e7a294de8ee4ca8e1d9465e52f69
-Q
-!app/Notifications/VerifyEmail.php,d/a/da00ac82c4b43fa8ed711892c7d0beead245ebe0
 U
 %app/Listeners/UserEventSubscriber.php,3/b/3b12037788c1fd40cb1c74a4aa07b9e35093b763
 O

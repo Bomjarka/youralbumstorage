@@ -15,6 +15,10 @@ class SecondNameRule implements UserNameRule
      */
     public function passes($attribute, $value): bool
     {
+        if ($value == '') {
+            return true;
+        }
+
         return $this->checkInputVale($value);
     }
 

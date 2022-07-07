@@ -8,7 +8,7 @@
     <input
         class="refresh-captcha-input w-full px-5  py-4 text-gray-700 rounded"
         id="captcha" name="captcha" type="text" required=""
-        placeholder="{{ trans('captcha.text') }}"
+        placeholder="{{ trans('captcha.text') }}*"
         aria-label="Captcha">
 </div>
 

@@ -4,7 +4,6 @@ namespace App\Models;
 
 
 use App\Notifications\ResetPassword;
-use App\Services\RoleService;
 use App\Traits\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -67,7 +66,7 @@ class User extends Authenticatable
      */
     public function fullName(): string
     {
-        return implode(' ', array_filter([$this->first_name, $this->second_name, $this->last_name]));
+        return implode(' ', array_filter([$this->first_name, (is_null($this->second_name) ?? ''), $this->last_name]));
     }
 
     /**
@@ -133,7 +132,7 @@ class User extends Authenticatable
     /**
      * Send the password reset notification.
      *
-     * @param  string  $token
+     * @param string $token
      * @return void
      */
     public function sendPasswordResetNotification($token)

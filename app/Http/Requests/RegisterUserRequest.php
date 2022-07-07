@@ -36,7 +36,7 @@ class RegisterUserRequest extends FormRequest
         return [
             'login' => ['required', 'string', 'max:255', 'unique:users'],
             'first_name' => ['required', 'string', 'max:255', new FirstNameRule()],
-            'second_name' => ['required', 'string', 'max:255', new SecondNameRule()],
+            'second_name' => ['nullable', 'string', 'max:255', new SecondNameRule()],
             'last_name' => ['required', 'string', 'max:255', new LastNameRule()],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone' => ['required', 'string', 'min:11', 'max:11', 'unique:users', new PhoneRule()],
@@ -54,7 +54,6 @@ class RegisterUserRequest extends FormRequest
             'login.required' => trans('validation-registration.login-required'),
             'login.unique' => trans('validation-registration.login-unique'),
             'first_name.required' => trans('validation-registration.first-name-required'),
-            'second_name.required' => trans('validation-registration.second-name-required'),
             'last_name.required' => trans('validation-registration.last-name-required'),
             //Почта
             'email.required' => trans('validation-registration.email-required'),
