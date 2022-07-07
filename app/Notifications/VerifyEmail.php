@@ -65,7 +65,7 @@ class VerifyEmail extends Notification
     {
         return (new MailMessage)
             ->subject(trans('verify-email-message.subject'))
-            ->greeting(trans('verify-email-message.greeting') . ', ' . $notifiable->fullName())
+            ->greeting(trans('verify-email-message.greeting') . ', ' . strtoupper($notifiable->fullName()))
             ->line(trans('verify-email-message.message'))
             ->action(trans('verify-email-message.action'), $url)
             ->line(trans('verify-email-message.warning'))

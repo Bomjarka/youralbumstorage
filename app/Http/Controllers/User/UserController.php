@@ -57,13 +57,17 @@ class UserController extends Controller
         $request->validate([
             'login' => ['string', 'max:255'],
             'first_name' => ['string', 'max:255'],
-            'second_name' => ['string', 'max:255'],
+            'second_name' => ['nullable', 'string', 'max:255'],
             'last_name' => ['string', 'max:255'],
             'email' => ['string', 'email', 'max:255'],
             'phone' => ['string', 'min:11', 'max:11'],
             'gender' => ['required', 'string'],
             'birthdate' => ['date'],
         ]);
+
+        if (is_null($request->get('secondName'))) {
+            $request->merge(['secondName' => '']);
+        }
 
         $userData = [];
         foreach ($request->all() as $key => $value) {

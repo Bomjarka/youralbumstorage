@@ -46,7 +46,7 @@ class DownloadPhotosNotification extends Notification
     {
         return (new MailMessage)
             ->subject(trans('download-photo-email-message.subject'))
-            ->greeting(trans('verify-email-message.greeting') . ', ' . $notifiable->fullName())
+            ->greeting(trans('verify-email-message.greeting') . ', ' . strtoupper($notifiable->fullName()))
             ->line(trans('download-photo-email-message.message'))
             ->action(trans('download-photo-email-message.action'), $this->downloadFileUrl($notifiable))
             ->line(trans('email.link-lifetime', ['period' => config('links.email.lifetime')]))
