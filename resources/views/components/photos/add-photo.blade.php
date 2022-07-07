@@ -104,7 +104,7 @@
                         @endif
                         <div class="add-photo-div flex justify-end mt-6">
                             <button type="submit"
-                                    class="px-3 py-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800">
+                                    class="add-photo-button px-3 py-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800">
                                 {{ trans('add-photo-form.button') }}
                             </button>
                         </div>
@@ -116,6 +116,7 @@
 </div>
 
 <script>
+    let maxUploadSize = "{{ \App\Helpers\Helper::getUploadMaxFileSize() }}";
     let hiddenField = true;
     $('.photo-to-album').on('click', function () {
         if (hiddenField == false) {
@@ -160,6 +161,12 @@
                     document.getElementById("img_preview").src = canvas.toDataURL(imageFile.type);
                 }
                 img.src = e.target.result;
+                if (imageFile.size >= maxUploadSize) {
+                    $('.img_preview').attr('src', "");
+                    $('.add-photo-button').addClass('cursor-not-allowed');
+                    $('.add-photo-button').prop('disabled', true);
+                    alert('File is too large, please upload new file!');
+                }
             }
             reader.readAsDataURL(imageFile);
         }
@@ -184,5 +191,8 @@
         $('.input_area').removeClass('border-red-500');
         $('.input_filename').removeClass('text-red-500')
         $('.add-photo-div').removeClass('hidden');
+
+        $('.add-photo-button').removeClass('cursor-not-allowed');
+        $('.add-photo-button').prop('disabled', false);
     });
 </script>
