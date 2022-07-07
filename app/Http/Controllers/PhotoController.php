@@ -52,8 +52,9 @@ class PhotoController extends Controller
      *
      * @param Request $request
      * @param PhotoService $photoService
+     * @return RedirectResponse
      */
-    public function create(Request $request, PhotoService $photoService)
+    public function create(Request $request, PhotoService $photoService): RedirectResponse
     {
         $validator = Validator::make($request->all(),
             [
