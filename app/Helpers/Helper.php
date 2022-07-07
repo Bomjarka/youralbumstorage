@@ -25,6 +25,15 @@ class Helper
         }
     }
 
+    public static function getUploadMaxFileSizeAsString()
+    {
+        if (is_numeric($postMaxSize = ini_get('upload_max_filesize'))) {
+            return (int)$postMaxSize;
+        }
+
+        return strtoupper(ini_get('upload_max_filesize'));
+    }
+
     public static function getUploadMaxFileSize()
     {
         if (is_numeric($postMaxSize = ini_get('upload_max_filesize'))) {

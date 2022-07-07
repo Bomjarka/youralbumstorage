@@ -94,7 +94,10 @@
                                 </div>
                             </div>
                             <div class="flex justify-end items-center text-gray-400 font-bold">
-                                <span>{{ trans('add-photo-form.accepted-files') }}: jpg/jpeg/png</span>
+                                <div class="flex flex-col">
+                                    <span>{{ trans('add-photo-form.accepted-files') }}: jpg/jpeg/png</span>
+                                    <span>{{ trans('add-photo-form.max-file-size') . ': ' . \App\Helpers\Helper::getUploadMaxFileSizeAsString() }}</span>
+                                </div>
                             </div>
                         </div>
                         <input class="album_id" type="hidden"
