@@ -17,8 +17,6 @@ Jdatabase/migrations/2022_06_21_171155_translation_to_admin_permissions.php,0/0
 Ldatabase/migrations/2022_05_21_223631_add_translation_user_blocked_blade.php,a/2/a213d37c955f9ef68a6274ac5e03b0e76508f26c
 U
 %app/View/Components/BlockedLayout.php,9/d/9d20d1c32d86e7a294de8ee4ca8e1d9465e52f69
-U
-%app/Listeners/UserEventSubscriber.php,3/b/3b12037788c1fd40cb1c74a4aa07b9e35093b763
 O
 app/Events/NotificationRead.php,9/2/924fbf941c17e4cf33941985efcd60b0d33e0205
 ]
@@ -33,5 +31,3 @@ b
 -resources/views/errors/link-expired.blade.php,e/9/e959c3f4a9272ea414a106c3235a65b5d401befc
 y
 Idatabase/migrations/2022_06_29_150530_translate_for_expired_link_page.php,e/d/ed27d522bea3aaa830d48188d08057da0698417f
-c
-3app/Console/Commands/DeleteUsersPhotosAndAlbums.php,2/6/266a1fbab9b62884dec230f20f8e1f7da3f50e37

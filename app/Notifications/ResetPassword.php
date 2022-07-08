@@ -79,7 +79,7 @@ class ResetPassword extends Notification
     {
         return (new MailMessage)
             ->subject(trans('reset-password-notification.subject'))
-            ->greeting(trans('verify-email-message.greeting') . ', ' . $this->user->fullName())
+            ->greeting(trans('verify-email-message.greeting') . ', ' . strtoupper($this->user->fullName()))
             ->line(trans('reset-password-notification.title'))
             ->action(trans('reset-password-notification.action'), $url)
             ->line(trans('reset-password-notification.expire', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
