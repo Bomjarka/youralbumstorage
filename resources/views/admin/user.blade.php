@@ -11,10 +11,9 @@
                 </x-notifications.warning>
             @endif
             @if($user->isBlocked())
-                <x-notifications.error
-                    :icon="'fa fa-lock mr-3'"
+                <x-notifications.warning
                     :value="trans('admin-user-page-blocked-alert.subject')">
-                </x-notifications.error>
+                </x-notifications.warning>
             @endif
         </div>
         <div class="w-full mt-6">

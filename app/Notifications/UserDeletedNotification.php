@@ -42,7 +42,7 @@ class UserDeletedNotification extends Notification
     {
         return (new MailMessage)
             ->subject(trans('deleted-user-notification.subject'))
-            ->greeting(trans('verify-email-message.greeting') . ', ' . $notifiable->fullName())
+            ->greeting(trans('verify-email-message.greeting') . ', ' . strtoupper($notifiable->fullName()))
             ->line(trans('deleted-user-notification.message'))
             ->salutation(trans('verify-email-message.regards'));
     }

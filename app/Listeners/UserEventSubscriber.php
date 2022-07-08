@@ -73,8 +73,8 @@ class UserEventSubscriber extends EventSubscriber
 
                 Storage::disk('public')->deleteDirectory('userphotos/' . $user->id);
 
-                $user->delete();
                 event(new UserDeleted($user));
+                $user->delete();
 
                 Log::info("User deleted from system", [
                     'user' => $user,

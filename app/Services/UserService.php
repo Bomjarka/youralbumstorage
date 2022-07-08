@@ -56,21 +56,13 @@ class UserService
      * Удаляем пользователя
      *
      * @param User $user
-     * @return bool
      */
-    public function deleteUser(User $user): bool
+    public function deleteUser(User $user): void
     {
         Log::info("Deleting user from system", [
             'user' => $user,
         ]);
 
         event(new UserDeletionInitiated($user));
-
-        if (!$user->fresh()) {
-            return true;
-        }
-
-        return false;
-
     }
 }

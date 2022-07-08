@@ -343,7 +343,8 @@ class AdminController extends Controller
      */
     public function deleteUser(User $user, UserService $userService)
     {
-        if (RoleHelper::has_role(Role::ROLE_ADMIN, Auth::user()->id) && $userService->deleteUser($user)) {
+        if (RoleHelper::has_role(Role::ROLE_ADMIN, Auth::user()->id)) {
+            $userService->deleteUser($user);
 
             return response()->json([
                 'status' => trans('approving-blade.title'),
